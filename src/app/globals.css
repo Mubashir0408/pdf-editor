@@ -1,0 +1,249 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.85rem;
+
+  /* Surfaces */
+  --background: #fafafc;
+  --foreground: #0e1424;
+  --card: #ffffff;
+  --card-foreground: #0e1424;
+  --popover: #ffffff;
+  --popover-foreground: #0e1424;
+  --overlay: #ffffff;
+
+  /* Brand */
+  --primary: #5b7fff;
+  --primary-foreground: #ffffff;
+  --secondary: #7c5cff;
+  --secondary-foreground: #ffffff;
+  --accent: #36cfc9;
+  --accent-foreground: #06302c;
+
+  /* Neutral / muted */
+  --muted: #f1f2f8;
+  --muted-foreground: #64708a;
+  --border: #e7e8f2;
+  --input: #e2e4f0;
+  --ring: #5b7fff;
+
+  /* Semantic */
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --success: #22c55e;
+  --success-foreground: #ffffff;
+  --warning: #f59e0b;
+  --warning-foreground: #241a00;
+  --info: #36cfc9;
+  --info-foreground: #06302c;
+
+  /* Sidebar */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #333c54;
+  --sidebar-primary: #5b7fff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f2f8;
+  --sidebar-accent-foreground: #0e1424;
+  --sidebar-border: #ecedf5;
+  --sidebar-ring: #5b7fff;
+
+  /* Charts */
+  --chart-1: #5b7fff;
+  --chart-2: #7c5cff;
+  --chart-3: #36cfc9;
+  --chart-4: #f59e0b;
+  --chart-5: #ef4444;
+
+  /* Elevation */
+  --shadow-color: 222 45% 20%;
+}
+
+.dark {
+  --background: #0b1220;
+  --foreground: #e8ecf7;
+  --card: #101a2e;
+  --card-foreground: #e8ecf7;
+  --popover: #101a2e;
+  --popover-foreground: #e8ecf7;
+  --overlay: #0b1220;
+
+  --primary: #7c97ff;
+  --primary-foreground: #0b1220;
+  --secondary: #9d85ff;
+  --secondary-foreground: #0b1220;
+  --accent: #47e0d9;
+  --accent-foreground: #06302c;
+
+  --muted: #16213a;
+  --muted-foreground: #92a0c2;
+  --border: #1e293f;
+  --input: #1e293f;
+  --ring: #7c97ff;
+
+  --destructive: #f87171;
+  --destructive-foreground: #2a0a0a;
+  --success: #4ade80;
+  --success-foreground: #052e12;
+  --warning: #fbbf24;
+  --warning-foreground: #241a00;
+  --info: #47e0d9;
+  --info-foreground: #06302c;
+
+  --sidebar: #0d1524;
+  --sidebar-foreground: #c7d0e8;
+  --sidebar-primary: #7c97ff;
+  --sidebar-primary-foreground: #0b1220;
+  --sidebar-accent: #16213a;
+  --sidebar-accent-foreground: #e8ecf7;
+  --sidebar-border: #1a2338;
+  --sidebar-ring: #7c97ff;
+
+  --chart-1: #7c97ff;
+  --chart-2: #9d85ff;
+  --chart-3: #47e0d9;
+  --chart-4: #fbbf24;
+  --chart-5: #f87171;
+
+  --shadow-color: 222 60% 2%;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-overlay: var(--overlay);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 0.35rem);
+  --radius-md: calc(var(--radius) - 0.2rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.4rem);
+  --radius-2xl: calc(var(--radius) + 0.8rem);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --animate-in: enter 0.2s ease-out;
+  --animate-out: exit 0.2s ease-in;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes shimmer {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  ::selection {
+    background-color: color-mix(in oklab, var(--primary) 30%, transparent);
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-card/70 backdrop-blur-xl border border-white/10 dark:border-white/5;
+  }
+  .glass-panel {
+    background: color-mix(in oklab, var(--card) 72%, transparent);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+  }
+  .card-elevated {
+    box-shadow:
+      0 1px 2px hsl(var(--shadow-color) / 0.04),
+      0 8px 24px -8px hsl(var(--shadow-color) / 0.12);
+  }
+  .card-elevated-lg {
+    box-shadow:
+      0 2px 8px hsl(var(--shadow-color) / 0.06),
+      0 24px 48px -16px hsl(var(--shadow-color) / 0.22);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--foreground) 18%, transparent) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--foreground) 16%, transparent);
+    border-radius: 999px;
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklab, var(--foreground) 5%, transparent) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+}
