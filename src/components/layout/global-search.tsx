@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Search, FileText, RefreshCw, Layers, Scissors, Sparkles } from "lucide-react";
+import { Search, RefreshCw, Layers, Scissors, Sparkles } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -16,7 +16,6 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
-import { mockFiles } from "@/lib/mock-data";
 import { allNavItems } from "@/lib/nav-config";
 
 export function GlobalSearch({ variant = "topbar" }: { variant?: "topbar" | "hero" }) {
@@ -38,8 +37,6 @@ export function GlobalSearch({ variant = "topbar" }: { variant?: "topbar" | "her
     setOpen(false);
     router.push(href);
   };
-
-  const files = mockFiles.filter((f) => !f.trashed).slice(0, 6);
 
   return (
     <>
@@ -65,7 +62,7 @@ export function GlobalSearch({ variant = "topbar" }: { variant?: "topbar" | "her
         >
           <Search className="size-5 shrink-0 text-white/80" />
           <span className="flex-1 text-[15px] text-white/80">
-            Search files, ask AI, or jump to a tool...
+            Search tools, or ask AI a question...
           </span>
           <span className="hidden rounded-md border border-white/20 bg-white/10 px-2 py-1 text-xs text-white/70 sm:inline-block">
             ⌘K
@@ -73,7 +70,7 @@ export function GlobalSearch({ variant = "topbar" }: { variant?: "topbar" | "her
         </button>
       )}
       <CommandDialog open={open} onOpenChange={setOpen} title="Search DocuFlow AI">
-        <CommandInput placeholder="Search files, tools, and actions..." />
+        <CommandInput placeholder="Search tools and actions..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Quick actions">
@@ -89,14 +86,6 @@ export function GlobalSearch({ variant = "topbar" }: { variant?: "topbar" | "her
             <CommandItem onSelect={() => go("/chat")}>
               <Sparkles /> Ask AI about a document
             </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Files">
-            {files.map((f) => (
-              <CommandItem key={f.id} onSelect={() => go("/files/recent")}>
-                <FileText /> {f.name}
-              </CommandItem>
-            ))}
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Navigate">

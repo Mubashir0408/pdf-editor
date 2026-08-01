@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 import * as Icons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-import { primaryQuickActions } from "@/lib/mock-data";
+import type { QuickAction } from "@/lib/types";
 
-export function QuickActionsGrid() {
+export function QuickActionsGrid({ actions }: { actions: QuickAction[] }) {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-      {primaryQuickActions.map((action, i) => {
+      {actions.map((action, i) => {
         const Icon = (Icons as unknown as Record<string, LucideIcon>)[action.icon] ?? Icons.FileText;
         return (
           <motion.div

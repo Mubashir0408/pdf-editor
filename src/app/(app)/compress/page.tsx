@@ -6,6 +6,8 @@ import { Minimize2, ArrowRight, FileText } from "lucide-react";
 import { PageHeader } from "@/components/shared/page-header";
 import { Dropzone } from "@/components/tools/dropzone";
 import { ResultCard } from "@/components/tools/result-card";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -13,6 +15,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { formatBytes, cn } from "@/lib/utils";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
 
 const levels = [
   { id: "low", label: "Low compression", desc: "Best quality, smaller savings", ratio: 0.85 },
@@ -20,8 +24,16 @@ const levels = [
   { id: "extreme", label: "Extreme compression", desc: "Smallest size, lower quality", ratio: 0.28 },
 ] as const;
 
+const faqs = [
+  { q: "Will compressing reduce quality?", a: "The Recommended level balances size and quality; choose Low compression if visual fidelity matters most, or Extreme for the smallest possible file." },
+  { q: "What's the maximum file size?", a: "Files up to 200MB are supported." },
+  { q: "Do I need an account?", a: "No. Compression works instantly with no sign-up required." },
+];
+
 export default function CompressPage() {
-  const [file, setFile] = React.useState<File | null>(null);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("compress");
+  const [file, setFile] = React.useState<File | null>(() => consume());
   const [level, setLevel] = React.useState<(typeof levels)[number]["id"]>("recommended");
   const { status, progress, start, reset } = useSimulatedTask(2200);
 
@@ -126,6 +138,9 @@ export default function CompressPage() {
           )}
         </CardContent>
       </Card>
+
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="compress" />
     </div>
   );
 }

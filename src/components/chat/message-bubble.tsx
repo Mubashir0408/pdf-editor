@@ -1,11 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Sparkles, FileText } from "lucide-react";
+import { Sparkles, FileText, User } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { currentUser } from "@/lib/mock-data";
-import { initials } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import type { ChatMessage } from "@/lib/types";
@@ -28,7 +26,9 @@ export function MessageBubble({
     >
       <Avatar className="mt-0.5 size-8 shrink-0">
         {isUser ? (
-          <AvatarFallback>{initials(currentUser.name)}</AvatarFallback>
+          <AvatarFallback className="bg-muted">
+            <User className="size-4 text-muted-foreground" />
+          </AvatarFallback>
         ) : (
           <AvatarFallback className="bg-gradient-to-br from-secondary to-primary">
             <Sparkles className="size-4 text-white" />

@@ -8,6 +8,8 @@ import { ToolErrorState } from "@/components/tools/tool-error-state";
 import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +25,8 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
 
 const positions = [
   { id: "center", label: "Center", classes: "items-center justify-center" },
@@ -33,8 +37,16 @@ const positions = [
   { id: "bottom-right", label: "Bottom right", classes: "items-end justify-end" },
 ] as const;
 
+const faqs = [
+  { q: "Can I customize the watermark text and position?", a: "Yes — set any text, choose a position, and adjust opacity with a live preview before applying." },
+  { q: "Will the watermark appear on every page?", a: "Yes, it's applied consistently across all pages of the document." },
+  { q: "Do I need an account?", a: "No. Watermarking works instantly with no sign-up required." },
+];
+
 export default function WatermarkPage() {
-  const [file, setFile] = React.useState<File | null>(null);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("watermark");
+  const [file, setFile] = React.useState<File | null>(() => consume());
   const [text, setText] = React.useState("CONFIDENTIAL");
   const [position, setPosition] = React.useState<(typeof positions)[number]["id"]>("diagonal");
   const [opacity, setOpacity] = React.useState([35]);
@@ -186,6 +198,9 @@ export default function WatermarkPage() {
           )}
         </CardContent>
       </Card>
+
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="watermark" />
     </div>
   );
 }

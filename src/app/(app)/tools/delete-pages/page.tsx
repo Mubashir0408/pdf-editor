@@ -9,15 +9,27 @@ import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
 import { PageThumbGrid } from "@/components/tools/page-thumb-grid";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
 
 const TOTAL_PAGES = 14;
 
+const faqs = [
+  { q: "Can I preview before deleting?", a: "Yes — selected pages are clearly marked before you confirm the deletion." },
+  { q: "Is the removal permanent?", a: "The download reflects the change; your original file is untouched unless you overwrite it yourself." },
+  { q: "Do I need an account?", a: "No. Deleting pages works instantly with no sign-up required." },
+];
+
 export default function DeletePagesPage() {
-  const [file, setFile] = React.useState<File | null>(null);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("delete-pages");
+  const [file, setFile] = React.useState<File | null>(() => consume());
   const [selected, setSelected] = React.useState<Set<number>>(new Set());
   const { status, progress, start, retry, reset } = useSimulatedTask(1800, { failureRate: 0.15 });
 
@@ -122,6 +134,9 @@ export default function DeletePagesPage() {
           )}
         </CardContent>
       </Card>
+
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="delete-pages" />
     </div>
   );
 }

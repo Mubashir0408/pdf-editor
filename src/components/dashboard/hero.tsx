@@ -1,14 +1,16 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Image as ImageIcon, Check } from "lucide-react";
+import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
-import { currentUser } from "@/lib/mock-data";
 import { useWallpaper } from "@/hooks/use-wallpaper";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { wallpaperComponents, wallpaperMeta } from "@/components/dashboard/wallpapers";
-import { GlobalSearch } from "@/components/layout/global-search";
+import { Dropzone } from "@/components/tools/dropzone";
 import {
   Popover,
   PopoverContent,
@@ -16,18 +18,17 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 
-function getGreeting() {
-  const hour = new Date().getHours();
-  if (hour < 5) return "Working late";
-  if (hour < 12) return "Good morning";
-  if (hour < 18) return "Good afternoon";
-  return "Good evening";
-}
-
 export function DashboardHero() {
   const { wallpaper, setWallpaper, mounted } = useWallpaper();
   const Wallpaper = wallpaperComponents[wallpaper];
-  const firstName = currentUser.name.split(" ")[0];
+  const { setFile } = usePendingFile();
+  const router = useRouter();
+
+  const handleFilesAdded = (files: File[]) => {
+    setFile(files[0]);
+    toast.success(`"${files[0].name}" ready — choose your output format`);
+    router.push("/convert");
+  };
 
   return (
     <div className="relative overflow-hidden rounded-b-[2.5rem] lg:rounded-3xl lg:mx-6 lg:mt-6">
@@ -51,7 +52,7 @@ export function DashboardHero() {
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/10" />
       <div className="absolute inset-0 bg-black/10" />
 
-      <div className="relative z-10 flex min-h-[320px] flex-col justify-end gap-6 px-5 pt-16 pb-10 sm:px-8 sm:pb-12 lg:min-h-[380px] lg:px-10">
+      <div className="relative z-10 flex flex-col items-center gap-8 px-5 py-16 text-center sm:px-8 sm:py-20 lg:py-24">
         <div className="absolute right-4 top-4 sm:right-6 sm:top-6">
           <WallpaperPicker current={wallpaper} onChange={setWallpaper} />
         </div>
@@ -61,21 +62,27 @@ export function DashboardHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <p className="text-sm font-medium text-white/75">
-            {getGreeting()}, {firstName}
-          </p>
-          <h1 className="mt-1 max-w-xl text-3xl font-semibold tracking-tight text-white text-balance sm:text-4xl lg:text-[42px]">
-            What are we working on today?
+          <h1 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-white text-balance sm:text-4xl lg:text-5xl">
+            All your PDF tools in one place.
           </h1>
+          <p className="mx-auto mt-3 max-w-xl text-sm text-white/80 sm:text-base">
+            Convert, merge, split, compress, edit, translate and chat with your PDFs in seconds.
+          </p>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="max-w-xl"
+          className="w-full max-w-lg"
         >
-          <GlobalSearch variant="hero" />
+          <Dropzone
+            tone="hero"
+            onFilesAdded={handleFilesAdded}
+            title="Drop a file to get started"
+            subtitle="or click to browse — no account needed"
+            formats="PDF, DOCX, XLSX, PPTX, JPG, PNG up to 100MB"
+          />
         </motion.div>
       </div>
     </div>

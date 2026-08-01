@@ -6,6 +6,8 @@ import { Scissors, ArrowRight, FileText } from "lucide-react";
 import { PageHeader } from "@/components/shared/page-header";
 import { Dropzone } from "@/components/tools/dropzone";
 import { ResultCard } from "@/components/tools/result-card";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +15,14 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
+
+const faqs = [
+  { q: "How do I choose which pages to split out?", a: "Type page ranges like \"1-4, 7, 10-12\" or click pages directly in the preview grid." },
+  { q: "What format is the result?", a: "Selected pages are packaged into a downloadable file — a single PDF or a zip if you split into multiple pieces." },
+  { q: "Do I need an account?", a: "No. Splitting works instantly with no sign-up required." },
+];
 
 function parseRanges(input: string, maxPage: number): Set<number> {
   const pages = new Set<number>();
@@ -31,7 +41,9 @@ function parseRanges(input: string, maxPage: number): Set<number> {
 }
 
 export default function SplitPage() {
-  const [file, setFile] = React.useState<File | null>(null);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("split");
+  const [file, setFile] = React.useState<File | null>(() => consume());
   const [range, setRange] = React.useState("1-4, 7, 10-12");
   const totalPages = 16;
   const { status, progress, start, reset } = useSimulatedTask(2000);
@@ -154,6 +166,9 @@ export default function SplitPage() {
           )}
         </CardContent>
       </Card>
+
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="split" />
     </div>
   );
 }

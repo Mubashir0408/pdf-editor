@@ -4,12 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
-import {
-  Logo,
-  SidebarNav,
-  SidebarStorage,
-  CollapseToggle,
-} from "@/components/layout/sidebar-content";
+import { Logo, SidebarNav, CollapseToggle } from "@/components/layout/sidebar-content";
 
 export function Sidebar({
   collapsed,
@@ -30,7 +25,6 @@ export function Sidebar({
         <Logo collapsed={collapsed} />
       </div>
       <SidebarNav collapsed={collapsed} />
-      <SidebarStorage collapsed={collapsed} />
       <div className="flex items-center justify-center border-t border-sidebar-border py-2">
         <CollapseToggle collapsed={collapsed} onToggle={onToggle} />
       </div>

@@ -9,15 +9,27 @@ import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
 import { PageThumbGrid } from "@/components/tools/page-thumb-grid";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
 
 const TOTAL_PAGES = 12;
 
+const faqs = [
+  { q: "Can I rotate just one page?", a: "Yes — rotate individual pages, or use \"Rotate all\" to turn the whole document at once." },
+  { q: "What angles are supported?", a: "Rotate in 90° increments, left or right, as many times as needed." },
+  { q: "Do I need an account?", a: "No. Rotating works instantly with no sign-up required." },
+];
+
 export default function RotatePage() {
-  const [file, setFile] = React.useState<File | null>(null);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("rotate");
+  const [file, setFile] = React.useState<File | null>(() => consume());
   const [rotations, setRotations] = React.useState<Record<number, number>>({});
   const { status, progress, start, retry, reset } = useSimulatedTask(1800, { failureRate: 0.15 });
 
@@ -147,6 +159,9 @@ export default function RotatePage() {
           )}
         </CardContent>
       </Card>
+
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="rotate" />
     </div>
   );
 }

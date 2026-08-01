@@ -9,15 +9,27 @@ import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
 import { PageThumbGrid } from "@/components/tools/page-thumb-grid";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
 
 const TOTAL_PAGES = 14;
 
+const faqs = [
+  { q: "How do I select which pages to extract?", a: "Click any page thumbnail to select it — selected pages are highlighted and combined into a new PDF." },
+  { q: "Can I extract non-consecutive pages?", a: "Yes, select any combination of pages in any order." },
+  { q: "Do I need an account?", a: "No. Extracting pages works instantly with no sign-up required." },
+];
+
 export default function ExtractPagesPage() {
-  const [file, setFile] = React.useState<File | null>(null);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("extract");
+  const [file, setFile] = React.useState<File | null>(() => consume());
   const [selected, setSelected] = React.useState<Set<number>>(new Set());
   const { status, progress, start, retry, reset } = useSimulatedTask(1800, { failureRate: 0.15 });
 
@@ -117,6 +129,9 @@ export default function ExtractPagesPage() {
           )}
         </CardContent>
       </Card>
+
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="extract" />
     </div>
   );
 }

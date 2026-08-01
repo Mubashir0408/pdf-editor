@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Logo, SidebarNav, SidebarStorage } from "@/components/layout/sidebar-content";
+import { Logo, SidebarNav } from "@/components/layout/sidebar-content";
 
 export function MobileDrawer({
   open,
@@ -23,7 +23,6 @@ export function MobileDrawer({
           </SheetTitle>
         </SheetHeader>
         <SidebarNav />
-        <SidebarStorage />
       </SheetContent>
     </Sheet>
   );

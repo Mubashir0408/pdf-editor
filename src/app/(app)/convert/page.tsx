@@ -9,14 +9,15 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow, inferFileType } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { FileIcon } from "@/components/shared/file-icon";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
-import { useRecentFiles } from "@/hooks/use-queries";
-import { formatBytes, formatRelativeTime } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
 import type { FileType } from "@/lib/types";
 
 const ALL_FORMATS: { id: FileType; label: string }[] = [
@@ -29,14 +30,22 @@ const ALL_FORMATS: { id: FileType; label: string }[] = [
   { id: "txt", label: "Text" },
 ];
 
+const faqs = [
+  { q: "Is it safe to convert my files here?", a: "Yes — files are processed for your conversion only and are never shared. This demo runs entirely in your browser with mock processing." },
+  { q: "What formats can I convert between?", a: "PDF, Word, Excel, PowerPoint, JPG, PNG, and plain text — pick any source file and choose your target format." },
+  { q: "Do I need an account?", a: "No. Every tool works instantly with no sign-up required." },
+  { q: "Is there a file size limit?", a: "Files up to 100MB are supported for conversion." },
+];
+
 function ConvertPageInner() {
   const params = useSearchParams();
-  const [file, setFile] = React.useState<File | null>(null);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("convert");
+  const [file, setFile] = React.useState<File | null>(() => consume());
   const [target, setTarget] = React.useState<FileType>(
     (params.get("to") as FileType) || "pdf"
   );
   const { status, progress, start, reset } = useSimulatedTask(2400);
-  const { data: recentFiles, isLoading } = useRecentFiles();
 
   const sourceType = file ? inferFileType(file.name) : null;
 
@@ -50,7 +59,7 @@ function ConvertPageInner() {
       <PageHeader
         icon={RefreshCw}
         title="Convert files"
-        description="Transform documents between PDF, Word, Excel, PowerPoint, and image formats."
+        description="Transform documents between PDF, Word, Excel, PowerPoint, and image formats — free, and no account needed."
       />
 
       <Card className="py-6">
@@ -125,34 +134,8 @@ function ConvertPageInner() {
         </CardContent>
       </Card>
 
-      <Card className="py-5">
-        <CardHeader>
-          <CardTitle className="text-base">Recent conversions</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col divide-y divide-border p-0">
-          {isLoading || !recentFiles
-            ? Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="flex items-center gap-3 px-5 py-3">
-                  <Skeleton className="size-9 rounded-xl" />
-                  <Skeleton className="h-4 w-40" />
-                </div>
-              ))
-            : recentFiles.slice(0, 4).map((f) => (
-                <div key={f.id} className="flex items-center gap-3 px-5 py-3">
-                  <FileIcon type={f.type} />
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-foreground">{f.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatBytes(f.size)} · {formatRelativeTime(f.updatedAt)}
-                    </p>
-                  </div>
-                  <Button variant="ghost" size="sm">
-                    Download
-                  </Button>
-                </div>
-              ))}
-        </CardContent>
-      </Card>
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="convert" />
     </div>
   );
 }

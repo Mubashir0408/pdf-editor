@@ -47,8 +47,8 @@ export default function NotFound() {
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg">
-            <Link href="/upload">
-              <ArrowLeft /> Upload a file instead
+            <Link href="/convert">
+              <ArrowLeft /> Try a tool instead
             </Link>
           </Button>
         </div>

@@ -10,7 +10,6 @@ import {
   Palette,
   Languages,
   Bell,
-  UserCog,
   Keyboard,
   ShieldCheck,
   Accessibility,
@@ -19,8 +18,6 @@ import {
   Moon,
   Monitor,
   Check,
-  LogOut,
-  Trash2,
   Sparkles,
 } from "lucide-react";
 
@@ -30,7 +27,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -38,19 +34,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
-import { currentUser, languages } from "@/lib/mock-data";
+import { languages } from "@/lib/mock-data";
 import { wallpaperMeta } from "@/components/dashboard/wallpapers";
 import { useWallpaper } from "@/hooks/use-wallpaper";
 
@@ -58,7 +43,6 @@ const sections = [
   { id: "appearance", label: "Appearance", icon: Palette },
   { id: "language", label: "Language", icon: Languages },
   { id: "notifications", label: "Notifications", icon: Bell },
-  { id: "account", label: "Account", icon: UserCog },
   { id: "shortcuts", label: "Keyboard shortcuts", icon: Keyboard },
   { id: "privacy", label: "Privacy", icon: ShieldCheck },
   { id: "accessibility", label: "Accessibility", icon: Accessibility },
@@ -69,10 +53,9 @@ type SectionId = (typeof sections)[number]["id"];
 
 const shortcuts = [
   { keys: ["⌘", "K"], desc: "Open global search" },
-  { keys: ["⌘", "U"], desc: "Upload a file" },
   { keys: ["⌘", "B"], desc: "Toggle sidebar" },
   { keys: ["⌘", "⇧", "C"], desc: "Open AI chat" },
-  { keys: ["⌘", "N"], desc: "New chat thread" },
+  { keys: ["⌘", "N"], desc: "Start a new chat" },
   { keys: ["Esc"], desc: "Close dialog or panel" },
   { keys: ["⏎"], desc: "Send message" },
   { keys: ["⇧", "⏎"], desc: "New line in chat" },
@@ -110,7 +93,7 @@ function SettingsPageInner() {
       <PageHeader
         icon={SettingsIcon}
         title="Settings"
-        description="Configure your workspace, preferences, and account."
+        description="Configure your appearance, language, and preferences."
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[14rem_1fr]">
@@ -255,62 +238,6 @@ function SettingsPageInner() {
                 ))}
               </CardContent>
             </Card>
-          )}
-
-          {active === "account" && (
-            <div className="flex flex-col gap-6">
-              <Card className="py-6">
-                <CardHeader>
-                  <CardTitle>Account</CardTitle>
-                  <CardDescription>Manage your account details and plan.</CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-4">
-                  <div className="flex items-center justify-between rounded-xl border border-border px-4 py-3">
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{currentUser.email}</p>
-                      <p className="text-xs text-muted-foreground">Primary email address</p>
-                    </div>
-                    <Badge variant="secondary" className="gap-1">
-                      <Sparkles className="size-3" /> {currentUser.plan}
-                    </Badge>
-                  </div>
-                  <Button variant="outline" className="self-start gap-2">
-                    <LogOut className="size-4" /> Log out of all devices
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="border-destructive/30 py-6">
-                <CardHeader>
-                  <CardTitle className="text-destructive">Danger zone</CardTitle>
-                  <CardDescription>These actions are permanent and cannot be undone.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="outline" className="text-destructive hover:text-destructive">
-                        <Trash2 /> Delete account
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Delete your account?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This will permanently delete your account, all documents, and chat history.
-                          This action cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                          Delete account
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </CardContent>
-              </Card>
-            </div>
           )}
 
           {active === "shortcuts" && (

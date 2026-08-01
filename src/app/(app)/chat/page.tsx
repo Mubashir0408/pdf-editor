@@ -1,17 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { Sparkles, PanelRightOpen, FileText } from "lucide-react";
+import { Sparkles, PanelRightOpen, MessageSquarePlus, FileText } from "lucide-react";
 
-import { ThreadList } from "@/components/chat/thread-list";
 import { SourcesPanel } from "@/components/chat/sources-panel";
 import { MessageBubble, TypingBubble, ModelBadge } from "@/components/chat/message-bubble";
 import { ChatComposer } from "@/components/chat/composer";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTitle, SheetHeader } from "@/components/ui/sheet";
 import { RightPanel, RightPanelSheet } from "@/components/layout/right-panel";
 import { suggestedPrompts } from "@/lib/mock-data";
-import type { ChatMessage, ChatSource, ChatThread } from "@/lib/types";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import type { ChatMessage, ChatSource } from "@/lib/types";
 
 const CANNED_RESPONSES: { content: string; sources: ChatSource[] }[] = [
   {
@@ -43,11 +42,10 @@ const CANNED_RESPONSES: { content: string; sources: ChatSource[] }[] = [
 let responseIndex = 0;
 
 export default function ChatPage() {
-  const [activeThread, setActiveThread] = React.useState<ChatThread | null>(null);
+  useRecordToolUsage("ai-chat");
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = React.useState(false);
   const [attachedFile, setAttachedFile] = React.useState<File | null>(null);
-  const [historyOpen, setHistoryOpen] = React.useState(false);
   const [sourcesOpen, setSourcesOpen] = React.useState(false);
   const [activeSources, setActiveSources] = React.useState<ChatSource[]>([]);
   const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -56,20 +54,10 @@ export default function ChatPage() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, isTyping]);
 
-  const handleSelectThread = (thread: ChatThread) => {
-    setActiveThread(thread);
-    setMessages(thread.messages);
-    setHistoryOpen(false);
-    const lastWithSources = [...thread.messages].reverse().find((m) => m.sources?.length);
-    setActiveSources(lastWithSources?.sources ?? []);
-  };
-
   const handleNewChat = () => {
-    setActiveThread(null);
     setMessages([]);
     setAttachedFile(null);
     setActiveSources([]);
-    setHistoryOpen(false);
   };
 
   const send = (text: string) => {
@@ -102,52 +90,30 @@ export default function ChatPage() {
 
   return (
     <div className="flex h-[calc(100svh-4rem)]">
-      {/* Desktop thread list */}
-      <div className="hidden w-72 shrink-0 border-r border-border lg:block">
-        <ThreadList activeId={activeThread?.id ?? null} onSelect={handleSelectThread} onNew={handleNewChat} />
-      </div>
-
-      {/* Mobile thread list drawer */}
-      <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
-        <SheetContent side="left" className="w-72 p-0">
-          <SheetHeader className="border-b border-border">
-            <SheetTitle>Chat history</SheetTitle>
-          </SheetHeader>
-          <ThreadList activeId={activeThread?.id ?? null} onSelect={handleSelectThread} onNew={handleNewChat} />
-        </SheetContent>
-      </Sheet>
-
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="lg:hidden"
-              onClick={() => setHistoryOpen(true)}
-            >
-              History
-            </Button>
-            <div>
-              <p className="text-sm font-semibold text-foreground">
-                {activeThread?.title ?? "New conversation"}
+          <div>
+            <p className="text-sm font-semibold text-foreground">AI Chat</p>
+            {attachedFile && (
+              <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                <FileText className="size-3" /> {attachedFile.name}
               </p>
-              {activeThread?.fileName && (
-                <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <FileText className="size-3" /> {activeThread.fileName}
-                </p>
-              )}
-            </div>
+            )}
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="xl:hidden"
-            onClick={() => setSourcesOpen(true)}
-            aria-label="View sources"
-          >
-            <PanelRightOpen className="size-4" />
-          </Button>
+          <div className="flex items-center gap-1.5">
+            <Button variant="outline" size="sm" onClick={handleNewChat} disabled={!hasMessages}>
+              <MessageSquarePlus className="size-4" /> New chat
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="xl:hidden"
+              onClick={() => setSourcesOpen(true)}
+              aria-label="View sources"
+            >
+              <PanelRightOpen className="size-4" />
+            </Button>
+          </div>
         </div>
 
         <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-thin px-4 py-6 sm:px-6">
@@ -160,7 +126,7 @@ export default function ChatPage() {
                 <div>
                   <h1 className="text-xl font-semibold text-foreground">Ask DocuFlow AI anything</h1>
                   <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
-                    Attach a document and ask questions, or start typing to chat freely.
+                    Attach a document and ask questions, or start typing to chat freely. No account needed.
                   </p>
                 </div>
                 <div className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2">

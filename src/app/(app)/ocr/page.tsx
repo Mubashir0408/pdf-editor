@@ -6,12 +6,22 @@ import { ScanText, Copy, Download, Check } from "lucide-react";
 import { PageHeader } from "@/components/shared/page-header";
 import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
+
+const faqs = [
+  { q: "What file types can I scan?", a: "JPG, PNG images, and scanned PDFs up to 50MB." },
+  { q: "How accurate is the text extraction?", a: "Typical confidence is above 95% for clear scans; skewed or low-resolution images may need manual review." },
+  { q: "Do I need an account?", a: "No. OCR works instantly with no sign-up required." },
+];
 
 const SAMPLE_TEXT = `INVOICE #4471
 
@@ -32,7 +42,9 @@ Thank you for your business. Payment is due within 15 days
 of the invoice date. Late payments may incur a 1.5% monthly fee.`;
 
 export default function OcrPage() {
-  const [file, setFile] = React.useState<File | null>(null);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("ocr");
+  const [file, setFile] = React.useState<File | null>(() => consume());
   const [copied, setCopied] = React.useState(false);
   const { status, progress, start, reset } = useSimulatedTask(2000);
 
@@ -122,6 +134,9 @@ export default function OcrPage() {
           )}
         </CardContent>
       </Card>
+
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="ocr" />
     </div>
   );
 }

@@ -8,6 +8,8 @@ import { ToolErrorState } from "@/components/tools/tool-error-state";
 import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,9 +17,19 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
+
+const faqs = [
+  { q: "How strong is the encryption?", a: "Files are protected with a password required to open them, matching standard PDF encryption practices." },
+  { q: "Can I control printing and copying separately?", a: "Yes — toggle printing and copy/paste permissions independently of the open password." },
+  { q: "Do I need an account?", a: "No. Password protection works instantly with no sign-up required." },
+];
 
 export default function ProtectPage() {
-  const [file, setFile] = React.useState<File | null>(null);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("protect");
+  const [file, setFile] = React.useState<File | null>(() => consume());
   const [password, setPassword] = React.useState("");
   const [confirm, setConfirm] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
@@ -168,6 +180,9 @@ export default function ProtectPage() {
           )}
         </CardContent>
       </Card>
+
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="protect" />
     </div>
   );
 }

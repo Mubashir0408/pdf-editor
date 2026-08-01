@@ -7,6 +7,8 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -19,9 +21,19 @@ import {
 } from "@/components/ui/select";
 import { languages } from "@/lib/mock-data";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
+
+const faqs = [
+  { q: "Does translation preserve formatting?", a: "Yes — layout, fonts, and images stay in place while the text is translated." },
+  { q: "How many languages are supported?", a: "16 languages including Spanish, French, German, Japanese, and Arabic." },
+  { q: "Do I need an account?", a: "No. Translation works instantly with no sign-up required." },
+];
 
 export default function TranslatePage() {
-  const [file, setFile] = React.useState<File | null>(null);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("translate");
+  const [file, setFile] = React.useState<File | null>(() => consume());
   const [source, setSource] = React.useState("English");
   const [target, setTarget] = React.useState("Spanish");
   const { status, progress, start, reset } = useSimulatedTask(2400);
@@ -151,6 +163,9 @@ export default function TranslatePage() {
           )}
         </CardContent>
       </Card>
+
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="translate" />
     </div>
   );
 }

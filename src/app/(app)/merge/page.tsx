@@ -8,10 +8,14 @@ import { PageHeader } from "@/components/shared/page-header";
 import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
+import { ToolFaq } from "@/components/tools/tool-faq";
+import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { useRecordToolUsage } from "@/hooks/use-recent-tools";
+import { usePendingFile } from "@/components/providers/pending-file-provider";
 
 interface MergeFile {
   id: string;
@@ -19,8 +23,19 @@ interface MergeFile {
   size: number;
 }
 
+const faqs = [
+  { q: "How many PDFs can I merge at once?", a: "Up to 20 files per merge, in any order you choose." },
+  { q: "Can I reorder the files before merging?", a: "Yes — drag and drop each file into the order you want the final PDF to follow." },
+  { q: "Do I need an account?", a: "No. Merging works instantly with no sign-up required." },
+];
+
 export default function MergePage() {
-  const [files, setFiles] = React.useState<MergeFile[]>([]);
+  const { consume } = usePendingFile();
+  useRecordToolUsage("merge");
+  const [files, setFiles] = React.useState<MergeFile[]>(() => {
+    const pending = consume();
+    return pending ? [{ id: `${pending.name}-${Date.now()}`, name: pending.name, size: pending.size }] : [];
+  });
   const { status, progress, start, reset } = useSimulatedTask(2600);
 
   const handleFilesAdded = (added: File[]) => {
@@ -118,6 +133,9 @@ export default function MergePage() {
           )}
         </CardContent>
       </Card>
+
+      <ToolFaq items={faqs} />
+      <RelatedTools currentId="merge" />
     </div>
   );
 }
