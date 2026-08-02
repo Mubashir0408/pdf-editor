@@ -24,21 +24,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useSimulatedTask } from "@/hooks/use-simulated-task";
 import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
+import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
+import { watermarkPdf } from "@/lib/api/watermark";
+import { buildDownloadUrl } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/api/errors";
+import type { ProcessedFileResponse, WatermarkPosition } from "@/lib/api/types";
 
-const positions = [
-  { id: "center", label: "Center", classes: "items-center justify-center" },
-  { id: "diagonal", label: "Diagonal", classes: "items-center justify-center" },
-  { id: "top-left", label: "Top left", classes: "items-start justify-start" },
-  { id: "top-right", label: "Top right", classes: "items-start justify-end" },
-  { id: "bottom-left", label: "Bottom left", classes: "items-end justify-start" },
-  { id: "bottom-right", label: "Bottom right", classes: "items-end justify-end" },
-] as const;
+const positions: { id: WatermarkPosition; label: string; classes: string; defaultRotation: number }[] = [
+  { id: "center", label: "Center", classes: "items-center justify-center", defaultRotation: 0 },
+  { id: "diagonal", label: "Diagonal", classes: "items-center justify-center", defaultRotation: 45 },
+  { id: "top-left", label: "Top left", classes: "items-start justify-start", defaultRotation: 0 },
+  { id: "top-right", label: "Top right", classes: "items-start justify-end", defaultRotation: 0 },
+  { id: "bottom-left", label: "Bottom left", classes: "items-end justify-start", defaultRotation: 0 },
+  { id: "bottom-right", label: "Bottom right", classes: "items-end justify-end", defaultRotation: 0 },
+];
 
 const faqs = [
-  { q: "Can I customize the watermark text and position?", a: "Yes — set any text, choose a position, and adjust opacity with a live preview before applying." },
+  { q: "Can I customize the watermark text and position?", a: "Yes — set any text, choose a position, and adjust opacity, size, and rotation with a live preview before applying." },
   { q: "Will the watermark appear on every page?", a: "Yes, it's applied consistently across all pages of the document." },
   { q: "Do I need an account?", a: "No. Watermarking works instantly with no sign-up required." },
 ];
@@ -46,16 +50,61 @@ const faqs = [
 export default function WatermarkPage() {
   const { consume } = usePendingFile();
   useRecordToolUsage("watermark");
-  const [file, setFile] = React.useState<File | null>(() => consume());
+
+  const { file, uploadedId, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
+    useSingleFileUpload();
+
   const [text, setText] = React.useState("CONFIDENTIAL");
-  const [position, setPosition] = React.useState<(typeof positions)[number]["id"]>("diagonal");
+  const [position, setPosition] = React.useState<WatermarkPosition>("diagonal");
   const [opacity, setOpacity] = React.useState([35]);
-  const { status, progress, start, retry, reset } = useSimulatedTask(2000, { failureRate: 0.15 });
+  const [fontSize, setFontSize] = React.useState([36]);
+  const [rotation, setRotation] = React.useState([45]);
+  const [processing, setProcessing] = React.useState(false);
+  const [processError, setProcessError] = React.useState<string | null>(null);
+  const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
+
+  const pendingFile = React.useRef(consume());
+  React.useEffect(() => {
+    if (pendingFile.current) void upload(pendingFile.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleReset = () => {
-    setFile(null);
-    reset();
+    resetUpload();
+    setProcessing(false);
+    setProcessError(null);
+    setResult(null);
   };
+
+  const handlePositionChange = (next: WatermarkPosition) => {
+    setPosition(next);
+    setRotation([positions.find((p) => p.id === next)!.defaultRotation]);
+  };
+
+  const handleApply = async () => {
+    if (!uploadedId) return;
+    setProcessing(true);
+    setProcessError(null);
+    try {
+      const processed = await watermarkPdf({
+        fileId: uploadedId,
+        text: text.trim(),
+        position,
+        opacity: opacity[0]!,
+        fontSize: fontSize[0]!,
+        rotation: rotation[0]!,
+      });
+      setResult(processed);
+    } catch (err) {
+      setProcessError(getApiErrorMessage(err));
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const showError = uploadStatus === "error" || !!processError;
+  const errorMessage = processError ?? uploadError ?? undefined;
+  const retry = uploadStatus === "error" && file ? () => upload(file) : handleApply;
 
   const activePosition = positions.find((p) => p.id === position)!;
 
@@ -71,16 +120,14 @@ export default function WatermarkPage() {
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">
-          {status === "error" ? (
-            <ToolErrorState
-              description="We couldn't apply the watermark. Please try again."
-              onRetry={retry}
-            />
-          ) : status === "done" && file ? (
+          {showError ? (
+            <ToolErrorState description={errorMessage} onRetry={retry} />
+          ) : result ? (
             <ResultCard
-              fileName={file.name}
+              fileName={result.outputName}
               fileType="pdf"
               summary={`"${text}" watermark applied to every page`}
+              downloadUrl={buildDownloadUrl(result.downloadUrl)}
               onReset={handleReset}
             />
           ) : !file ? (
@@ -89,7 +136,7 @@ export default function WatermarkPage() {
               <Dropzone
                 multiple={false}
                 accept=".pdf"
-                onFilesAdded={(files) => setFile(files[0])}
+                onFilesAdded={(files) => void upload(files[0])}
                 title="Drop a PDF to watermark"
                 formats="PDF files only"
               />
@@ -99,7 +146,7 @@ export default function WatermarkPage() {
               <SelectedFileRow
                 name={file.name}
                 size={file.size}
-                onRemove={status === "processing" ? undefined : handleReset}
+                onRemove={uploadStatus === "uploading" || processing ? undefined : handleReset}
               />
 
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -110,16 +157,14 @@ export default function WatermarkPage() {
                       id="wm-text"
                       value={text}
                       onChange={(e) => setText(e.target.value)}
-                      disabled={status === "processing"}
+                      maxLength={100}
+                      disabled={processing}
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
                     <Label>Position</Label>
-                    <Select
-                      value={position}
-                      onValueChange={(v) => setPosition(v as typeof position)}
-                    >
+                    <Select value={position} onValueChange={(v) => handlePositionChange(v as WatermarkPosition)}>
                       <SelectTrigger className="w-full">
                         <SelectValue />
                       </SelectTrigger>
@@ -144,7 +189,37 @@ export default function WatermarkPage() {
                       min={10}
                       max={80}
                       step={5}
-                      disabled={status === "processing"}
+                      disabled={processing}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <Label>Font size</Label>
+                      <span className="text-xs text-muted-foreground">{fontSize[0]}px</span>
+                    </div>
+                    <Slider
+                      value={fontSize}
+                      onValueChange={setFontSize}
+                      min={12}
+                      max={96}
+                      step={2}
+                      disabled={processing}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <Label>Rotation</Label>
+                      <span className="text-xs text-muted-foreground">{rotation[0]}°</span>
+                    </div>
+                    <Slider
+                      value={rotation}
+                      onValueChange={setRotation}
+                      min={-90}
+                      max={90}
+                      step={5}
+                      disabled={processing}
                     />
                   </div>
                 </div>
@@ -155,11 +230,12 @@ export default function WatermarkPage() {
                     <FileText className="absolute size-10 text-muted-foreground/20" />
                     <div className={cn("absolute inset-4 flex", activePosition.classes)}>
                       <span
-                        className={cn(
-                          "select-none text-lg font-bold uppercase tracking-widest text-primary",
-                          position === "diagonal" && "-rotate-45 text-2xl"
-                        )}
-                        style={{ opacity: opacity[0] / 100 }}
+                        className="select-none font-bold uppercase tracking-widest text-primary"
+                        style={{
+                          opacity: opacity[0]! / 100,
+                          fontSize: `${Math.min(fontSize[0]!, 32)}px`,
+                          transform: `rotate(${-rotation[0]!}deg)`,
+                        }}
                       >
                         {text || "WATERMARK"}
                       </span>
@@ -173,21 +249,20 @@ export default function WatermarkPage() {
                 </div>
               </div>
 
-              {status === "processing" && (
+              {processing || uploadStatus === "uploading" ? (
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-foreground">Applying watermark…</span>
-                    <span className="text-muted-foreground">{progress}%</span>
+                    <span className="text-foreground">
+                      {uploadStatus === "uploading" ? "Uploading…" : "Applying watermark…"}
+                    </span>
                   </div>
-                  <Progress value={progress} />
+                  <Progress value={70} />
                 </div>
-              )}
-
-              {status !== "processing" && (
+              ) : (
                 <Button
                   variant="gradient"
                   size="lg"
-                  onClick={start}
+                  onClick={handleApply}
                   disabled={!text.trim()}
                   className="self-start"
                 >

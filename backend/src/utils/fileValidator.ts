@@ -52,6 +52,7 @@ export function isAllowedFile(originalName: string, mimeType: string): boolean {
  */
 const EXTENSION_TO_MIME_TYPE: Record<string, string> = {
   ".pdf": "application/pdf",
+  ".zip": "application/zip",
 };
 
 export function getMimeTypeForFilename(filename: string): string {

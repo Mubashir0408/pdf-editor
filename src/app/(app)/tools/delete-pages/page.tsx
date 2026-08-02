@@ -14,11 +14,14 @@ import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useSimulatedTask } from "@/hooks/use-simulated-task";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
-
-const TOTAL_PAGES = 14;
+import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
+import { deletePages as deletePagesRequest } from "@/lib/api/deletePages";
+import { buildDownloadUrl } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/api/errors";
+import type { ProcessedFileResponse } from "@/lib/api/types";
 
 const faqs = [
   { q: "Can I preview before deleting?", a: "Yes — selected pages are clearly marked before you confirm the deletion." },
@@ -29,16 +32,29 @@ const faqs = [
 export default function DeletePagesPage() {
   const { consume } = usePendingFile();
   useRecordToolUsage("delete-pages");
-  const [file, setFile] = React.useState<File | null>(() => consume());
-  const [selected, setSelected] = React.useState<Set<number>>(new Set());
-  const { status, progress, start, retry, reset } = useSimulatedTask(1800, { failureRate: 0.15 });
 
-  const remaining = TOTAL_PAGES - selected.size;
+  const { file, uploadedId, pageCount, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
+    useSingleFileUpload({ fetchPageCount: true });
+
+  const [selected, setSelected] = React.useState<Set<number>>(new Set());
+  const [processing, setProcessing] = React.useState(false);
+  const [processError, setProcessError] = React.useState<string | null>(null);
+  const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
+
+  const pendingFile = React.useRef(consume());
+  React.useEffect(() => {
+    if (pendingFile.current) void upload(pendingFile.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const remaining = (pageCount ?? 0) - selected.size;
 
   const handleReset = () => {
-    setFile(null);
+    resetUpload();
     setSelected(new Set());
-    reset();
+    setProcessing(false);
+    setProcessError(null);
+    setResult(null);
   };
 
   const toggle = (page: number) => {
@@ -49,6 +65,24 @@ export default function DeletePagesPage() {
       return next;
     });
   };
+
+  const handleDelete = async () => {
+    if (!uploadedId) return;
+    setProcessing(true);
+    setProcessError(null);
+    try {
+      const processed = await deletePagesRequest(uploadedId, Array.from(selected).sort((a, b) => a - b));
+      setResult(processed);
+    } catch (err) {
+      setProcessError(getApiErrorMessage(err));
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const showError = uploadStatus === "error" || !!processError;
+  const errorMessage = processError ?? uploadError ?? undefined;
+  const retry = uploadStatus === "error" && file ? () => upload(file) : handleDelete;
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
@@ -62,16 +96,14 @@ export default function DeletePagesPage() {
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">
-          {status === "error" ? (
-            <ToolErrorState
-              description="We couldn't remove these pages. Please try again."
-              onRetry={retry}
-            />
-          ) : status === "done" && file ? (
+          {showError ? (
+            <ToolErrorState description={errorMessage} onRetry={retry} />
+          ) : result ? (
             <ResultCard
-              fileName={file.name}
+              fileName={result.outputName}
               fileType="pdf"
               summary={`${selected.size} page${selected.size === 1 ? "" : "s"} removed · ${remaining} pages remain`}
+              downloadUrl={buildDownloadUrl(result.downloadUrl)}
               onReset={handleReset}
             />
           ) : !file ? (
@@ -80,7 +112,7 @@ export default function DeletePagesPage() {
               <Dropzone
                 multiple={false}
                 accept=".pdf"
-                onFilesAdded={(files) => setFile(files[0])}
+                onFilesAdded={(files) => void upload(files[0])}
                 title="Drop a PDF to remove pages from"
                 formats="PDF files only"
               />
@@ -90,45 +122,54 @@ export default function DeletePagesPage() {
               <SelectedFileRow
                 name={file.name}
                 size={file.size}
-                onRemove={status === "processing" ? undefined : handleReset}
+                onRemove={uploadStatus === "uploading" || processing ? undefined : handleReset}
               />
 
-              <div>
-                <div className="mb-3 flex items-center justify-between">
-                  <p className="text-sm font-medium text-foreground">
-                    2. Select pages to delete ({selected.size} selected)
-                  </p>
-                  <span className="text-xs text-muted-foreground">{remaining} pages will remain</span>
+              {uploadStatus === "uploading" || !pageCount ? (
+                <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <Skeleton key={i} className="aspect-[3/4] w-full rounded-xl" />
+                  ))}
                 </div>
-                <PageThumbGrid
-                  totalPages={TOTAL_PAGES}
-                  selected={selected}
-                  onToggle={toggle}
-                  tone="destructive"
-                  disabled={status === "processing"}
-                />
-              </div>
-
-              {status === "processing" && (
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-foreground">Removing pages…</span>
-                    <span className="text-muted-foreground">{progress}%</span>
+              ) : (
+                <>
+                  <div>
+                    <div className="mb-3 flex items-center justify-between">
+                      <p className="text-sm font-medium text-foreground">
+                        2. Select pages to delete ({selected.size} selected)
+                      </p>
+                      <span className="text-xs text-muted-foreground">{remaining} pages will remain</span>
+                    </div>
+                    <PageThumbGrid
+                      totalPages={pageCount}
+                      selected={selected}
+                      onToggle={toggle}
+                      tone="destructive"
+                      disabled={processing}
+                    />
                   </div>
-                  <Progress value={progress} />
-                </div>
-              )}
 
-              {status !== "processing" && (
-                <Button
-                  variant="gradient"
-                  size="lg"
-                  onClick={start}
-                  disabled={selected.size === 0 || remaining === 0}
-                  className="self-start"
-                >
-                  Delete {selected.size || ""} pages <ArrowRight />
-                </Button>
+                  {processing && (
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-foreground">Removing pages…</span>
+                      </div>
+                      <Progress value={70} />
+                    </div>
+                  )}
+
+                  {!processing && (
+                    <Button
+                      variant="gradient"
+                      size="lg"
+                      onClick={handleDelete}
+                      disabled={selected.size === 0 || remaining === 0}
+                      className="self-start"
+                    >
+                      Delete {selected.size || ""} pages <ArrowRight />
+                    </Button>
+                  )}
+                </>
               )}
             </>
           )}

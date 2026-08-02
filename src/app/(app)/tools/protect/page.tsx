@@ -16,9 +16,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
-import { useSimulatedTask } from "@/hooks/use-simulated-task";
 import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
+import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
+import { protectPdf } from "@/lib/api/protect";
+import { buildDownloadUrl } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/api/errors";
+import type { ProcessedFileResponse } from "@/lib/api/types";
 
 const faqs = [
   { q: "How strong is the encryption?", a: "Files are protected with a password required to open them, matching standard PDF encryption practices." },
@@ -29,23 +33,60 @@ const faqs = [
 export default function ProtectPage() {
   const { consume } = usePendingFile();
   useRecordToolUsage("protect");
-  const [file, setFile] = React.useState<File | null>(() => consume());
+
+  const { file, uploadedId, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
+    useSingleFileUpload();
+
   const [password, setPassword] = React.useState("");
   const [confirm, setConfirm] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const [allowPrinting, setAllowPrinting] = React.useState(true);
   const [allowCopying, setAllowCopying] = React.useState(false);
-  const { status, progress, start, retry, reset } = useSimulatedTask(2000, { failureRate: 0.15 });
+  const [processing, setProcessing] = React.useState(false);
+  const [processError, setProcessError] = React.useState<string | null>(null);
+  const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
+
+  const pendingFile = React.useRef(consume());
+  React.useEffect(() => {
+    if (pendingFile.current) void upload(pendingFile.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const passwordsMatch = password.length >= 6 && password === confirm;
   const showMismatch = confirm.length > 0 && password !== confirm;
 
   const handleReset = () => {
-    setFile(null);
+    resetUpload();
     setPassword("");
     setConfirm("");
-    reset();
+    setProcessing(false);
+    setProcessError(null);
+    setResult(null);
   };
+
+  const handleProtect = async () => {
+    if (!uploadedId) return;
+    setProcessing(true);
+    setProcessError(null);
+    try {
+      const processed = await protectPdf({
+        fileId: uploadedId,
+        password,
+        confirmPassword: confirm,
+        allowPrinting,
+        allowCopying,
+      });
+      setResult(processed);
+    } catch (err) {
+      setProcessError(getApiErrorMessage(err));
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const showError = uploadStatus === "error" || !!processError;
+  const errorMessage = processError ?? uploadError ?? undefined;
+  const retry = uploadStatus === "error" && file ? () => upload(file) : handleProtect;
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
@@ -59,16 +100,14 @@ export default function ProtectPage() {
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">
-          {status === "error" ? (
-            <ToolErrorState
-              description="We couldn't encrypt this file. Please try again."
-              onRetry={retry}
-            />
-          ) : status === "done" && file ? (
+          {showError ? (
+            <ToolErrorState description={errorMessage} onRetry={retry} />
+          ) : result ? (
             <ResultCard
-              fileName={file.name}
+              fileName={result.outputName}
               fileType="pdf"
               summary="Your file is now password protected"
+              downloadUrl={buildDownloadUrl(result.downloadUrl)}
               onReset={handleReset}
             />
           ) : !file ? (
@@ -77,7 +116,7 @@ export default function ProtectPage() {
               <Dropzone
                 multiple={false}
                 accept=".pdf"
-                onFilesAdded={(files) => setFile(files[0])}
+                onFilesAdded={(files) => void upload(files[0])}
                 title="Drop a PDF to protect"
                 formats="PDF files only"
               />
@@ -87,7 +126,7 @@ export default function ProtectPage() {
               <SelectedFileRow
                 name={file.name}
                 size={file.size}
-                onRemove={status === "processing" ? undefined : handleReset}
+                onRemove={uploadStatus === "uploading" || processing ? undefined : handleReset}
               />
 
               <div>
@@ -102,7 +141,7 @@ export default function ProtectPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="At least 6 characters"
-                        disabled={status === "processing"}
+                        disabled={processing}
                         className="pr-9"
                       />
                       <button
@@ -123,7 +162,7 @@ export default function ProtectPage() {
                       value={confirm}
                       onChange={(e) => setConfirm(e.target.value)}
                       placeholder="Re-enter password"
-                      disabled={status === "processing"}
+                      disabled={processing}
                       aria-invalid={showMismatch}
                     />
                     {showMismatch && (
@@ -140,7 +179,7 @@ export default function ProtectPage() {
                     <Checkbox
                       checked={allowPrinting}
                       onCheckedChange={(v) => setAllowPrinting(!!v)}
-                      disabled={status === "processing"}
+                      disabled={processing}
                     />
                     Allow printing
                   </Label>
@@ -148,28 +187,27 @@ export default function ProtectPage() {
                     <Checkbox
                       checked={allowCopying}
                       onCheckedChange={(v) => setAllowCopying(!!v)}
-                      disabled={status === "processing"}
+                      disabled={processing}
                     />
                     Allow copying text and images
                   </Label>
                 </div>
               </div>
 
-              {status === "processing" && (
+              {processing || uploadStatus === "uploading" ? (
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-foreground">Encrypting…</span>
-                    <span className="text-muted-foreground">{progress}%</span>
+                    <span className="text-foreground">
+                      {uploadStatus === "uploading" ? "Uploading…" : "Encrypting…"}
+                    </span>
                   </div>
-                  <Progress value={progress} />
+                  <Progress value={70} />
                 </div>
-              )}
-
-              {status !== "processing" && (
+              ) : (
                 <Button
                   variant="gradient"
                   size="lg"
-                  onClick={start}
+                  onClick={handleProtect}
                   disabled={!passwordsMatch}
                   className="self-start"
                 >

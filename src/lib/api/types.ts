@@ -44,3 +44,19 @@ export interface ProcessedFileResponse {
   downloadUrl: string;
   createdAt: string;
 }
+
+export interface PdfInfoResponse {
+  pageCount: number;
+}
+
+export type SplitRequest =
+  | { mode: "range"; fileId: string; groups: number[][] }
+  | { mode: "pages"; fileId: string };
+
+export type WatermarkPosition =
+  | "center"
+  | "diagonal"
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";

@@ -1,9 +1,8 @@
-import fs from "node:fs";
 import path from "node:path";
 
-import { env } from "../config/env";
 import { logger } from "../config/logger";
 import { ApiError } from "../utils/ApiError";
+import { resolveManyUploadedFilePaths } from "../utils/resolveUploadedFile";
 import type { PdfService } from "./pdf.service";
 import type { DownloadService } from "./download.service";
 import type { ProcessedFileDto } from "../types/file";
@@ -13,10 +12,9 @@ import type { ProcessedFileDto } from "../types/file";
  * disk (each id is already validated upstream to match the exact filename
  * shape our own storage layer generates — see common.validator.ts), make
  * sure they're all actually PDFs, hand their paths to PdfService, and save
- * the result via DownloadService. This is the pattern every future tool
- * (split, rotate, ...) follows — a small service per tool that wires the
- * shared services together, so neither of them needs to know anything
- * about any specific tool.
+ * the result via DownloadService. Every tool service follows this same
+ * shape — a small class that wires the shared services together so none
+ * of them needs to know anything about any specific tool.
  *
  * Nothing here touches a database — `fileIds` map straight onto
  * `uploadDir/<id>` because that filename *is* the id (see
@@ -35,8 +33,7 @@ export class MergeService {
       }
     });
 
-    const inputPaths = fileIds.map((id) => path.join(env.uploadDir, id));
-    await this.assertAllExist(inputPaths);
+    const inputPaths = await resolveManyUploadedFilePaths(fileIds);
 
     const labels = fileIds.map((_, i) => `file ${i + 1}`);
     const mergedBytes = await this.pdfService.merge(inputPaths, labels);
@@ -55,19 +52,5 @@ export class MergeService {
     });
 
     return result;
-  }
-
-  private async assertAllExist(paths: string[]): Promise<void> {
-    await Promise.all(
-      paths.map(async (filePath, i) => {
-        try {
-          await fs.promises.access(filePath, fs.constants.R_OK);
-        } catch {
-          throw ApiError.notFound(
-            `Uploaded file ${i + 1} was not found. It may have expired — please re-upload and try again.`
-          );
-        }
-      })
-    );
   }
 }
