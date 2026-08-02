@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Languages, ArrowRight, ArrowLeftRight } from "lucide-react";
 
-import { PageHeader } from "@/components/shared/page-header";
+import { ToolHero } from "@/components/tools/tool-hero";
 import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
@@ -45,10 +45,12 @@ export default function TranslatePage() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-      <PageHeader
+      <ToolHero
         icon={Languages}
         title="Translate PDF"
         description="Translate entire documents while preserving layout and formatting."
+        gradientFrom="#5B7FFF"
+        gradientTo="#36CFC9"
       />
 
       <Card className="py-6">

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ScanText, Copy, Download, Check } from "lucide-react";
 
-import { PageHeader } from "@/components/shared/page-header";
+import { ToolHero } from "@/components/tools/tool-hero";
 import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
 import { ToolFaq } from "@/components/tools/tool-faq";
@@ -61,10 +61,12 @@ export default function OcrPage() {
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-      <PageHeader
+      <ToolHero
         icon={ScanText}
         title="OCR Scanner"
         description="Extract editable, searchable text from scanned images and PDFs."
+        gradientFrom="#36CFC9"
+        gradientTo="#22C55E"
       />
 
       <Card className="py-6">

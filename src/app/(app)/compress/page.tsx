@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Minimize2, ArrowRight, FileText } from "lucide-react";
 
-import { PageHeader } from "@/components/shared/page-header";
+import { ToolHero } from "@/components/tools/tool-hero";
 import { Dropzone } from "@/components/tools/dropzone";
 import { ResultCard } from "@/components/tools/result-card";
 import { ToolFaq } from "@/components/tools/tool-faq";
@@ -47,10 +47,12 @@ export default function CompressPage() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-      <PageHeader
+      <ToolHero
         icon={Minimize2}
         title="Compress PDF"
         description="Shrink file size while keeping documents sharp and readable."
+        gradientFrom="#22C55E"
+        gradientTo="#36CFC9"
       />
 
       <Card className="py-6">

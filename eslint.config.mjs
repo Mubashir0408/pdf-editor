@@ -12,7 +12,10 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    ignores: [".next/**", "out/**", "build/**", "next-env.d.ts"],
+    // backend/ is a separate project with its own package.json, tsconfig,
+    // and eslint.config.mjs — it must never be picked up by the frontend's
+    // linter (or vice versa).
+    ignores: [".next/**", "out/**", "build/**", "next-env.d.ts", "backend/**"],
   },
 ];
 

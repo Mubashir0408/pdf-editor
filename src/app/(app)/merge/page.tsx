@@ -4,7 +4,8 @@ import * as React from "react";
 import { Layers, ArrowRight } from "lucide-react";
 import { Reorder } from "framer-motion";
 
-import { PageHeader } from "@/components/shared/page-header";
+import { ToolHero } from "@/components/tools/tool-hero";
+import { ToolErrorState } from "@/components/tools/tool-error-state";
 import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
@@ -13,15 +14,24 @@ import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useSimulatedTask } from "@/hooks/use-simulated-task";
 import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
+import { uploadFile } from "@/lib/api/upload";
+import { mergePdfs } from "@/lib/api/merge";
+import { getApiErrorMessage } from "@/lib/api/errors";
+import { buildDownloadUrl } from "@/lib/api-client";
+import type { ProcessedFileResponse } from "@/lib/api/types";
 
 interface MergeFile {
   id: string;
-  name: string;
-  size: number;
+  file: File;
+  /** Set once this file has finished uploading and the backend has assigned it an id. */
+  uploadedId?: string;
+  /** 0-100 while uploading. */
+  progress: number;
 }
+
+type MergeStatus = "idle" | "uploading" | "merging" | "done" | "error";
 
 const faqs = [
   { q: "How many PDFs can I merge at once?", a: "Up to 20 files per merge, in any order you choose." },
@@ -29,42 +39,97 @@ const faqs = [
   { q: "Do I need an account?", a: "No. Merging works instantly with no sign-up required." },
 ];
 
+let mergeFileCounter = 0;
+function nextClientId() {
+  mergeFileCounter += 1;
+  return `merge-file-${mergeFileCounter}`;
+}
+
 export default function MergePage() {
   const { consume } = usePendingFile();
   useRecordToolUsage("merge");
+
   const [files, setFiles] = React.useState<MergeFile[]>(() => {
     const pending = consume();
-    return pending ? [{ id: `${pending.name}-${Date.now()}`, name: pending.name, size: pending.size }] : [];
+    return pending ? [{ id: nextClientId(), file: pending, progress: 0 }] : [];
   });
-  const { status, progress, start, reset } = useSimulatedTask(2600);
+  const [status, setStatus] = React.useState<MergeStatus>("idle");
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
+
+  const isBusy = status === "uploading" || status === "merging";
 
   const handleFilesAdded = (added: File[]) => {
-    setFiles((prev) => [
-      ...prev,
-      ...added.map((f) => ({ id: `${f.name}-${Date.now()}-${Math.random()}`, name: f.name, size: f.size })),
-    ]);
+    setFiles((prev) => [...prev, ...added.map((file) => ({ id: nextClientId(), file, progress: 0 }))]);
   };
 
   const handleReset = () => {
     setFiles([]);
-    reset();
+    setStatus("idle");
+    setErrorMessage(null);
+    setResult(null);
   };
+
+  const updateProgress = (id: string, progress: number) => {
+    setFiles((prev) => prev.map((f) => (f.id === id ? { ...f, progress } : f)));
+  };
+
+  const handleMerge = async () => {
+    setStatus("uploading");
+    setErrorMessage(null);
+
+    try {
+      // Files already uploaded from a previous failed attempt are reused
+      // rather than re-uploaded, so retrying after a merge-step failure
+      // doesn't redo work that already succeeded.
+      const uploaded = await Promise.all(
+        files.map(async (mergeFile) => {
+          if (mergeFile.uploadedId) return mergeFile;
+          const response = await uploadFile(mergeFile.file, (percent) =>
+            updateProgress(mergeFile.id, percent)
+          );
+          return { ...mergeFile, uploadedId: response.id, progress: 100 };
+        })
+      );
+      setFiles(uploaded);
+
+      setStatus("merging");
+      const fileIds = uploaded.map((f) => f.uploadedId!);
+      const merged = await mergePdfs(fileIds);
+
+      setResult(merged);
+      setStatus("done");
+    } catch (err) {
+      setErrorMessage(getApiErrorMessage(err));
+      setStatus("error");
+    }
+  };
+
+  const overallProgress =
+    status === "merging"
+      ? 95
+      : Math.round(files.reduce((sum, f) => sum + f.progress, 0) / Math.max(files.length, 1));
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-      <PageHeader
+      <ToolHero
         icon={Layers}
         title="Merge PDFs"
         description="Combine multiple documents into a single organized PDF."
+        gradientFrom="#7C5CFF"
+        gradientTo="#B45CFF"
       />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">
-          {status === "done" ? (
+          {status === "error" ? (
+            <ToolErrorState description={errorMessage ?? undefined} onRetry={handleMerge} />
+          ) : status === "done" && result ? (
             <ResultCard
-              fileName="Merged Document.pdf"
+              fileName={result.outputName}
               fileType="pdf"
               summary={`${files.length} files combined into one PDF`}
+              downloadUrl={buildDownloadUrl(result.downloadUrl)}
               onReset={handleReset}
             />
           ) : (
@@ -93,14 +158,15 @@ export default function MergePage() {
                     className="flex flex-col gap-2.5"
                   >
                     {files.map((f, i) => (
-                      <Reorder.Item key={f.id} value={f}>
+                      <Reorder.Item key={f.id} value={f} dragListener={!isBusy}>
                         <SelectedFileRow
-                          name={f.name}
-                          size={f.size}
+                          name={f.file.name}
+                          size={f.file.size}
                           index={i}
-                          draggable
+                          draggable={!isBusy}
+                          progress={status === "uploading" ? f.progress : undefined}
                           onRemove={
-                            status === "processing"
+                            isBusy
                               ? undefined
                               : () => setFiles((prev) => prev.filter((x) => x.id !== f.id))
                           }
@@ -111,18 +177,20 @@ export default function MergePage() {
                 </div>
               )}
 
-              {status === "processing" && (
+              {isBusy && (
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-foreground">Merging…</span>
-                    <span className="text-muted-foreground">{progress}%</span>
+                    <span className="text-foreground">
+                      {status === "uploading" ? "Uploading…" : "Merging on the server…"}
+                    </span>
+                    <span className="text-muted-foreground">{overallProgress}%</span>
                   </div>
-                  <Progress value={progress} />
+                  <Progress value={overallProgress} />
                 </div>
               )}
 
-              {files.length >= 2 && status !== "processing" && (
-                <Button variant="gradient" size="lg" onClick={start} className="self-start">
+              {files.length >= 2 && !isBusy && (
+                <Button variant="gradient" size="lg" onClick={handleMerge} className="self-start">
                   Merge {files.length} files <ArrowRight />
                 </Button>
               )}

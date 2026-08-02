@@ -115,8 +115,9 @@ function WallpaperPicker({
             <button
               key={w.id}
               onClick={() => onChange(w.id)}
+              aria-pressed={current === w.id}
               className={cn(
-                "flex items-center justify-between rounded-lg px-2.5 py-2 text-sm transition-colors hover:bg-muted",
+                "flex items-center justify-between rounded-lg px-2.5 py-2 text-sm transition-colors outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring",
                 current === w.id && "bg-primary/10 text-primary"
               )}
             >

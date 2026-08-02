@@ -1,0 +1,70 @@
+// Prisma schema for DocuFlow AI backend.
+// Backed by Supabase PostgreSQL — see backend/README.md for setup.
+// Run `npm run prisma:migrate` after configuring DATABASE_URL/DIRECT_URL in .env.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // Pooled connection (PgBouncer, port 6543) — used for normal query traffic.
+  url       = env("DATABASE_URL")
+  // Direct connection (port 5432) — required for migrations. PgBouncer's
+  // transaction pooling mode doesn't support the prepared statements /
+  // multi-statement transactions `prisma migrate` needs.
+  directUrl = env("DIRECT_URL")
+}
+
+enum UploadStatus {
+  UPLOADED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+/// A file uploaded by a client, before any processing has been applied.
+model UploadedFile {
+  id           String   @id @default(uuid())
+  originalName String
+  storedName   String   @unique
+  mimeType     String
+  extension    String
+  size         Int
+  status       UploadStatus @default(UPLOADED)
+
+  /// Reserved for a future auth milestone — nullable so this schema works
+  /// identically before and after user accounts exist. No FK yet.
+  userId       String?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([status])
+  @@map("uploaded_files")
+}
+
+/// The output of running a tool (merge, split, rotate, ...) against one or
+/// more UploadedFiles. A row is only ever created after processing has
+/// already succeeded — there is no "pending"/"failed" state to track here,
+/// the request itself fails instead.
+///
+/// `sourceFileIds` is a plain array, not a Prisma relation: tools like
+/// Merge take many inputs and produce one output, which a scalar array
+/// represents (with order preserved) far more simply than a join table.
+/// Nothing here queries "which outputs used upload X" yet — if that need
+/// shows up later, that's the point to introduce a proper join table.
+model ProcessedFile {
+  id            String   @id @default(uuid())
+  tool          String
+  outputName    String
+  /// Filename on disk under generated/ — never an absolute path.
+  outputPath    String
+  size          Int
+  sourceFileIds String[]
+
+  createdAt     DateTime @default(now())
+
+  @@index([tool])
+  @@map("processed_files")
+}

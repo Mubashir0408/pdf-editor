@@ -42,7 +42,6 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
       <div className="flex items-center gap-1.5 sm:gap-2">
         <Select value={language} onValueChange={setLanguage}>
           <SelectTrigger
-            size="sm"
             className="hidden w-auto gap-1.5 border-0 bg-transparent shadow-none hover:bg-muted sm:flex"
             aria-label="Language"
           >

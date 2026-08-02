@@ -48,3 +48,15 @@ claude.md
 
 # Prompt files
 prompts/
+
+# Backend (Express/TypeScript API)
+backend/node_modules/
+backend/dist/
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/generated/*
+!backend/generated/.gitkeep
+backend/logs/*
+!backend/logs/.gitkeep
+backend/.env
+backend/*.tsbuildinfo

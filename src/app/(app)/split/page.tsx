@@ -3,17 +3,17 @@
 import * as React from "react";
 import { Scissors, ArrowRight, FileText } from "lucide-react";
 
-import { PageHeader } from "@/components/shared/page-header";
+import { ToolHero } from "@/components/tools/tool-hero";
 import { Dropzone } from "@/components/tools/dropzone";
 import { ResultCard } from "@/components/tools/result-card";
 import { ToolFaq } from "@/components/tools/tool-faq";
 import { RelatedTools } from "@/components/tools/related-tools";
+import { PageThumbGrid } from "@/components/tools/page-thumb-grid";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
 import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
@@ -55,12 +55,25 @@ export default function SplitPage() {
     reset();
   };
 
+  const togglePage = (page: number) => {
+    const next = new Set(selectedPages);
+    if (next.has(page)) next.delete(page);
+    else next.add(page);
+    setRange(
+      Array.from(next)
+        .sort((a, b) => a - b)
+        .join(", ")
+    );
+  };
+
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-      <PageHeader
+      <ToolHero
         icon={Scissors}
         title="Split PDF"
         description="Break a document apart by page range and export each piece."
+        gradientFrom="#36CFC9"
+        gradientTo="#5B7FFF"
       />
 
       <Card className="py-6">
@@ -109,36 +122,13 @@ export default function SplitPage() {
 
               <div>
                 <p className="mb-3 text-sm font-medium text-foreground">3. Preview pages</p>
-                <div className="grid grid-cols-4 gap-2.5 sm:grid-cols-6 lg:grid-cols-8">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                    const selected = selectedPages.has(page);
-                    return (
-                      <button
-                        key={page}
-                        onClick={() => {
-                          const next = new Set(selectedPages);
-                          if (next.has(page)) next.delete(page);
-                          else next.add(page);
-                          setRange(
-                            Array.from(next)
-                              .sort((a, b) => a - b)
-                              .join(", ")
-                          );
-                        }}
-                        disabled={status === "processing"}
-                        className={cn(
-                          "flex aspect-[3/4] flex-col items-center justify-center gap-1 rounded-lg border text-xs font-medium transition-colors",
-                          selected
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-border bg-muted/40 text-muted-foreground hover:bg-muted"
-                        )}
-                      >
-                        <FileText className="size-4" />
-                        {page}
-                      </button>
-                    );
-                  })}
-                </div>
+                <PageThumbGrid
+                  totalPages={totalPages}
+                  selected={selectedPages}
+                  onToggle={togglePage}
+                  density="compact"
+                  disabled={status === "processing"}
+                />
               </div>
 
               {status === "processing" && (

@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 import * as Icons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -34,25 +37,33 @@ export function RelatedTools({ currentId }: { currentId: string }) {
     <section className="flex flex-col gap-4">
       <h2 className="text-lg font-semibold tracking-tight text-foreground">Related tools</h2>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {tools.map((tool) => {
+        {tools.map((tool, i) => {
           const Icon = (Icons as unknown as Record<string, LucideIcon>)[tool.icon] ?? Icons.FileText;
           return (
-            <Link
+            <motion.div
               key={tool.id}
-              href={tool.href}
-              className="group flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-4 card-elevated transition-shadow hover:card-elevated-lg"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: i * 0.04 }}
+              whileHover={{ y: -4 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <div
-                className="flex size-10 shrink-0 items-center justify-center rounded-xl text-white shadow-sm transition-transform group-hover:scale-105"
-                style={{ backgroundImage: `linear-gradient(135deg, ${tool.colorFrom}, ${tool.colorTo})` }}
+              <Link
+                href={tool.href}
+                className="group flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-4 card-elevated outline-none transition-shadow hover:card-elevated-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <Icon className="size-5" strokeWidth={2} />
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-foreground">{tool.label}</p>
-                <p className="truncate text-xs text-muted-foreground">{tool.description}</p>
-              </div>
-            </Link>
+                <div
+                  className="flex size-10 shrink-0 items-center justify-center rounded-xl text-white shadow-sm transition-transform group-hover:scale-105"
+                  style={{ backgroundImage: `linear-gradient(135deg, ${tool.colorFrom}, ${tool.colorTo})` }}
+                >
+                  <Icon className="size-5" strokeWidth={2} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground">{tool.label}</p>
+                  <p className="truncate text-xs text-muted-foreground">{tool.description}</p>
+                </div>
+              </Link>
+            </motion.div>
           );
         })}
       </div>

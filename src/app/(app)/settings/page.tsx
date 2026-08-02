@@ -102,8 +102,9 @@ function SettingsPageInner() {
             <button
               key={s.id}
               onClick={() => setActive(s.id)}
+              aria-current={active === s.id ? "page" : undefined}
               className={cn(
-                "flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors lg:shrink",
+                "flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:shrink",
                 active === s.id
                   ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -134,8 +135,9 @@ function SettingsPageInner() {
                       <button
                         key={t.id}
                         onClick={() => setTheme(t.id)}
+                        aria-pressed={theme === t.id}
                         className={cn(
-                          "relative flex flex-col items-center gap-2 rounded-xl border px-4 py-4 transition-colors",
+                          "relative flex flex-col items-center gap-2 rounded-xl border px-4 py-4 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                           theme === t.id
                             ? "border-primary bg-primary/5"
                             : "border-border hover:bg-muted/50"
@@ -162,8 +164,9 @@ function SettingsPageInner() {
                       <button
                         key={w.id}
                         onClick={() => mounted && setWallpaper(w.id)}
+                        aria-pressed={mounted && wallpaper === w.id}
                         className={cn(
-                          "flex items-center justify-center gap-1.5 rounded-lg border px-2.5 py-2 text-xs font-medium transition-colors",
+                          "flex items-center justify-center gap-1.5 rounded-lg border px-2.5 py-2 text-xs font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                           mounted && wallpaper === w.id
                             ? "border-primary bg-primary/5 text-primary"
                             : "border-border text-muted-foreground hover:bg-muted"

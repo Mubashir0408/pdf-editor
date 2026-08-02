@@ -14,6 +14,10 @@ interface ResultCardProps {
   summary?: string;
   onReset: () => void;
   onPreview?: () => void;
+  /** When provided, the Download button is a real link to the generated
+   *  file. Tools not yet backed by the real API omit this and get the
+   *  same inert button as before. */
+  downloadUrl?: string;
 }
 
 export function ResultCard({
@@ -23,6 +27,7 @@ export function ResultCard({
   summary,
   onReset,
   onPreview,
+  downloadUrl,
 }: ResultCardProps) {
   return (
     <motion.div
@@ -50,8 +55,16 @@ export function ResultCard({
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-2.5">
-        <Button variant="gradient">
-          <Download /> Download
+        <Button variant="gradient" asChild={!!downloadUrl}>
+          {downloadUrl ? (
+            <a href={downloadUrl} download={fileName}>
+              <Download /> Download
+            </a>
+          ) : (
+            <>
+              <Download /> Download
+            </>
+          )}
         </Button>
         {onPreview && (
           <Button variant="outline" onClick={onPreview}>

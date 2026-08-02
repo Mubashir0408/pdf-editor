@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { RefreshCw, ArrowRight } from "lucide-react";
 
-import { PageHeader } from "@/components/shared/page-header";
+import { ToolHero } from "@/components/tools/tool-hero";
 import { Dropzone } from "@/components/tools/dropzone";
 import { SelectedFileRow, inferFileType } from "@/components/tools/selected-file-row";
 import { ResultCard } from "@/components/tools/result-card";
@@ -18,6 +18,7 @@ import { FileIcon } from "@/components/shared/file-icon";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
 import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
+import { cn } from "@/lib/utils";
 import type { FileType } from "@/lib/types";
 
 const ALL_FORMATS: { id: FileType; label: string }[] = [
@@ -56,10 +57,12 @@ function ConvertPageInner() {
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-      <PageHeader
+      <ToolHero
         icon={RefreshCw}
         title="Convert files"
         description="Transform documents between PDF, Word, Excel, PowerPoint, and image formats — free, and no account needed."
+        gradientFrom="#5B7FFF"
+        gradientTo="#7C5CFF"
       />
 
       <Card className="py-6">
@@ -100,11 +103,13 @@ function ConvertPageInner() {
                         key={f.id}
                         onClick={() => setTarget(f.id)}
                         disabled={status === "processing"}
-                        className={`flex flex-col items-center gap-2 rounded-xl border px-3 py-3 text-xs font-medium transition-colors ${
+                        aria-pressed={target === f.id}
+                        className={cn(
+                          "flex flex-col items-center gap-2 rounded-xl border px-3 py-3 text-xs font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                           target === f.id
                             ? "border-primary bg-primary/5 text-primary"
                             : "border-border text-foreground hover:bg-muted"
-                        }`}
+                        )}
                       >
                         <FileIcon type={f.id} className="size-8" />
                         {f.label}

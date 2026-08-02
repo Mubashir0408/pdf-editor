@@ -23,7 +23,7 @@ export function QuickActionsGrid({ actions }: { actions: QuickAction[] }) {
           >
             <Link
               href={action.href}
-              className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-border/70 bg-card p-4 card-elevated transition-shadow hover:card-elevated-lg sm:p-5"
+              className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-border/70 bg-card p-4 card-elevated outline-none transition-shadow hover:card-elevated-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:p-5"
             >
               <div
                 className="flex size-10 items-center justify-center rounded-xl text-white shadow-sm transition-transform group-hover:scale-105"
