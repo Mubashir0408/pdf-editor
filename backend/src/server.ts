@@ -2,7 +2,6 @@ import { createApp } from "./app";
 import { env } from "./config/env";
 import { logger } from "./config/logger";
 import { ensureDirSync } from "./utils/pathHelpers";
-import { prisma } from "./database/prisma";
 
 // Multer (uploads) and DownloadService (processed output) will fail on
 // every request if these don't exist yet — created once at boot rather
@@ -19,19 +18,17 @@ const server = app.listen(env.PORT, () => {
   );
 });
 
-async function shutdown(signal: string) {
+function shutdown(signal: string) {
   logger.info({ signal }, "Shutting down gracefully...");
 
   server.close(() => {
     logger.info("HTTP server closed");
+    process.exit(0);
   });
-
-  await prisma.$disconnect();
-  process.exit(0);
 }
 
-process.on("SIGINT", () => void shutdown("SIGINT"));
-process.on("SIGTERM", () => void shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
 
 process.on("unhandledRejection", (reason) => {
   logger.error({ err: reason }, "Unhandled promise rejection");

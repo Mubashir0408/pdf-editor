@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { PrismaClient, ProcessedFile } from "@prisma/client";
 import type { Response } from "express";
 
 import { env } from "../config/env";
@@ -9,65 +8,46 @@ import { generateStoredFileName } from "../utils/pathHelpers";
 import { getMimeTypeForFilename } from "../utils/fileValidator";
 import type { ProcessedFileDto } from "../types/file";
 
-export function toProcessedFileDto(file: ProcessedFile): ProcessedFileDto {
-  return {
-    id: file.id,
-    tool: file.tool,
-    outputName: file.outputName,
-    size: file.size,
-    downloadUrl: `/download/${file.id}`,
-    createdAt: file.createdAt,
-  };
-}
-
 interface SaveProcessedFileParams {
   tool: string;
   outputName: string;
   bytes: Uint8Array;
-  sourceFileIds: string[];
 }
 
 /**
  * The counterpart to UploadService: instead of accepting a file a client
  * sent us, this persists a file *we* generated (a merged PDF, eventually a
- * split zip, ...) — writing it under generated/, recording it, and later
- * serving it back out. Every tool milestone ends by calling `save()` here.
+ * split zip, ...) under generated/, and later serves it back out. There's
+ * no database row backing any of this — `id` below *is* the generated
+ * on-disk filename, and the human-friendly `outputName` travels in the
+ * download URL's query string (`?name=`) rather than being looked up,
+ * since nothing persists between the two requests to look it up in.
  */
 export class DownloadService {
-  constructor(private readonly prisma: PrismaClient) {}
-
   async save(params: SaveProcessedFileParams): Promise<ProcessedFileDto> {
     const storedName = generateStoredFileName(params.outputName);
     const destination = path.join(env.generatedDir, storedName);
 
     await fs.promises.writeFile(destination, params.bytes);
 
-    const created = await this.prisma.processedFile.create({
-      data: {
-        tool: params.tool,
-        outputName: params.outputName,
-        outputPath: storedName,
-        size: params.bytes.byteLength,
-        sourceFileIds: params.sourceFileIds,
-      },
-    });
-
-    return toProcessedFileDto(created);
+    return {
+      id: storedName,
+      tool: params.tool,
+      outputName: params.outputName,
+      size: params.bytes.byteLength,
+      downloadUrl: `/download/${storedName}?name=${encodeURIComponent(params.outputName)}`,
+      createdAt: new Date().toISOString(),
+    };
   }
 
   /**
    * Streams a previously generated file to the client as an attachment.
-   * Writes headers and pipes directly from disk rather than buffering the
-   * whole file in memory — merged PDFs can be large.
+   * `displayName` (from the download URL's `?name=` query param) is what
+   * the browser's save dialog shows; it falls back to the raw id if
+   * missing so this never 500s over a stripped query string.
    */
-  async streamToResponse(id: string, res: Response): Promise<void> {
-    const file = await this.prisma.processedFile.findUnique({ where: { id } });
-
-    if (!file) {
-      throw ApiError.notFound(`No generated file found with id "${id}".`);
-    }
-
-    const filePath = path.join(env.generatedDir, file.outputPath);
+  async streamToResponse(id: string, displayName: string | undefined, res: Response): Promise<void> {
+    const filePath = path.join(env.generatedDir, id);
 
     try {
       await fs.promises.access(filePath, fs.constants.R_OK);
@@ -75,9 +55,12 @@ export class DownloadService {
       throw ApiError.notFound("This file is no longer available for download.");
     }
 
-    res.setHeader("Content-Type", getMimeTypeForFilename(file.outputName));
-    res.setHeader("Content-Length", file.size);
-    res.setHeader("Content-Disposition", buildContentDisposition(file.outputName));
+    const stat = await fs.promises.stat(filePath);
+    const outputName = displayName ?? id;
+
+    res.setHeader("Content-Type", getMimeTypeForFilename(outputName));
+    res.setHeader("Content-Length", stat.size);
+    res.setHeader("Content-Disposition", buildContentDisposition(outputName));
 
     await new Promise<void>((resolve, reject) => {
       const stream = fs.createReadStream(filePath);
@@ -85,6 +68,21 @@ export class DownloadService {
       stream.on("close", resolve);
       stream.pipe(res);
     });
+  }
+
+  /** Best-effort cleanup — logged, never allowed to fail the request that
+   *  triggered it (the response has already succeeded by the time this
+   *  runs; a stray temp file is a much smaller problem than a 500 here). */
+  async deleteQuietly(filePaths: string[], onError: (filePath: string, err: unknown) => void): Promise<void> {
+    await Promise.all(
+      filePaths.map(async (filePath) => {
+        try {
+          await fs.promises.unlink(filePath);
+        } catch (err) {
+          onError(filePath, err);
+        }
+      })
+    );
   }
 }
 

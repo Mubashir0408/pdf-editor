@@ -1,11 +1,13 @@
-# DocuFlow AI — Backend (Milestone 1)
+# DocuFlow AI — Backend
 
-Express + TypeScript API. Currently implements file upload and metadata
-retrieval only — no PDF processing, OCR, or AI yet (future milestones).
+Express + TypeScript API for a stateless PDF tool site (in the spirit of
+iLovePDF) — no accounts, no saved documents, no database. Every request
+uploads file(s), processes them, and returns a download; nothing persists
+beyond that.
 
 ## Stack
 
-Node.js · Express · TypeScript · PostgreSQL · Prisma · Zod · Multer · Pino
+Node.js · Express · TypeScript · Multer · pdf-lib · Zod · Pino
 
 ## Setup
 
@@ -13,17 +15,32 @@ Node.js · Express · TypeScript · PostgreSQL · Prisma · Zod · Multer · Pin
 cd backend
 npm install
 copy .env.example .env
+npm run dev
 ```
 
-Edit `.env` and point `DATABASE_URL` at a real PostgreSQL database, then
-create the schema:
+That's it — there's no database to provision or migrate.
 
-```bash
-npm run prisma:migrate
-```
+## Processing flow
 
-(This step requires a running PostgreSQL instance and could not be run in
-the environment this backend was built in — see "Known limitation" below.)
+Every tool follows the same shape:
+
+1. Client uploads file(s) — validated (mime type, extension, size) and
+   written to `uploads/` under a generated, collision-proof name. That
+   generated filename **is** the file's id; nothing about it is recorded
+   anywhere else.
+2. The client calls the tool's endpoint (e.g. `POST /merge`) referencing
+   those ids.
+3. The tool processes the file(s) (pdf-lib for PDF tools) and writes the
+   result to `generated/`.
+4. The response describes the output and a `downloadUrl`; `GET /download/:id`
+   streams it.
+5. Once a tool successfully finishes with a given upload, that input file
+   is deleted from `uploads/` — it's already been read into the output, so
+   nothing further needs it. (On failure, uploads are left in place so a
+   retry doesn't have to re-upload files that were already fine.)
+
+There's no background sweep for abandoned uploads (a user who uploads but
+never finishes) yet — worth adding once there's real traffic to justify it.
 
 ## Development
 
@@ -47,11 +64,12 @@ All responses use one consistent envelope:
 { "success": false, "message": "...", "errors": [], "status": 400, "timestamp": "...", "requestId": "..." }
 ```
 
-| Method | Route        | Description                                              |
-| ------ | ------------ | -------------------------------------------------------- |
-| GET    | `/health`    | Server + database status, version, timestamp             |
-| POST   | `/upload`    | Upload a file (`multipart/form-data`, field name `file`) |
-| GET    | `/files/:id` | Metadata for a previously uploaded file                  |
+| Method | Route           | Description                                                              |
+| ------ | --------------- | ------------------------------------------------------------------------- |
+| GET    | `/health`       | Server status, version, timestamp                                       |
+| POST   | `/upload`       | Upload a file (`multipart/form-data`, field name `file`)                |
+| POST   | `/merge`        | Merge PDFs: `{ fileIds: string[] }` (2–20 previously-uploaded ids, in order) |
+| GET    | `/download/:id` | Streams a processed file (e.g. the output of `/merge`)                  |
 
 Accepted upload types: PDF, DOCX, PPTX, XLSX, JPG, PNG. Max size is set by
 `MAX_UPLOAD_SIZE` in `.env` (bytes; default 100MB).
@@ -68,24 +86,8 @@ src/
   validators/   Zod schemas
   utils/        ApiError, ApiResponse, asyncHandler, file/path helpers
   types/        shared TypeScript types
-  database/     Prisma client singleton
-prisma/         schema.prisma
 uploads/        uploaded files land here (gitignored)
-generated/      reserved for future processed/converted output files
+generated/      processed output files (merged PDFs, ...), gitignored
 logs/           reserved for future file-based logging
 public/         reserved for future static assets
 ```
-
-## Known limitation
-
-This backend was built in a sandboxed environment with no PostgreSQL
-instance available, so `npm run prisma:migrate` and full end-to-end
-database behavior (actually persisting an upload, `/health` reporting
-`"database": "connected"`) could not be verified here. Everything that
-doesn't require a live database was verified: `npm install`, `npm run
-lint`, `npm run build`, and the server starting and responding correctly
-— including `/health` correctly reporting `"database": "disconnected"`
-and returning HTTP 503 when it can't reach PostgreSQL, which confirms the
-error-handling path works. Run `npm run prisma:migrate` yourself once
-`DATABASE_URL` points at a real database, then re-verify `/health` and
-`/upload`.

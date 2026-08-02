@@ -13,13 +13,6 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(5000),
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 
-  // Supabase's connection pooler (PgBouncer): used for all normal query
-  // traffic. Required — there is no local-database fallback.
-  DATABASE_URL: z.string().min(1, "DATABASE_URL is required (Supabase pooled connection string)"),
-  // Supabase's direct connection: required by Prisma Migrate specifically
-  // (see the comment in prisma/schema.prisma for why).
-  DIRECT_URL: z.string().min(1, "DIRECT_URL is required (Supabase direct connection string)"),
-
   UPLOAD_PATH: z.string().min(1).default("uploads"),
   MAX_UPLOAD_SIZE: z.coerce.number().int().positive().default(104_857_600),
   GENERATED_PATH: z.string().min(1).default("generated"),

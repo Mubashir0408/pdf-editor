@@ -1,7 +1,5 @@
-import { prisma } from "../database/prisma";
 import { HealthService } from "./health.service";
 import { UploadService } from "./upload.service";
-import { FileService } from "./file.service";
 import { PdfService } from "./pdf.service";
 import { DownloadService } from "./download.service";
 import { MergeService } from "./merge.service";
@@ -13,9 +11,8 @@ import { MergeService } from "./merge.service";
  * themselves, which keeps them easy to unit test — swap what's exported
  * here for a mock and every controller picks it up.
  */
-export const healthService = new HealthService(prisma);
-export const uploadService = new UploadService(prisma);
-export const fileService = new FileService(prisma);
+export const healthService = new HealthService();
+export const uploadService = new UploadService();
 export const pdfService = new PdfService();
-export const downloadService = new DownloadService(prisma);
-export const mergeService = new MergeService(fileService, pdfService, downloadService);
+export const downloadService = new DownloadService();
+export const mergeService = new MergeService(pdfService, downloadService);

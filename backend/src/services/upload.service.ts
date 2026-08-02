@@ -1,28 +1,27 @@
 import path from "node:path";
-import type { PrismaClient } from "@prisma/client";
 
-import { toUploadedFileDto } from "./file.service";
 import type { UploadedFileDto } from "../types/file";
 
+/**
+ * There is no persistence step here on purpose: by the time this runs,
+ * Multer has already validated and written the file to `uploadDir` under
+ * its generated name (`file.filename`) — that filename *is* the id a
+ * later tool call (e.g. `/merge`) will reference. Nothing needs recording
+ * anywhere else for that to work.
+ */
 export class UploadService {
-  constructor(private readonly prisma: PrismaClient) {}
+  toDto(file: Express.Multer.File): UploadedFileDto {
+    const now = new Date().toISOString();
 
-  /**
-   * Persists metadata for a file Multer has already validated and written
-   * to disk. This never touches the file system itself — that's Multer's
-   * job — it only records what happened.
-   */
-  async recordUpload(file: Express.Multer.File): Promise<UploadedFileDto> {
-    const created = await this.prisma.uploadedFile.create({
-      data: {
-        originalName: file.originalname,
-        storedName: file.filename,
-        mimeType: file.mimetype,
-        extension: path.extname(file.originalname).toLowerCase(),
-        size: file.size,
-      },
-    });
-
-    return toUploadedFileDto(created);
+    return {
+      id: file.filename,
+      originalName: file.originalname,
+      mimeType: file.mimetype,
+      extension: path.extname(file.originalname).toLowerCase(),
+      size: file.size,
+      status: "UPLOADED",
+      createdAt: now,
+      updatedAt: now,
+    };
   }
 }

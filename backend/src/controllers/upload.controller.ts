@@ -11,7 +11,7 @@ export const uploadFile = asyncHandler(async (req: Request, res: Response) => {
     throw ApiError.badRequest('No file was provided. Attach one under the "file" field.');
   }
 
-  const uploaded = await uploadService.recordUpload(req.file);
+  const uploaded = uploadService.toDto(req.file);
 
   logger.info(
     { requestId: req.id, fileId: uploaded.id, mimeType: uploaded.mimeType, size: uploaded.size },
