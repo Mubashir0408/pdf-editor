@@ -21,6 +21,12 @@ const relatedMap: Record<string, string[]> = {
   rotate: ["extract", "delete-pages", "merge"],
   extract: ["delete-pages", "split", "merge"],
   "delete-pages": ["extract", "split", "merge"],
+  "word-to-pdf": ["excel-to-pdf", "ppt-to-pdf", "merge"],
+  "excel-to-pdf": ["word-to-pdf", "ppt-to-pdf", "pdf-to-excel"],
+  "ppt-to-pdf": ["word-to-pdf", "excel-to-pdf", "image-to-pdf"],
+  "image-to-pdf": ["pdf-to-image", "merge", "compress"],
+  "pdf-to-image": ["image-to-pdf", "pdf-to-word", "compress"],
+  "pdf-to-word": ["pdf-to-image", "ocr", "word-to-pdf"],
 };
 
 export function RelatedTools({ currentId }: { currentId: string }) {

@@ -33,7 +33,12 @@ const faqs = [
 export default function CompressPage() {
   const { consume } = usePendingFile();
   useRecordToolUsage("compress");
-  const [file, setFile] = React.useState<File | null>(() => consume());
+  const [file, setFile] = React.useState<File | null>(null);
+  React.useEffect(() => {
+    const pending = consume();
+    if (pending) setFile(pending);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [level, setLevel] = React.useState<(typeof levels)[number]["id"]>("recommended");
   const { status, progress, start, reset } = useSimulatedTask(2200);
 

@@ -63,9 +63,9 @@ export default function WatermarkPage() {
   const [processError, setProcessError] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
 
-  const pendingFile = React.useRef(consume());
   React.useEffect(() => {
-    if (pendingFile.current) void upload(pendingFile.current);
+    const pending = consume();
+    if (pending) void upload(pending);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

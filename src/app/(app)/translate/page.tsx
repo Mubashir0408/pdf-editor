@@ -33,7 +33,12 @@ const faqs = [
 export default function TranslatePage() {
   const { consume } = usePendingFile();
   useRecordToolUsage("translate");
-  const [file, setFile] = React.useState<File | null>(() => consume());
+  const [file, setFile] = React.useState<File | null>(null);
+  React.useEffect(() => {
+    const pending = consume();
+    if (pending) setFile(pending);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [source, setSource] = React.useState("English");
   const [target, setTarget] = React.useState("Spanish");
   const { status, progress, start, reset } = useSimulatedTask(2400);

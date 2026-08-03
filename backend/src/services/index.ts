@@ -10,6 +10,13 @@ import { ExtractPagesService } from "./extractPages.service";
 import { DeletePagesService } from "./deletePages.service";
 import { ProtectService } from "./protect.service";
 import { WatermarkService } from "./watermark.service";
+import { HtmlRendererService } from "./htmlRenderer.service";
+import { WordToPdfService } from "./wordToPdf.service";
+import { ExcelToPdfService } from "./excelToPdf.service";
+import { PowerpointToPdfService } from "./powerpointToPdf.service";
+import { ImageToPdfService } from "./imageToPdf.service";
+import { PdfToImageService } from "./pdfToImage.service";
+import { PdfToWordService } from "./pdfToWord.service";
 
 /**
  * Composition root: every service is constructed exactly once here, with
@@ -31,3 +38,11 @@ export const extractPagesService = new ExtractPagesService(pdfService, downloadS
 export const deletePagesService = new DeletePagesService(pdfService, downloadService);
 export const protectService = new ProtectService(pdfEncryptionService, downloadService);
 export const watermarkService = new WatermarkService(pdfService, downloadService);
+
+export const htmlRendererService = new HtmlRendererService();
+export const wordToPdfService = new WordToPdfService(htmlRendererService, downloadService);
+export const excelToPdfService = new ExcelToPdfService(htmlRendererService, downloadService);
+export const powerpointToPdfService = new PowerpointToPdfService(htmlRendererService, downloadService);
+export const imageToPdfService = new ImageToPdfService(pdfService, downloadService);
+export const pdfToImageService = new PdfToImageService(downloadService);
+export const pdfToWordService = new PdfToWordService(downloadService);

@@ -14,6 +14,12 @@ import {
   FileOutput,
   FileMinus,
   Settings,
+  FileText,
+  Sheet,
+  MonitorPlay,
+  Image,
+  ImageDown,
+  FileEdit,
 } from "lucide-react";
 
 export interface NavItem {
@@ -48,6 +54,12 @@ export const navGroups: NavGroup[] = [
       { label: "Rotate", href: "/tools/rotate", icon: RotateCw },
       { label: "Extract Pages", href: "/tools/extract-pages", icon: FileOutput },
       { label: "Delete Pages", href: "/tools/delete-pages", icon: FileMinus },
+      { label: "Word to PDF", href: "/tools/word-to-pdf", icon: FileText },
+      { label: "Excel to PDF", href: "/tools/excel-to-pdf", icon: Sheet },
+      { label: "PowerPoint to PDF", href: "/tools/powerpoint-to-pdf", icon: MonitorPlay },
+      { label: "Image to PDF", href: "/tools/image-to-pdf", icon: Image },
+      { label: "PDF to Image", href: "/tools/pdf-to-image", icon: ImageDown },
+      { label: "PDF to Word", href: "/tools/pdf-to-word", icon: FileEdit },
     ],
   },
   {

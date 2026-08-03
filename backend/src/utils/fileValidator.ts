@@ -53,6 +53,10 @@ export function isAllowedFile(originalName: string, mimeType: string): boolean {
 const EXTENSION_TO_MIME_TYPE: Record<string, string> = {
   ".pdf": "application/pdf",
   ".zip": "application/zip",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 };
 
 export function getMimeTypeForFilename(filename: string): string {

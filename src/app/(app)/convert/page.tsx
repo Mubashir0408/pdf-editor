@@ -42,7 +42,12 @@ function ConvertPageInner() {
   const params = useSearchParams();
   const { consume } = usePendingFile();
   useRecordToolUsage("convert");
-  const [file, setFile] = React.useState<File | null>(() => consume());
+  const [file, setFile] = React.useState<File | null>(null);
+  React.useEffect(() => {
+    const pending = consume();
+    if (pending) setFile(pending);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [target, setTarget] = React.useState<FileType>(
     (params.get("to") as FileType) || "pdf"
   );

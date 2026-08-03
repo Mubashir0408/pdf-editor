@@ -4,6 +4,7 @@ import { createApp } from "./app";
 import { env } from "./config/env";
 import { logger } from "./config/logger";
 import { ensureDirSync } from "./utils/pathHelpers";
+import { htmlRendererService } from "./services";
 
 // Multer (uploads) and DownloadService (processed output) will fail on
 // every request if these don't exist yet — created once at boot rather
@@ -54,6 +55,8 @@ startServer();
 
 function shutdown(signal: string) {
   logger.info({ signal }, "Shutting down gracefully...");
+
+  void htmlRendererService.closeBrowser();
 
   if (!currentServer) {
     process.exit(0);

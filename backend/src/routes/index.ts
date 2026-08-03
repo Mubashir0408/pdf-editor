@@ -11,6 +11,12 @@ import extractPagesRoutes from "./extractPages.routes";
 import deletePagesRoutes from "./deletePages.routes";
 import protectRoutes from "./protect.routes";
 import watermarkRoutes from "./watermark.routes";
+import wordToPdfRoutes from "./wordToPdf.routes";
+import excelToPdfRoutes from "./excelToPdf.routes";
+import powerpointToPdfRoutes from "./powerpointToPdf.routes";
+import imageToPdfRoutes from "./imageToPdf.routes";
+import pdfToImageRoutes from "./pdfToImage.routes";
+import pdfToWordRoutes from "./pdfToWord.routes";
 
 const router = Router();
 
@@ -23,6 +29,12 @@ router.use("/extract-pages", extractPagesRoutes);
 router.use("/delete-pages", deletePagesRoutes);
 router.use("/protect", protectRoutes);
 router.use("/watermark", watermarkRoutes);
+router.use("/word-to-pdf", wordToPdfRoutes);
+router.use("/excel-to-pdf", excelToPdfRoutes);
+router.use("/powerpoint-to-pdf", powerpointToPdfRoutes);
+router.use("/image-to-pdf", imageToPdfRoutes);
+router.use("/pdf-to-image", pdfToImageRoutes);
+router.use("/pdf-to-word", pdfToWordRoutes);
 router.use("/download", downloadRoutes);
 router.use("/pdf-info", pdfInfoRoutes);
 

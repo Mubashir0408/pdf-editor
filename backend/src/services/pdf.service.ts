@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import path from "node:path";
 import { PDFDocument, StandardFonts, degrees, rgb } from "pdf-lib";
 
 import { ApiError } from "../utils/ApiError";
@@ -160,6 +161,31 @@ export class PdfService {
       default:
         return { x: (width - textWidth) / 2, y: (height - textHeight) / 2 };
     }
+  }
+
+  /**
+   * Builds a new PDF with one page per image, each page sized to that
+   * image's natural pixel dimensions (rather than fitting into a fixed page
+   * size) so nothing gets cropped or letterboxed.
+   */
+  async imagesToPdf(inputPaths: string[], labels: string[]): Promise<Uint8Array> {
+    const doc = await PDFDocument.create();
+
+    for (const [i, inputPath] of inputPaths.entries()) {
+      const label = labels[i] ?? inputPath;
+      const bytes = await fs.readFile(inputPath);
+      const isPng = path.extname(inputPath).toLowerCase() === ".png";
+
+      try {
+        const image = isPng ? await doc.embedPng(bytes) : await doc.embedJpg(bytes);
+        const page = doc.addPage([image.width, image.height]);
+        page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
+      } catch {
+        throw ApiError.badRequest(`"${label}" doesn't look like a valid image file.`);
+      }
+    }
+
+    return doc.save();
   }
 
   private async buildFromPages(source: PDFDocument, pageNumbers: number[]): Promise<Uint8Array> {

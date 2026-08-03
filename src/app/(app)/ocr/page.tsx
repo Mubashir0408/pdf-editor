@@ -44,7 +44,12 @@ of the invoice date. Late payments may incur a 1.5% monthly fee.`;
 export default function OcrPage() {
   const { consume } = usePendingFile();
   useRecordToolUsage("ocr");
-  const [file, setFile] = React.useState<File | null>(() => consume());
+  const [file, setFile] = React.useState<File | null>(null);
+  React.useEffect(() => {
+    const pending = consume();
+    if (pending) setFile(pending);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [copied, setCopied] = React.useState(false);
   const { status, progress, start, reset } = useSimulatedTask(2000);
 

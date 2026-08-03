@@ -49,10 +49,12 @@ export default function MergePage() {
   const { consume } = usePendingFile();
   useRecordToolUsage("merge");
 
-  const [files, setFiles] = React.useState<MergeFile[]>(() => {
+  const [files, setFiles] = React.useState<MergeFile[]>([]);
+  React.useEffect(() => {
     const pending = consume();
-    return pending ? [{ id: nextClientId(), file: pending, progress: 0 }] : [];
-  });
+    if (pending) setFiles([{ id: nextClientId(), file: pending, progress: 0 }]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [status, setStatus] = React.useState<MergeStatus>("idle");
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
