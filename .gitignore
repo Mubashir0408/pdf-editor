@@ -60,3 +60,6 @@ backend/logs/*
 !backend/logs/.gitkeep
 backend/.env
 backend/*.tsbuildinfo
+
+# Tesseract OCR's downloaded language training data (cached on first use, ~5MB per language)
+backend/*.traineddata

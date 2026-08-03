@@ -19,7 +19,9 @@
     "somethingWentWrong": "Etwas ist schiefgelaufen",
     "couldNotProcessFile": "Diese Datei konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.",
     "upTo100mb": "bis zu 100 MB",
-    "pdfFilesOnly": "Nur PDF-Dateien"
+    "pdfFilesOnly": "Nur PDF-Dateien",
+    "copy": "Kopieren",
+    "copied": "Kopiert!"
   },
   "nav": {
     "overview": "Übersicht",
@@ -67,23 +69,74 @@
     "rights": "Alle Rechte vorbehalten."
   },
   "tools": {
-    "convert": { "title": "Dateien konvertieren", "description": "Dokumente zwischen PDF, Word, Excel, PowerPoint und Bildformaten umwandeln." },
-    "merge": { "title": "PDFs zusammenführen", "description": "Mehrere Dokumente zu einer einzigen, geordneten PDF zusammenführen." },
-    "split": { "title": "PDF teilen", "description": "Ein Dokument nach Seitenbereich aufteilen und jeden Teil exportieren." },
-    "compress": { "title": "PDF komprimieren", "description": "Dateigröße verringern und Dokumente dabei scharf und lesbar halten." },
-    "ocr": { "title": "OCR-Scanner", "description": "Bearbeitbaren, durchsuchbaren Text aus gescannten Bildern und PDFs extrahieren." },
-    "translate": { "title": "PDF übersetzen", "description": "Den Text eines Dokuments in eine andere Sprache übersetzen." },
-    "protect": { "title": "PDF mit Passwort schützen", "description": "Vertrauliche Dokumente vor dem Teilen mit einem Passwort verschlüsseln." },
-    "watermark": { "title": "PDF mit Wasserzeichen versehen", "description": "Ihre Dokumente mit einem individuellen Wasserzeichen kennzeichnen und schützen." },
-    "rotate": { "title": "PDF drehen", "description": "Seitlich oder auf dem Kopf stehende Seiten in Sekunden korrigieren." },
-    "extractPages": { "title": "Seiten extrahieren", "description": "Bestimmte Seiten aus einem Dokument in eine neue Datei übertragen." },
-    "deletePages": { "title": "Seiten löschen", "description": "Unerwünschte Seiten dauerhaft aus einem Dokument entfernen." },
-    "wordToPdf": { "title": "Word zu PDF", "description": "Word-Dokumente in ansprechende, teilbare PDFs umwandeln." },
-    "excelToPdf": { "title": "Excel zu PDF", "description": "Tabellenkalkulationen in saubere, druckbare PDFs umwandeln." },
-    "pptToPdf": { "title": "PowerPoint zu PDF", "description": "Präsentationen in teilbare, druckfertige PDFs umwandeln." },
-    "imageToPdf": { "title": "Bild zu PDF", "description": "JPG- oder PNG-Bilder zu einer einzigen PDF zusammenführen." },
-    "pdfToImage": { "title": "PDF zu Bild", "description": "Jede Seite eines PDFs als PNG- oder JPG-Bild exportieren." },
-    "pdfToWord": { "title": "PDF zu Word", "description": "Den Text eines PDFs in ein bearbeitbares Word-Dokument umwandeln." }
+    "convert": {
+      "title": "Dateien konvertieren",
+      "description": "Dokumente zwischen PDF, Word, Excel, PowerPoint und Bildformaten umwandeln."
+    },
+    "merge": {
+      "title": "PDFs zusammenführen",
+      "description": "Mehrere Dokumente zu einer einzigen, geordneten PDF zusammenführen."
+    },
+    "split": {
+      "title": "PDF teilen",
+      "description": "Ein Dokument nach Seitenbereich aufteilen und jeden Teil exportieren."
+    },
+    "compress": {
+      "title": "PDF komprimieren",
+      "description": "Dateigröße verringern und Dokumente dabei scharf und lesbar halten."
+    },
+    "ocr": {
+      "title": "OCR-Scanner",
+      "description": "Bearbeitbaren, durchsuchbaren Text aus gescannten Bildern und PDFs extrahieren."
+    },
+    "translate": {
+      "title": "PDF übersetzen",
+      "description": "Den Text eines Dokuments in eine andere Sprache übersetzen."
+    },
+    "protect": {
+      "title": "PDF mit Passwort schützen",
+      "description": "Vertrauliche Dokumente vor dem Teilen mit einem Passwort verschlüsseln."
+    },
+    "watermark": {
+      "title": "PDF mit Wasserzeichen versehen",
+      "description": "Ihre Dokumente mit einem individuellen Wasserzeichen kennzeichnen und schützen."
+    },
+    "rotate": {
+      "title": "PDF drehen",
+      "description": "Seitlich oder auf dem Kopf stehende Seiten in Sekunden korrigieren."
+    },
+    "extractPages": {
+      "title": "Seiten extrahieren",
+      "description": "Bestimmte Seiten aus einem Dokument in eine neue Datei übertragen."
+    },
+    "deletePages": {
+      "title": "Seiten löschen",
+      "description": "Unerwünschte Seiten dauerhaft aus einem Dokument entfernen."
+    },
+    "wordToPdf": {
+      "title": "Word zu PDF",
+      "description": "Word-Dokumente in ansprechende, teilbare PDFs umwandeln."
+    },
+    "excelToPdf": {
+      "title": "Excel zu PDF",
+      "description": "Tabellenkalkulationen in saubere, druckbare PDFs umwandeln."
+    },
+    "pptToPdf": {
+      "title": "PowerPoint zu PDF",
+      "description": "Präsentationen in teilbare, druckfertige PDFs umwandeln."
+    },
+    "imageToPdf": {
+      "title": "Bild zu PDF",
+      "description": "JPG- oder PNG-Bilder zu einer einzigen PDF zusammenführen."
+    },
+    "pdfToImage": {
+      "title": "PDF zu Bild",
+      "description": "Jede Seite eines PDFs als PNG- oder JPG-Bild exportieren."
+    },
+    "pdfToWord": {
+      "title": "PDF zu Word",
+      "description": "Den Text eines PDFs in ein bearbeitbares Word-Dokument umwandeln."
+    }
   },
   "translateTool": {
     "uploadTitle": "1. Dokument hochladen",
@@ -99,6 +152,7 @@
     "stageDone": "Übersetzung abgeschlossen",
     "resultSummary": "Übersetzt von {{source}} nach {{target}}",
     "errorNoText": "Dieses PDF enthält keinen extrahierbaren Text — es könnte ein gescanntes Dokument oder reines Bild sein. Versuchen Sie zuerst das OCR-Werkzeug.",
-    "errorGeneric": "Dieses Dokument konnte nicht übersetzt werden. Bitte versuchen Sie es erneut."
+    "errorGeneric": "Dieses Dokument konnte nicht übersetzt werden. Bitte versuchen Sie es erneut.",
+    "autoDetect": "Automatisch erkennen"
   }
 }

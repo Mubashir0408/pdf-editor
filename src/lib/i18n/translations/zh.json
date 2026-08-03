@@ -19,7 +19,9 @@
     "somethingWentWrong": "出了点问题",
     "couldNotProcessFile": "我们无法处理此文件，请重试。",
     "upTo100mb": "最大 100MB",
-    "pdfFilesOnly": "仅限 PDF 文件"
+    "pdfFilesOnly": "仅限 PDF 文件",
+    "copy": "复制",
+    "copied": "已复制！"
   },
   "nav": {
     "overview": "概览",
@@ -67,23 +69,74 @@
     "rights": "保留所有权利。"
   },
   "tools": {
-    "convert": { "title": "转换文件", "description": "在 PDF、Word、Excel、PowerPoint 和图片格式之间转换文档。" },
-    "merge": { "title": "合并 PDF", "description": "将多个文档合并为一个有序的 PDF。" },
-    "split": { "title": "拆分 PDF", "description": "按页面范围拆分文档并导出每一部分。" },
-    "compress": { "title": "压缩 PDF", "description": "在保持文档清晰易读的同时缩小文件大小。" },
-    "ocr": { "title": "OCR 扫描", "description": "从扫描图像和 PDF 中提取可编辑、可搜索的文本。" },
-    "translate": { "title": "翻译 PDF", "description": "将文档文本翻译成另一种语言。" },
-    "protect": { "title": "PDF 密码保护", "description": "在共享敏感文档之前使用密码进行加密。" },
-    "watermark": { "title": "PDF 添加水印", "description": "使用自定义水印为您的文档打上标记并加以保护。" },
-    "rotate": { "title": "旋转 PDF", "description": "几秒钟内修正歪斜或颠倒的页面。" },
-    "extractPages": { "title": "提取页面", "description": "将文档中的特定页面提取到新文件中。" },
-    "deletePages": { "title": "删除页面", "description": "永久删除文档中不需要的页面。" },
-    "wordToPdf": { "title": "Word 转 PDF", "description": "将 Word 文档转换为精美、可共享的 PDF。" },
-    "excelToPdf": { "title": "Excel 转 PDF", "description": "将电子表格转换为整洁、可打印的 PDF。" },
-    "pptToPdf": { "title": "PowerPoint 转 PDF", "description": "将演示文稿转换为可共享、可打印的 PDF。" },
-    "imageToPdf": { "title": "图片转 PDF", "description": "将 JPG 或 PNG 图片合并为一个 PDF。" },
-    "pdfToImage": { "title": "PDF 转图片", "description": "将 PDF 的每一页导出为 PNG 或 JPG 图片。" },
-    "pdfToWord": { "title": "PDF 转 Word", "description": "将 PDF 的文本转换为可编辑的 Word 文档。" }
+    "convert": {
+      "title": "转换文件",
+      "description": "在 PDF、Word、Excel、PowerPoint 和图片格式之间转换文档。"
+    },
+    "merge": {
+      "title": "合并 PDF",
+      "description": "将多个文档合并为一个有序的 PDF。"
+    },
+    "split": {
+      "title": "拆分 PDF",
+      "description": "按页面范围拆分文档并导出每一部分。"
+    },
+    "compress": {
+      "title": "压缩 PDF",
+      "description": "在保持文档清晰易读的同时缩小文件大小。"
+    },
+    "ocr": {
+      "title": "OCR 扫描",
+      "description": "从扫描图像和 PDF 中提取可编辑、可搜索的文本。"
+    },
+    "translate": {
+      "title": "翻译 PDF",
+      "description": "将文档文本翻译成另一种语言。"
+    },
+    "protect": {
+      "title": "PDF 密码保护",
+      "description": "在共享敏感文档之前使用密码进行加密。"
+    },
+    "watermark": {
+      "title": "PDF 添加水印",
+      "description": "使用自定义水印为您的文档打上标记并加以保护。"
+    },
+    "rotate": {
+      "title": "旋转 PDF",
+      "description": "几秒钟内修正歪斜或颠倒的页面。"
+    },
+    "extractPages": {
+      "title": "提取页面",
+      "description": "将文档中的特定页面提取到新文件中。"
+    },
+    "deletePages": {
+      "title": "删除页面",
+      "description": "永久删除文档中不需要的页面。"
+    },
+    "wordToPdf": {
+      "title": "Word 转 PDF",
+      "description": "将 Word 文档转换为精美、可共享的 PDF。"
+    },
+    "excelToPdf": {
+      "title": "Excel 转 PDF",
+      "description": "将电子表格转换为整洁、可打印的 PDF。"
+    },
+    "pptToPdf": {
+      "title": "PowerPoint 转 PDF",
+      "description": "将演示文稿转换为可共享、可打印的 PDF。"
+    },
+    "imageToPdf": {
+      "title": "图片转 PDF",
+      "description": "将 JPG 或 PNG 图片合并为一个 PDF。"
+    },
+    "pdfToImage": {
+      "title": "PDF 转图片",
+      "description": "将 PDF 的每一页导出为 PNG 或 JPG 图片。"
+    },
+    "pdfToWord": {
+      "title": "PDF 转 Word",
+      "description": "将 PDF 的文本转换为可编辑的 Word 文档。"
+    }
   },
   "translateTool": {
     "uploadTitle": "1. 上传文档",
@@ -99,6 +152,7 @@
     "stageDone": "翻译完成",
     "resultSummary": "已从{{source}}翻译为{{target}}",
     "errorNoText": "此 PDF 没有可提取的文本 — 可能是扫描件或图片。请先尝试 OCR 工具。",
-    "errorGeneric": "我们无法翻译此文档，请重试。"
+    "errorGeneric": "我们无法翻译此文档，请重试。",
+    "autoDetect": "自动检测"
   }
 }

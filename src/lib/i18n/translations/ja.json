@@ -19,7 +19,9 @@
     "somethingWentWrong": "問題が発生しました",
     "couldNotProcessFile": "このファイルを処理できませんでした。もう一度お試しください。",
     "upTo100mb": "100MBまで",
-    "pdfFilesOnly": "PDFファイルのみ"
+    "pdfFilesOnly": "PDFファイルのみ",
+    "copy": "コピー",
+    "copied": "コピーしました！"
   },
   "nav": {
     "overview": "概要",
@@ -67,23 +69,74 @@
     "rights": "全著作権所有。"
   },
   "tools": {
-    "convert": { "title": "ファイルを変換", "description": "PDF、Word、Excel、PowerPoint、画像形式の間でドキュメントを変換します。" },
-    "merge": { "title": "PDFを結合", "description": "複数のドキュメントを1つの整理されたPDFにまとめます。" },
-    "split": { "title": "PDFを分割", "description": "ページ範囲でドキュメントを分割し、各部分を書き出します。" },
-    "compress": { "title": "PDFを圧縮", "description": "文書の鮮明さと読みやすさを保ちながらファイルサイズを縮小します。" },
-    "ocr": { "title": "OCRスキャナー", "description": "スキャンした画像やPDFから編集・検索可能なテキストを抽出します。" },
-    "translate": { "title": "PDFを翻訳", "description": "ドキュメントのテキストを別の言語に翻訳します。" },
-    "protect": { "title": "PDFをパスワードで保護", "description": "共有前に機密文書をパスワードで暗号化します。" },
-    "watermark": { "title": "PDFに透かしを追加", "description": "カスタム透かしで文書をブランド化・保護します。" },
-    "rotate": { "title": "PDFを回転", "description": "横向きや逆さまのページを数秒で修正します。" },
-    "extractPages": { "title": "ページを抽出", "description": "文書から特定のページを新しいファイルに抽出します。" },
-    "deletePages": { "title": "ページを削除", "description": "不要なページを文書から完全に削除します。" },
-    "wordToPdf": { "title": "WordからPDFへ", "description": "Word文書を美しく共有しやすいPDFに変換します。" },
-    "excelToPdf": { "title": "ExcelからPDFへ", "description": "表計算シートをきれいで印刷可能なPDFに変換します。" },
-    "pptToPdf": { "title": "PowerPointからPDFへ", "description": "プレゼンテーションを共有・印刷しやすいPDFに変換します。" },
-    "imageToPdf": { "title": "画像からPDFへ", "description": "JPGまたはPNG画像を1つのPDFにまとめます。" },
-    "pdfToImage": { "title": "PDFから画像へ", "description": "PDFの各ページをPNGまたはJPG画像として書き出します。" },
-    "pdfToWord": { "title": "PDFからWordへ", "description": "PDFのテキストを編集可能なWord文書に変換します。" }
+    "convert": {
+      "title": "ファイルを変換",
+      "description": "PDF、Word、Excel、PowerPoint、画像形式の間でドキュメントを変換します。"
+    },
+    "merge": {
+      "title": "PDFを結合",
+      "description": "複数のドキュメントを1つの整理されたPDFにまとめます。"
+    },
+    "split": {
+      "title": "PDFを分割",
+      "description": "ページ範囲でドキュメントを分割し、各部分を書き出します。"
+    },
+    "compress": {
+      "title": "PDFを圧縮",
+      "description": "文書の鮮明さと読みやすさを保ちながらファイルサイズを縮小します。"
+    },
+    "ocr": {
+      "title": "OCRスキャナー",
+      "description": "スキャンした画像やPDFから編集・検索可能なテキストを抽出します。"
+    },
+    "translate": {
+      "title": "PDFを翻訳",
+      "description": "ドキュメントのテキストを別の言語に翻訳します。"
+    },
+    "protect": {
+      "title": "PDFをパスワードで保護",
+      "description": "共有前に機密文書をパスワードで暗号化します。"
+    },
+    "watermark": {
+      "title": "PDFに透かしを追加",
+      "description": "カスタム透かしで文書をブランド化・保護します。"
+    },
+    "rotate": {
+      "title": "PDFを回転",
+      "description": "横向きや逆さまのページを数秒で修正します。"
+    },
+    "extractPages": {
+      "title": "ページを抽出",
+      "description": "文書から特定のページを新しいファイルに抽出します。"
+    },
+    "deletePages": {
+      "title": "ページを削除",
+      "description": "不要なページを文書から完全に削除します。"
+    },
+    "wordToPdf": {
+      "title": "WordからPDFへ",
+      "description": "Word文書を美しく共有しやすいPDFに変換します。"
+    },
+    "excelToPdf": {
+      "title": "ExcelからPDFへ",
+      "description": "表計算シートをきれいで印刷可能なPDFに変換します。"
+    },
+    "pptToPdf": {
+      "title": "PowerPointからPDFへ",
+      "description": "プレゼンテーションを共有・印刷しやすいPDFに変換します。"
+    },
+    "imageToPdf": {
+      "title": "画像からPDFへ",
+      "description": "JPGまたはPNG画像を1つのPDFにまとめます。"
+    },
+    "pdfToImage": {
+      "title": "PDFから画像へ",
+      "description": "PDFの各ページをPNGまたはJPG画像として書き出します。"
+    },
+    "pdfToWord": {
+      "title": "PDFからWordへ",
+      "description": "PDFのテキストを編集可能なWord文書に変換します。"
+    }
   },
   "translateTool": {
     "uploadTitle": "1. ドキュメントをアップロード",
@@ -99,6 +152,7 @@
     "stageDone": "翻訳が完了しました",
     "resultSummary": "{{source}}から{{target}}に翻訳しました",
     "errorNoText": "このPDFには抽出可能なテキストがありません — スキャン文書または画像の可能性があります。まずOCRツールをお試しください。",
-    "errorGeneric": "このドキュメントを翻訳できませんでした。もう一度お試しください。"
+    "errorGeneric": "このドキュメントを翻訳できませんでした。もう一度お試しください。",
+    "autoDetect": "自動検出"
   }
 }

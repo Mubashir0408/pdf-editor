@@ -17,6 +17,8 @@ import { PowerpointToPdfService } from "./powerpointToPdf.service";
 import { ImageToPdfService } from "./imageToPdf.service";
 import { PdfToImageService } from "./pdfToImage.service";
 import { PdfToWordService } from "./pdfToWord.service";
+import { TranslationJobsService } from "./translationJobs.service";
+import { PdfTranslateService } from "./pdfTranslate.service";
 
 /**
  * Composition root: every service is constructed exactly once here, with
@@ -46,3 +48,10 @@ export const powerpointToPdfService = new PowerpointToPdfService(htmlRendererSer
 export const imageToPdfService = new ImageToPdfService(pdfService, downloadService);
 export const pdfToImageService = new PdfToImageService(downloadService);
 export const pdfToWordService = new PdfToWordService(downloadService);
+
+export const translationJobsService = new TranslationJobsService();
+export const pdfTranslateService = new PdfTranslateService(
+  htmlRendererService,
+  downloadService,
+  translationJobsService
+);

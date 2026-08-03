@@ -19,7 +19,9 @@
     "somethingWentWrong": "Qualcosa è andato storto",
     "couldNotProcessFile": "Non siamo riusciti a elaborare questo file. Riprova.",
     "upTo100mb": "fino a 100 MB",
-    "pdfFilesOnly": "Solo file PDF"
+    "pdfFilesOnly": "Solo file PDF",
+    "copy": "Copia",
+    "copied": "Copiato!"
   },
   "nav": {
     "overview": "Panoramica",
@@ -67,23 +69,74 @@
     "rights": "Tutti i diritti riservati."
   },
   "tools": {
-    "convert": { "title": "Converti file", "description": "Trasforma documenti tra PDF, Word, Excel, PowerPoint e formati immagine." },
-    "merge": { "title": "Unisci PDF", "description": "Combina più documenti in un unico PDF organizzato." },
-    "split": { "title": "Dividi PDF", "description": "Dividi un documento per intervallo di pagine ed esporta ogni parte." },
-    "compress": { "title": "Comprimi PDF", "description": "Riduci la dimensione del file mantenendo i documenti nitidi e leggibili." },
-    "ocr": { "title": "Scanner OCR", "description": "Estrai testo modificabile e ricercabile da immagini e PDF scansionati." },
-    "translate": { "title": "Traduci PDF", "description": "Traduci il testo di un documento in un'altra lingua." },
-    "protect": { "title": "Proteggi PDF con password", "description": "Cripta documenti sensibili con una password prima di condividerli." },
-    "watermark": { "title": "Filigrana PDF", "description": "Personalizza e proteggi i tuoi documenti con una filigrana." },
-    "rotate": { "title": "Ruota PDF", "description": "Correggi in pochi secondi le pagine storte o capovolte." },
-    "extractPages": { "title": "Estrai pagine", "description": "Estrai pagine specifiche da un documento in un nuovo file." },
-    "deletePages": { "title": "Elimina pagine", "description": "Rimuovi definitivamente le pagine indesiderate da un documento." },
-    "wordToPdf": { "title": "Word in PDF", "description": "Converti documenti Word in PDF curati e condivisibili." },
-    "excelToPdf": { "title": "Excel in PDF", "description": "Trasforma fogli di calcolo in PDF puliti e stampabili." },
-    "pptToPdf": { "title": "PowerPoint in PDF", "description": "Converti presentazioni in PDF condivisibili e pronti per la stampa." },
-    "imageToPdf": { "title": "Immagine in PDF", "description": "Combina immagini JPG o PNG in un unico PDF." },
-    "pdfToImage": { "title": "PDF in immagine", "description": "Esporta ogni pagina di un PDF come immagine PNG o JPG." },
-    "pdfToWord": { "title": "PDF in Word", "description": "Trasforma il testo di un PDF in un documento Word modificabile." }
+    "convert": {
+      "title": "Converti file",
+      "description": "Trasforma documenti tra PDF, Word, Excel, PowerPoint e formati immagine."
+    },
+    "merge": {
+      "title": "Unisci PDF",
+      "description": "Combina più documenti in un unico PDF organizzato."
+    },
+    "split": {
+      "title": "Dividi PDF",
+      "description": "Dividi un documento per intervallo di pagine ed esporta ogni parte."
+    },
+    "compress": {
+      "title": "Comprimi PDF",
+      "description": "Riduci la dimensione del file mantenendo i documenti nitidi e leggibili."
+    },
+    "ocr": {
+      "title": "Scanner OCR",
+      "description": "Estrai testo modificabile e ricercabile da immagini e PDF scansionati."
+    },
+    "translate": {
+      "title": "Traduci PDF",
+      "description": "Traduci il testo di un documento in un'altra lingua."
+    },
+    "protect": {
+      "title": "Proteggi PDF con password",
+      "description": "Cripta documenti sensibili con una password prima di condividerli."
+    },
+    "watermark": {
+      "title": "Filigrana PDF",
+      "description": "Personalizza e proteggi i tuoi documenti con una filigrana."
+    },
+    "rotate": {
+      "title": "Ruota PDF",
+      "description": "Correggi in pochi secondi le pagine storte o capovolte."
+    },
+    "extractPages": {
+      "title": "Estrai pagine",
+      "description": "Estrai pagine specifiche da un documento in un nuovo file."
+    },
+    "deletePages": {
+      "title": "Elimina pagine",
+      "description": "Rimuovi definitivamente le pagine indesiderate da un documento."
+    },
+    "wordToPdf": {
+      "title": "Word in PDF",
+      "description": "Converti documenti Word in PDF curati e condivisibili."
+    },
+    "excelToPdf": {
+      "title": "Excel in PDF",
+      "description": "Trasforma fogli di calcolo in PDF puliti e stampabili."
+    },
+    "pptToPdf": {
+      "title": "PowerPoint in PDF",
+      "description": "Converti presentazioni in PDF condivisibili e pronti per la stampa."
+    },
+    "imageToPdf": {
+      "title": "Immagine in PDF",
+      "description": "Combina immagini JPG o PNG in un unico PDF."
+    },
+    "pdfToImage": {
+      "title": "PDF in immagine",
+      "description": "Esporta ogni pagina di un PDF come immagine PNG o JPG."
+    },
+    "pdfToWord": {
+      "title": "PDF in Word",
+      "description": "Trasforma il testo di un PDF in un documento Word modificabile."
+    }
   },
   "translateTool": {
     "uploadTitle": "1. Carica un documento",
@@ -99,6 +152,7 @@
     "stageDone": "Traduzione completata",
     "resultSummary": "Tradotto da {{source}} a {{target}}",
     "errorNoText": "Questo PDF non contiene testo estraibile — potrebbe essere un documento scansionato o un'immagine. Prova prima lo strumento OCR.",
-    "errorGeneric": "Non siamo riusciti a tradurre questo documento. Riprova."
+    "errorGeneric": "Non siamo riusciti a tradurre questo documento. Riprova.",
+    "autoDetect": "Rilevamento automatico"
   }
 }

@@ -19,7 +19,9 @@
     "somethingWentWrong": "حدث خطأ ما",
     "couldNotProcessFile": "تعذّرت معالجة هذا الملف. يرجى المحاولة مرة أخرى.",
     "upTo100mb": "حتى 100 ميغابايت",
-    "pdfFilesOnly": "ملفات PDF فقط"
+    "pdfFilesOnly": "ملفات PDF فقط",
+    "copy": "نسخ",
+    "copied": "تم النسخ!"
   },
   "nav": {
     "overview": "نظرة عامة",
@@ -67,23 +69,74 @@
     "rights": "جميع الحقوق محفوظة."
   },
   "tools": {
-    "convert": { "title": "تحويل الملفات", "description": "حوّل المستندات بين صيغ PDF وWord وExcel وPowerPoint والصور." },
-    "merge": { "title": "دمج ملفات PDF", "description": "ادمج عدة مستندات في ملف PDF واحد منظم." },
-    "split": { "title": "تقسيم PDF", "description": "قسّم مستندًا حسب نطاق الصفحات وصدّر كل جزء." },
-    "compress": { "title": "ضغط PDF", "description": "قلّل حجم الملف مع الحفاظ على وضوح المستندات وقابليتها للقراءة." },
-    "ocr": { "title": "ماسح التعرف الضوئي", "description": "استخرج نصًا قابلًا للتحرير والبحث من الصور وملفات PDF الممسوحة ضوئيًا." },
-    "translate": { "title": "ترجمة PDF", "description": "ترجم نص مستند إلى لغة أخرى." },
-    "protect": { "title": "حماية PDF بكلمة مرور", "description": "شفّر المستندات الحساسة بكلمة مرور قبل مشاركتها." },
-    "watermark": { "title": "وضع علامة مائية على PDF", "description": "ميّز مستنداتك واحمها بعلامة مائية مخصصة." },
-    "rotate": { "title": "تدوير PDF", "description": "أصلح الصفحات المائلة أو المقلوبة في ثوانٍ." },
-    "extractPages": { "title": "استخراج الصفحات", "description": "استخرج صفحات محددة من مستند إلى ملف جديد." },
-    "deletePages": { "title": "حذف الصفحات", "description": "أزل الصفحات غير المرغوب فيها نهائيًا من مستند." },
-    "wordToPdf": { "title": "Word إلى PDF", "description": "حوّل مستندات Word إلى ملفات PDF أنيقة وقابلة للمشاركة." },
-    "excelToPdf": { "title": "Excel إلى PDF", "description": "حوّل جداول البيانات إلى ملفات PDF نظيفة وقابلة للطباعة." },
-    "pptToPdf": { "title": "PowerPoint إلى PDF", "description": "حوّل العروض التقديمية إلى ملفات PDF قابلة للمشاركة والطباعة." },
-    "imageToPdf": { "title": "صورة إلى PDF", "description": "ادمج صور JPG أو PNG في ملف PDF واحد." },
-    "pdfToImage": { "title": "PDF إلى صورة", "description": "صدّر كل صفحة من PDF كصورة PNG أو JPG." },
-    "pdfToWord": { "title": "PDF إلى Word", "description": "حوّل نص ملف PDF إلى مستند Word قابل للتحرير." }
+    "convert": {
+      "title": "تحويل الملفات",
+      "description": "حوّل المستندات بين صيغ PDF وWord وExcel وPowerPoint والصور."
+    },
+    "merge": {
+      "title": "دمج ملفات PDF",
+      "description": "ادمج عدة مستندات في ملف PDF واحد منظم."
+    },
+    "split": {
+      "title": "تقسيم PDF",
+      "description": "قسّم مستندًا حسب نطاق الصفحات وصدّر كل جزء."
+    },
+    "compress": {
+      "title": "ضغط PDF",
+      "description": "قلّل حجم الملف مع الحفاظ على وضوح المستندات وقابليتها للقراءة."
+    },
+    "ocr": {
+      "title": "ماسح التعرف الضوئي",
+      "description": "استخرج نصًا قابلًا للتحرير والبحث من الصور وملفات PDF الممسوحة ضوئيًا."
+    },
+    "translate": {
+      "title": "ترجمة PDF",
+      "description": "ترجم نص مستند إلى لغة أخرى."
+    },
+    "protect": {
+      "title": "حماية PDF بكلمة مرور",
+      "description": "شفّر المستندات الحساسة بكلمة مرور قبل مشاركتها."
+    },
+    "watermark": {
+      "title": "وضع علامة مائية على PDF",
+      "description": "ميّز مستنداتك واحمها بعلامة مائية مخصصة."
+    },
+    "rotate": {
+      "title": "تدوير PDF",
+      "description": "أصلح الصفحات المائلة أو المقلوبة في ثوانٍ."
+    },
+    "extractPages": {
+      "title": "استخراج الصفحات",
+      "description": "استخرج صفحات محددة من مستند إلى ملف جديد."
+    },
+    "deletePages": {
+      "title": "حذف الصفحات",
+      "description": "أزل الصفحات غير المرغوب فيها نهائيًا من مستند."
+    },
+    "wordToPdf": {
+      "title": "Word إلى PDF",
+      "description": "حوّل مستندات Word إلى ملفات PDF أنيقة وقابلة للمشاركة."
+    },
+    "excelToPdf": {
+      "title": "Excel إلى PDF",
+      "description": "حوّل جداول البيانات إلى ملفات PDF نظيفة وقابلة للطباعة."
+    },
+    "pptToPdf": {
+      "title": "PowerPoint إلى PDF",
+      "description": "حوّل العروض التقديمية إلى ملفات PDF قابلة للمشاركة والطباعة."
+    },
+    "imageToPdf": {
+      "title": "صورة إلى PDF",
+      "description": "ادمج صور JPG أو PNG في ملف PDF واحد."
+    },
+    "pdfToImage": {
+      "title": "PDF إلى صورة",
+      "description": "صدّر كل صفحة من PDF كصورة PNG أو JPG."
+    },
+    "pdfToWord": {
+      "title": "PDF إلى Word",
+      "description": "حوّل نص ملف PDF إلى مستند Word قابل للتحرير."
+    }
   },
   "translateTool": {
     "uploadTitle": "١. ارفع مستندًا",
@@ -99,6 +152,7 @@
     "stageDone": "اكتملت الترجمة",
     "resultSummary": "تُرجم من {{source}} إلى {{target}}",
     "errorNoText": "لا يحتوي ملف PDF هذا على نص قابل للاستخراج — قد يكون مستندًا ممسوحًا ضوئيًا أو صورة. جرّب أداة التعرف الضوئي أولًا.",
-    "errorGeneric": "تعذّرت ترجمة هذا المستند. يرجى المحاولة مرة أخرى."
+    "errorGeneric": "تعذّرت ترجمة هذا المستند. يرجى المحاولة مرة أخرى.",
+    "autoDetect": "اكتشاف تلقائي"
   }
 }

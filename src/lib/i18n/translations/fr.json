@@ -19,7 +19,9 @@
     "somethingWentWrong": "Une erreur s'est produite",
     "couldNotProcessFile": "Nous n'avons pas pu traiter ce fichier. Veuillez réessayer.",
     "upTo100mb": "jusqu'à 100 Mo",
-    "pdfFilesOnly": "Fichiers PDF uniquement"
+    "pdfFilesOnly": "Fichiers PDF uniquement",
+    "copy": "Copier",
+    "copied": "Copié !"
   },
   "nav": {
     "overview": "Aperçu",
@@ -67,23 +69,74 @@
     "rights": "Tous droits réservés."
   },
   "tools": {
-    "convert": { "title": "Convertir des fichiers", "description": "Transformez des documents entre PDF, Word, Excel, PowerPoint et formats d'image." },
-    "merge": { "title": "Fusionner des PDF", "description": "Combinez plusieurs documents en un seul PDF organisé." },
-    "split": { "title": "Diviser un PDF", "description": "Divisez un document par plage de pages et exportez chaque partie." },
-    "compress": { "title": "Compresser un PDF", "description": "Réduisez la taille du fichier tout en gardant les documents nets et lisibles." },
-    "ocr": { "title": "Scanner OCR", "description": "Extrayez du texte modifiable et consultable à partir d'images et de PDF scannés." },
-    "translate": { "title": "Traduire un PDF", "description": "Traduisez le texte d'un document dans une autre langue." },
-    "protect": { "title": "Protéger un PDF par mot de passe", "description": "Chiffrez vos documents sensibles avec un mot de passe avant de les partager." },
-    "watermark": { "title": "Filigraner un PDF", "description": "Personnalisez et protégez vos documents avec un filigrane." },
-    "rotate": { "title": "Faire pivoter un PDF", "description": "Corrigez en quelques secondes les pages de travers ou à l'envers." },
-    "extractPages": { "title": "Extraire des pages", "description": "Extrayez des pages spécifiques d'un document vers un nouveau fichier." },
-    "deletePages": { "title": "Supprimer des pages", "description": "Supprimez définitivement les pages indésirables d'un document." },
-    "wordToPdf": { "title": "Word vers PDF", "description": "Convertissez des documents Word en PDF soignés et partageables." },
-    "excelToPdf": { "title": "Excel vers PDF", "description": "Transformez des feuilles de calcul en PDF propres et imprimables." },
-    "pptToPdf": { "title": "PowerPoint vers PDF", "description": "Convertissez des présentations en PDF partageables et prêts à imprimer." },
-    "imageToPdf": { "title": "Image vers PDF", "description": "Combinez des images JPG ou PNG en un seul PDF." },
-    "pdfToImage": { "title": "PDF vers image", "description": "Exportez chaque page d'un PDF en image PNG ou JPG." },
-    "pdfToWord": { "title": "PDF vers Word", "description": "Transformez le texte d'un PDF en document Word modifiable." }
+    "convert": {
+      "title": "Convertir des fichiers",
+      "description": "Transformez des documents entre PDF, Word, Excel, PowerPoint et formats d'image."
+    },
+    "merge": {
+      "title": "Fusionner des PDF",
+      "description": "Combinez plusieurs documents en un seul PDF organisé."
+    },
+    "split": {
+      "title": "Diviser un PDF",
+      "description": "Divisez un document par plage de pages et exportez chaque partie."
+    },
+    "compress": {
+      "title": "Compresser un PDF",
+      "description": "Réduisez la taille du fichier tout en gardant les documents nets et lisibles."
+    },
+    "ocr": {
+      "title": "Scanner OCR",
+      "description": "Extrayez du texte modifiable et consultable à partir d'images et de PDF scannés."
+    },
+    "translate": {
+      "title": "Traduire un PDF",
+      "description": "Traduisez le texte d'un document dans une autre langue."
+    },
+    "protect": {
+      "title": "Protéger un PDF par mot de passe",
+      "description": "Chiffrez vos documents sensibles avec un mot de passe avant de les partager."
+    },
+    "watermark": {
+      "title": "Filigraner un PDF",
+      "description": "Personnalisez et protégez vos documents avec un filigrane."
+    },
+    "rotate": {
+      "title": "Faire pivoter un PDF",
+      "description": "Corrigez en quelques secondes les pages de travers ou à l'envers."
+    },
+    "extractPages": {
+      "title": "Extraire des pages",
+      "description": "Extrayez des pages spécifiques d'un document vers un nouveau fichier."
+    },
+    "deletePages": {
+      "title": "Supprimer des pages",
+      "description": "Supprimez définitivement les pages indésirables d'un document."
+    },
+    "wordToPdf": {
+      "title": "Word vers PDF",
+      "description": "Convertissez des documents Word en PDF soignés et partageables."
+    },
+    "excelToPdf": {
+      "title": "Excel vers PDF",
+      "description": "Transformez des feuilles de calcul en PDF propres et imprimables."
+    },
+    "pptToPdf": {
+      "title": "PowerPoint vers PDF",
+      "description": "Convertissez des présentations en PDF partageables et prêts à imprimer."
+    },
+    "imageToPdf": {
+      "title": "Image vers PDF",
+      "description": "Combinez des images JPG ou PNG en un seul PDF."
+    },
+    "pdfToImage": {
+      "title": "PDF vers image",
+      "description": "Exportez chaque page d'un PDF en image PNG ou JPG."
+    },
+    "pdfToWord": {
+      "title": "PDF vers Word",
+      "description": "Transformez le texte d'un PDF en document Word modifiable."
+    }
   },
   "translateTool": {
     "uploadTitle": "1. Téléverser un document",
@@ -99,6 +152,7 @@
     "stageDone": "Traduction terminée",
     "resultSummary": "Traduit du {{source}} vers le {{target}}",
     "errorNoText": "Ce PDF ne contient aucun texte extractible — il s'agit peut-être d'un document scanné ou d'une image. Essayez d'abord l'outil OCR.",
-    "errorGeneric": "Nous n'avons pas pu traduire ce document. Veuillez réessayer."
+    "errorGeneric": "Nous n'avons pas pu traduire ce document. Veuillez réessayer.",
+    "autoDetect": "Détection automatique"
   }
 }

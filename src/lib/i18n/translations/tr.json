@@ -19,7 +19,9 @@
     "somethingWentWrong": "Bir şeyler ters gitti",
     "couldNotProcessFile": "Bu dosyayı işleyemedik. Lütfen tekrar deneyin.",
     "upTo100mb": "100 MB'a kadar",
-    "pdfFilesOnly": "Yalnızca PDF dosyaları"
+    "pdfFilesOnly": "Yalnızca PDF dosyaları",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı!"
   },
   "nav": {
     "overview": "Genel Bakış",
@@ -67,23 +69,74 @@
     "rights": "Tüm hakları saklıdır."
   },
   "tools": {
-    "convert": { "title": "Dosyaları dönüştür", "description": "Belgeleri PDF, Word, Excel, PowerPoint ve resim formatları arasında dönüştürün." },
-    "merge": { "title": "PDF'leri birleştir", "description": "Birden çok belgeyi tek, düzenli bir PDF'de birleştirin." },
-    "split": { "title": "PDF'yi böl", "description": "Bir belgeyi sayfa aralığına göre bölün ve her parçayı dışa aktarın." },
-    "compress": { "title": "PDF'yi sıkıştır", "description": "Belgeleri net ve okunaklı tutarken dosya boyutunu küçültün." },
-    "ocr": { "title": "OCR Tarayıcı", "description": "Taranmış görüntülerden ve PDF'lerden düzenlenebilir, aranabilir metin çıkarın." },
-    "translate": { "title": "PDF çevir", "description": "Bir belgenin metnini başka bir dile çevirin." },
-    "protect": { "title": "PDF'yi parola ile koru", "description": "Hassas belgeleri paylaşmadan önce bir parola ile şifreleyin." },
-    "watermark": { "title": "PDF'ye filigran ekle", "description": "Belgelerinizi özel bir filigranla markalayın ve koruyun." },
-    "rotate": { "title": "PDF'yi döndür", "description": "Yan yatmış veya ters dönmüş sayfaları saniyeler içinde düzeltin." },
-    "extractPages": { "title": "Sayfaları ayıkla", "description": "Bir belgeden belirli sayfaları yeni bir dosyaya çıkarın." },
-    "deletePages": { "title": "Sayfaları sil", "description": "İstenmeyen sayfaları bir belgeden kalıcı olarak kaldırın." },
-    "wordToPdf": { "title": "Word'den PDF'e", "description": "Word belgelerini şık, paylaşılabilir PDF'lere dönüştürün." },
-    "excelToPdf": { "title": "Excel'den PDF'e", "description": "Elektronik tabloları temiz, yazdırılabilir PDF'lere dönüştürün." },
-    "pptToPdf": { "title": "PowerPoint'ten PDF'e", "description": "Sunumları paylaşılabilir, baskıya hazır PDF'lere dönüştürün." },
-    "imageToPdf": { "title": "Resimden PDF'e", "description": "JPG veya PNG resimlerini tek bir PDF'de birleştirin." },
-    "pdfToImage": { "title": "PDF'den resme", "description": "Bir PDF'nin her sayfasını PNG veya JPG resim olarak dışa aktarın." },
-    "pdfToWord": { "title": "PDF'den Word'e", "description": "Bir PDF'nin metnini düzenlenebilir bir Word belgesine dönüştürün." }
+    "convert": {
+      "title": "Dosyaları dönüştür",
+      "description": "Belgeleri PDF, Word, Excel, PowerPoint ve resim formatları arasında dönüştürün."
+    },
+    "merge": {
+      "title": "PDF'leri birleştir",
+      "description": "Birden çok belgeyi tek, düzenli bir PDF'de birleştirin."
+    },
+    "split": {
+      "title": "PDF'yi böl",
+      "description": "Bir belgeyi sayfa aralığına göre bölün ve her parçayı dışa aktarın."
+    },
+    "compress": {
+      "title": "PDF'yi sıkıştır",
+      "description": "Belgeleri net ve okunaklı tutarken dosya boyutunu küçültün."
+    },
+    "ocr": {
+      "title": "OCR Tarayıcı",
+      "description": "Taranmış görüntülerden ve PDF'lerden düzenlenebilir, aranabilir metin çıkarın."
+    },
+    "translate": {
+      "title": "PDF çevir",
+      "description": "Bir belgenin metnini başka bir dile çevirin."
+    },
+    "protect": {
+      "title": "PDF'yi parola ile koru",
+      "description": "Hassas belgeleri paylaşmadan önce bir parola ile şifreleyin."
+    },
+    "watermark": {
+      "title": "PDF'ye filigran ekle",
+      "description": "Belgelerinizi özel bir filigranla markalayın ve koruyun."
+    },
+    "rotate": {
+      "title": "PDF'yi döndür",
+      "description": "Yan yatmış veya ters dönmüş sayfaları saniyeler içinde düzeltin."
+    },
+    "extractPages": {
+      "title": "Sayfaları ayıkla",
+      "description": "Bir belgeden belirli sayfaları yeni bir dosyaya çıkarın."
+    },
+    "deletePages": {
+      "title": "Sayfaları sil",
+      "description": "İstenmeyen sayfaları bir belgeden kalıcı olarak kaldırın."
+    },
+    "wordToPdf": {
+      "title": "Word'den PDF'e",
+      "description": "Word belgelerini şık, paylaşılabilir PDF'lere dönüştürün."
+    },
+    "excelToPdf": {
+      "title": "Excel'den PDF'e",
+      "description": "Elektronik tabloları temiz, yazdırılabilir PDF'lere dönüştürün."
+    },
+    "pptToPdf": {
+      "title": "PowerPoint'ten PDF'e",
+      "description": "Sunumları paylaşılabilir, baskıya hazır PDF'lere dönüştürün."
+    },
+    "imageToPdf": {
+      "title": "Resimden PDF'e",
+      "description": "JPG veya PNG resimlerini tek bir PDF'de birleştirin."
+    },
+    "pdfToImage": {
+      "title": "PDF'den resme",
+      "description": "Bir PDF'nin her sayfasını PNG veya JPG resim olarak dışa aktarın."
+    },
+    "pdfToWord": {
+      "title": "PDF'den Word'e",
+      "description": "Bir PDF'nin metnini düzenlenebilir bir Word belgesine dönüştürün."
+    }
   },
   "translateTool": {
     "uploadTitle": "1. Bir belge yükleyin",
@@ -99,6 +152,7 @@
     "stageDone": "Çeviri tamamlandı",
     "resultSummary": "{{source}} dilinden {{target}} diline çevrildi",
     "errorNoText": "Bu PDF'de çıkarılabilir metin yok — taranmış bir belge veya görüntü olabilir. Önce OCR aracını deneyin.",
-    "errorGeneric": "Bu belgeyi çeviremedik. Lütfen tekrar deneyin."
+    "errorGeneric": "Bu belgeyi çeviremedik. Lütfen tekrar deneyin.",
+    "autoDetect": "Otomatik algıla"
   }
 }

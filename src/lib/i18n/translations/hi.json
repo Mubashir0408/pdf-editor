@@ -19,7 +19,9 @@
     "somethingWentWrong": "कुछ गड़बड़ हो गई",
     "couldNotProcessFile": "हम इस फ़ाइल को प्रोसेस नहीं कर सके। कृपया फिर से कोशिश करें।",
     "upTo100mb": "100MB तक",
-    "pdfFilesOnly": "केवल PDF फ़ाइलें"
+    "pdfFilesOnly": "केवल PDF फ़ाइलें",
+    "copy": "कॉपी करें",
+    "copied": "कॉपी हो गया!"
   },
   "nav": {
     "overview": "अवलोकन",
@@ -67,23 +69,74 @@
     "rights": "सर्वाधिकार सुरक्षित।"
   },
   "tools": {
-    "convert": { "title": "फ़ाइलें बदलें", "description": "दस्तावेज़ों को PDF, Word, Excel, PowerPoint और छवि प्रारूपों के बीच बदलें।" },
-    "merge": { "title": "PDF मर्ज करें", "description": "कई दस्तावेज़ों को एक व्यवस्थित PDF में मिलाएं।" },
-    "split": { "title": "PDF विभाजित करें", "description": "पेज श्रेणी के अनुसार दस्तावेज़ को विभाजित करें और हर हिस्से को निर्यात करें।" },
-    "compress": { "title": "PDF संपीड़ित करें", "description": "दस्तावेज़ों को स्पष्ट और पठनीय रखते हुए फ़ाइल का आकार घटाएं।" },
-    "ocr": { "title": "OCR स्कैनर", "description": "स्कैन की गई छवियों और PDF से संपादन योग्य, खोजने योग्य टेक्स्ट निकालें।" },
-    "translate": { "title": "PDF अनुवाद करें", "description": "किसी दस्तावेज़ के टेक्स्ट का दूसरी भाषा में अनुवाद करें।" },
-    "protect": { "title": "PDF को पासवर्ड से सुरक्षित करें", "description": "साझा करने से पहले संवेदनशील दस्तावेज़ों को पासवर्ड से एन्क्रिप्ट करें।" },
-    "watermark": { "title": "PDF पर वॉटरमार्क लगाएं", "description": "अपने दस्तावेज़ों को कस्टम वॉटरमार्क से ब्रांड और सुरक्षित करें।" },
-    "rotate": { "title": "PDF घुमाएं", "description": "सेकंडों में तिरछे या उल्टे पेज ठीक करें।" },
-    "extractPages": { "title": "पेज निकालें", "description": "किसी दस्तावेज़ से विशिष्ट पेज एक नई फ़ाइल में निकालें।" },
-    "deletePages": { "title": "पेज हटाएं", "description": "किसी दस्तावेज़ से अवांछित पेज स्थायी रूप से हटाएं।" },
-    "wordToPdf": { "title": "Word से PDF", "description": "Word दस्तावेज़ों को आकर्षक, साझा करने योग्य PDF में बदलें।" },
-    "excelToPdf": { "title": "Excel से PDF", "description": "स्प्रेडशीट को स्वच्छ, प्रिंट करने योग्य PDF में बदलें।" },
-    "pptToPdf": { "title": "PowerPoint से PDF", "description": "प्रस्तुतियों को साझा करने योग्य, प्रिंट के लिए तैयार PDF में बदलें।" },
-    "imageToPdf": { "title": "छवि से PDF", "description": "JPG या PNG छवियों को एक PDF में मिलाएं।" },
-    "pdfToImage": { "title": "PDF से छवि", "description": "PDF के हर पेज को PNG या JPG छवि के रूप में निर्यात करें।" },
-    "pdfToWord": { "title": "PDF से Word", "description": "PDF के टेक्स्ट को संपादन योग्य Word दस्तावेज़ में बदलें।" }
+    "convert": {
+      "title": "फ़ाइलें बदलें",
+      "description": "दस्तावेज़ों को PDF, Word, Excel, PowerPoint और छवि प्रारूपों के बीच बदलें।"
+    },
+    "merge": {
+      "title": "PDF मर्ज करें",
+      "description": "कई दस्तावेज़ों को एक व्यवस्थित PDF में मिलाएं।"
+    },
+    "split": {
+      "title": "PDF विभाजित करें",
+      "description": "पेज श्रेणी के अनुसार दस्तावेज़ को विभाजित करें और हर हिस्से को निर्यात करें।"
+    },
+    "compress": {
+      "title": "PDF संपीड़ित करें",
+      "description": "दस्तावेज़ों को स्पष्ट और पठनीय रखते हुए फ़ाइल का आकार घटाएं।"
+    },
+    "ocr": {
+      "title": "OCR स्कैनर",
+      "description": "स्कैन की गई छवियों और PDF से संपादन योग्य, खोजने योग्य टेक्स्ट निकालें।"
+    },
+    "translate": {
+      "title": "PDF अनुवाद करें",
+      "description": "किसी दस्तावेज़ के टेक्स्ट का दूसरी भाषा में अनुवाद करें।"
+    },
+    "protect": {
+      "title": "PDF को पासवर्ड से सुरक्षित करें",
+      "description": "साझा करने से पहले संवेदनशील दस्तावेज़ों को पासवर्ड से एन्क्रिप्ट करें।"
+    },
+    "watermark": {
+      "title": "PDF पर वॉटरमार्क लगाएं",
+      "description": "अपने दस्तावेज़ों को कस्टम वॉटरमार्क से ब्रांड और सुरक्षित करें।"
+    },
+    "rotate": {
+      "title": "PDF घुमाएं",
+      "description": "सेकंडों में तिरछे या उल्टे पेज ठीक करें।"
+    },
+    "extractPages": {
+      "title": "पेज निकालें",
+      "description": "किसी दस्तावेज़ से विशिष्ट पेज एक नई फ़ाइल में निकालें।"
+    },
+    "deletePages": {
+      "title": "पेज हटाएं",
+      "description": "किसी दस्तावेज़ से अवांछित पेज स्थायी रूप से हटाएं।"
+    },
+    "wordToPdf": {
+      "title": "Word से PDF",
+      "description": "Word दस्तावेज़ों को आकर्षक, साझा करने योग्य PDF में बदलें।"
+    },
+    "excelToPdf": {
+      "title": "Excel से PDF",
+      "description": "स्प्रेडशीट को स्वच्छ, प्रिंट करने योग्य PDF में बदलें।"
+    },
+    "pptToPdf": {
+      "title": "PowerPoint से PDF",
+      "description": "प्रस्तुतियों को साझा करने योग्य, प्रिंट के लिए तैयार PDF में बदलें।"
+    },
+    "imageToPdf": {
+      "title": "छवि से PDF",
+      "description": "JPG या PNG छवियों को एक PDF में मिलाएं।"
+    },
+    "pdfToImage": {
+      "title": "PDF से छवि",
+      "description": "PDF के हर पेज को PNG या JPG छवि के रूप में निर्यात करें।"
+    },
+    "pdfToWord": {
+      "title": "PDF से Word",
+      "description": "PDF के टेक्स्ट को संपादन योग्य Word दस्तावेज़ में बदलें।"
+    }
   },
   "translateTool": {
     "uploadTitle": "१. एक दस्तावेज़ अपलोड करें",
@@ -99,6 +152,7 @@
     "stageDone": "अनुवाद पूर्ण",
     "resultSummary": "{{source}} से {{target}} में अनुवादित",
     "errorNoText": "इस PDF में निकालने योग्य टेक्स्ट नहीं है — यह स्कैन किया गया दस्तावेज़ या छवि हो सकता है। पहले OCR टूल आज़माएं।",
-    "errorGeneric": "हम इस दस्तावेज़ का अनुवाद नहीं कर सके। कृपया फिर से कोशिश करें।"
+    "errorGeneric": "हम इस दस्तावेज़ का अनुवाद नहीं कर सके। कृपया फिर से कोशिश करें।",
+    "autoDetect": "स्वतः पहचानें"
   }
 }

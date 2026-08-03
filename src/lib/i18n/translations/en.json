@@ -19,7 +19,9 @@
     "somethingWentWrong": "Something went wrong",
     "couldNotProcessFile": "We couldn't process this file. Please try again.",
     "upTo100mb": "up to 100MB",
-    "pdfFilesOnly": "PDF files only"
+    "pdfFilesOnly": "PDF files only",
+    "copy": "Copy",
+    "copied": "Copied!"
   },
   "nav": {
     "overview": "Overview",
@@ -67,23 +69,74 @@
     "rights": "All rights reserved."
   },
   "tools": {
-    "convert": { "title": "Convert files", "description": "Transform documents between PDF, Word, Excel, PowerPoint, and image formats." },
-    "merge": { "title": "Merge PDFs", "description": "Combine multiple documents into a single organized PDF." },
-    "split": { "title": "Split PDF", "description": "Break a document apart by page range and export each piece." },
-    "compress": { "title": "Compress PDF", "description": "Shrink file size while keeping documents sharp and readable." },
-    "ocr": { "title": "OCR Scanner", "description": "Extract editable, searchable text from scanned images and PDFs." },
-    "translate": { "title": "Translate PDF", "description": "Translate a document's text into another language." },
-    "protect": { "title": "Password Protect PDF", "description": "Encrypt sensitive documents with a password before sharing." },
-    "watermark": { "title": "Watermark PDF", "description": "Brand and protect your documents with a custom watermark." },
-    "rotate": { "title": "Rotate PDF", "description": "Fix sideways or upside-down pages in seconds." },
-    "extractPages": { "title": "Extract Pages", "description": "Pull specific pages out of a document into a new file." },
-    "deletePages": { "title": "Delete Pages", "description": "Remove unwanted pages from a document permanently." },
-    "wordToPdf": { "title": "Word to PDF", "description": "Convert Word documents into polished, shareable PDFs." },
-    "excelToPdf": { "title": "Excel to PDF", "description": "Turn spreadsheets into clean, printable PDFs." },
-    "pptToPdf": { "title": "PowerPoint to PDF", "description": "Convert presentations into shareable, print-ready PDFs." },
-    "imageToPdf": { "title": "Image to PDF", "description": "Combine JPG or PNG images into a single PDF." },
-    "pdfToImage": { "title": "PDF to Image", "description": "Export every page of a PDF as a PNG or JPG image." },
-    "pdfToWord": { "title": "PDF to Word", "description": "Turn a PDF's text into an editable Word document." }
+    "convert": {
+      "title": "Convert files",
+      "description": "Transform documents between PDF, Word, Excel, PowerPoint, and image formats."
+    },
+    "merge": {
+      "title": "Merge PDFs",
+      "description": "Combine multiple documents into a single organized PDF."
+    },
+    "split": {
+      "title": "Split PDF",
+      "description": "Break a document apart by page range and export each piece."
+    },
+    "compress": {
+      "title": "Compress PDF",
+      "description": "Shrink file size while keeping documents sharp and readable."
+    },
+    "ocr": {
+      "title": "OCR Scanner",
+      "description": "Extract editable, searchable text from scanned images and PDFs."
+    },
+    "translate": {
+      "title": "Translate PDF",
+      "description": "Translate a document's text into another language."
+    },
+    "protect": {
+      "title": "Password Protect PDF",
+      "description": "Encrypt sensitive documents with a password before sharing."
+    },
+    "watermark": {
+      "title": "Watermark PDF",
+      "description": "Brand and protect your documents with a custom watermark."
+    },
+    "rotate": {
+      "title": "Rotate PDF",
+      "description": "Fix sideways or upside-down pages in seconds."
+    },
+    "extractPages": {
+      "title": "Extract Pages",
+      "description": "Pull specific pages out of a document into a new file."
+    },
+    "deletePages": {
+      "title": "Delete Pages",
+      "description": "Remove unwanted pages from a document permanently."
+    },
+    "wordToPdf": {
+      "title": "Word to PDF",
+      "description": "Convert Word documents into polished, shareable PDFs."
+    },
+    "excelToPdf": {
+      "title": "Excel to PDF",
+      "description": "Turn spreadsheets into clean, printable PDFs."
+    },
+    "pptToPdf": {
+      "title": "PowerPoint to PDF",
+      "description": "Convert presentations into shareable, print-ready PDFs."
+    },
+    "imageToPdf": {
+      "title": "Image to PDF",
+      "description": "Combine JPG or PNG images into a single PDF."
+    },
+    "pdfToImage": {
+      "title": "PDF to Image",
+      "description": "Export every page of a PDF as a PNG or JPG image."
+    },
+    "pdfToWord": {
+      "title": "PDF to Word",
+      "description": "Turn a PDF's text into an editable Word document."
+    }
   },
   "translateTool": {
     "uploadTitle": "1. Upload a document",
@@ -99,6 +152,7 @@
     "stageDone": "Translation complete",
     "resultSummary": "Translated from {{source}} to {{target}}",
     "errorNoText": "This PDF has no extractable text — it may be a scanned or image-only document. Try the OCR tool first.",
-    "errorGeneric": "We couldn't translate this document. Please try again."
+    "errorGeneric": "We couldn't translate this document. Please try again.",
+    "autoDetect": "Auto-detect"
   }
 }

@@ -2,7 +2,19 @@ import { randomUUID } from "node:crypto";
 
 import type { ProcessedFileDto } from "../types/file";
 
-export type TranslateStage = "extracting" | "translating" | "rendering" | "done" | "error";
+export type TranslateStage = "extracting" | "ocr" | "translating" | "rendering" | "done" | "error";
+
+export interface TranslateJobResult {
+  /** Full translated text, in reading order — used for the in-page preview and copy button. */
+  translatedText: string;
+  /** How many of the document's pages had no selectable text and were read via OCR instead. */
+  ocrPageCount: number;
+  files: {
+    pdf: ProcessedFileDto;
+    txt: ProcessedFileDto;
+    docx: ProcessedFileDto;
+  };
+}
 
 export interface TranslateJobState {
   status: "processing" | "done" | "error";
@@ -10,7 +22,7 @@ export interface TranslateJobState {
   progress: number;
   current?: number;
   total?: number;
-  result?: ProcessedFileDto;
+  result?: TranslateJobResult;
   error?: string;
 }
 

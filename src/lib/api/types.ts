@@ -60,3 +60,25 @@ export type WatermarkPosition =
   | "top-right"
   | "bottom-left"
   | "bottom-right";
+
+export type TranslateStage = "extracting" | "ocr" | "translating" | "rendering" | "done" | "error";
+
+export interface TranslateJobResult {
+  translatedText: string;
+  ocrPageCount: number;
+  files: {
+    pdf: ProcessedFileResponse;
+    txt: ProcessedFileResponse;
+    docx: ProcessedFileResponse;
+  };
+}
+
+export interface TranslateJobStatus {
+  status: "processing" | "done" | "error";
+  stage: TranslateStage;
+  progress: number;
+  current?: number;
+  total?: number;
+  result?: TranslateJobResult;
+  error?: string;
+}

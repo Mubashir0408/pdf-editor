@@ -10,7 +10,7 @@ import { z } from "zod";
  * `path.join`.
  */
 const STORED_FILENAME_PATTERN =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(pdf|docx|pptx|xlsx|jpe?g|png|zip)$/i;
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.(pdf|docx|pptx|xlsx|jpe?g|png|zip|txt)$/i;
 
 export const storedFileIdSchema = z.string().regex(STORED_FILENAME_PATTERN, "Invalid file id");
 

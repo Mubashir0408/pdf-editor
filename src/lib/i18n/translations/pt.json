@@ -19,7 +19,9 @@
     "somethingWentWrong": "Algo deu errado",
     "couldNotProcessFile": "Não foi possível processar este arquivo. Tente novamente.",
     "upTo100mb": "até 100 MB",
-    "pdfFilesOnly": "Somente arquivos PDF"
+    "pdfFilesOnly": "Somente arquivos PDF",
+    "copy": "Copiar",
+    "copied": "Copiado!"
   },
   "nav": {
     "overview": "Visão geral",
@@ -67,23 +69,74 @@
     "rights": "Todos os direitos reservados."
   },
   "tools": {
-    "convert": { "title": "Converter arquivos", "description": "Transforme documentos entre PDF, Word, Excel, PowerPoint e formatos de imagem." },
-    "merge": { "title": "Juntar PDFs", "description": "Combine vários documentos em um único PDF organizado." },
-    "split": { "title": "Dividir PDF", "description": "Divida um documento por intervalo de páginas e exporte cada parte." },
-    "compress": { "title": "Comprimir PDF", "description": "Reduza o tamanho do arquivo mantendo os documentos nítidos e legíveis." },
-    "ocr": { "title": "Scanner OCR", "description": "Extraia texto editável e pesquisável de imagens e PDFs digitalizados." },
-    "translate": { "title": "Traduzir PDF", "description": "Traduza o texto de um documento para outro idioma." },
-    "protect": { "title": "Proteger PDF com senha", "description": "Criptografe documentos confidenciais com uma senha antes de compartilhar." },
-    "watermark": { "title": "Marca d'água em PDF", "description": "Personalize e proteja seus documentos com uma marca d'água." },
-    "rotate": { "title": "Girar PDF", "description": "Corrija páginas de lado ou de cabeça para baixo em segundos." },
-    "extractPages": { "title": "Extrair páginas", "description": "Extraia páginas específicas de um documento para um novo arquivo." },
-    "deletePages": { "title": "Excluir páginas", "description": "Remova permanentemente páginas indesejadas de um documento." },
-    "wordToPdf": { "title": "Word para PDF", "description": "Converta documentos Word em PDFs elegantes e compartilháveis." },
-    "excelToPdf": { "title": "Excel para PDF", "description": "Transforme planilhas em PDFs limpos e prontos para impressão." },
-    "pptToPdf": { "title": "PowerPoint para PDF", "description": "Converta apresentações em PDFs compartilháveis e prontos para impressão." },
-    "imageToPdf": { "title": "Imagem para PDF", "description": "Combine imagens JPG ou PNG em um único PDF." },
-    "pdfToImage": { "title": "PDF para imagem", "description": "Exporte cada página de um PDF como imagem PNG ou JPG." },
-    "pdfToWord": { "title": "PDF para Word", "description": "Transforme o texto de um PDF em um documento Word editável." }
+    "convert": {
+      "title": "Converter arquivos",
+      "description": "Transforme documentos entre PDF, Word, Excel, PowerPoint e formatos de imagem."
+    },
+    "merge": {
+      "title": "Juntar PDFs",
+      "description": "Combine vários documentos em um único PDF organizado."
+    },
+    "split": {
+      "title": "Dividir PDF",
+      "description": "Divida um documento por intervalo de páginas e exporte cada parte."
+    },
+    "compress": {
+      "title": "Comprimir PDF",
+      "description": "Reduza o tamanho do arquivo mantendo os documentos nítidos e legíveis."
+    },
+    "ocr": {
+      "title": "Scanner OCR",
+      "description": "Extraia texto editável e pesquisável de imagens e PDFs digitalizados."
+    },
+    "translate": {
+      "title": "Traduzir PDF",
+      "description": "Traduza o texto de um documento para outro idioma."
+    },
+    "protect": {
+      "title": "Proteger PDF com senha",
+      "description": "Criptografe documentos confidenciais com uma senha antes de compartilhar."
+    },
+    "watermark": {
+      "title": "Marca d'água em PDF",
+      "description": "Personalize e proteja seus documentos com uma marca d'água."
+    },
+    "rotate": {
+      "title": "Girar PDF",
+      "description": "Corrija páginas de lado ou de cabeça para baixo em segundos."
+    },
+    "extractPages": {
+      "title": "Extrair páginas",
+      "description": "Extraia páginas específicas de um documento para um novo arquivo."
+    },
+    "deletePages": {
+      "title": "Excluir páginas",
+      "description": "Remova permanentemente páginas indesejadas de um documento."
+    },
+    "wordToPdf": {
+      "title": "Word para PDF",
+      "description": "Converta documentos Word em PDFs elegantes e compartilháveis."
+    },
+    "excelToPdf": {
+      "title": "Excel para PDF",
+      "description": "Transforme planilhas em PDFs limpos e prontos para impressão."
+    },
+    "pptToPdf": {
+      "title": "PowerPoint para PDF",
+      "description": "Converta apresentações em PDFs compartilháveis e prontos para impressão."
+    },
+    "imageToPdf": {
+      "title": "Imagem para PDF",
+      "description": "Combine imagens JPG ou PNG em um único PDF."
+    },
+    "pdfToImage": {
+      "title": "PDF para imagem",
+      "description": "Exporte cada página de um PDF como imagem PNG ou JPG."
+    },
+    "pdfToWord": {
+      "title": "PDF para Word",
+      "description": "Transforme o texto de um PDF em um documento Word editável."
+    }
   },
   "translateTool": {
     "uploadTitle": "1. Envie um documento",
@@ -99,6 +152,7 @@
     "stageDone": "Tradução concluída",
     "resultSummary": "Traduzido de {{source}} para {{target}}",
     "errorNoText": "Este PDF não tem texto extraível — pode ser um documento digitalizado ou uma imagem. Experimente primeiro a ferramenta OCR.",
-    "errorGeneric": "Não foi possível traduzir este documento. Tente novamente."
+    "errorGeneric": "Não foi possível traduzir este documento. Tente novamente.",
+    "autoDetect": "Detecção automática"
   }
 }

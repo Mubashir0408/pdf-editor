@@ -57,6 +57,7 @@ const EXTENSION_TO_MIME_TYPE: Record<string, string> = {
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
   ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ".txt": "text/plain",
 };
 
 export function getMimeTypeForFilename(filename: string): string {

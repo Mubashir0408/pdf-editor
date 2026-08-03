@@ -19,7 +19,9 @@
     "somethingWentWrong": "کچھ غلط ہو گیا",
     "couldNotProcessFile": "ہم اس فائل کو پروسیس نہیں کر سکے۔ براہ کرم دوبارہ کوشش کریں۔",
     "upTo100mb": "100MB تک",
-    "pdfFilesOnly": "صرف PDF فائلیں"
+    "pdfFilesOnly": "صرف PDF فائلیں",
+    "copy": "کاپی کریں",
+    "copied": "کاپی ہو گیا!"
   },
   "nav": {
     "overview": "جائزہ",
@@ -67,23 +69,74 @@
     "rights": "جملہ حقوق محفوظ ہیں۔"
   },
   "tools": {
-    "convert": { "title": "فائلیں تبدیل کریں", "description": "دستاویزات کو PDF، Word، Excel، PowerPoint اور تصویری فارمیٹس کے درمیان تبدیل کریں۔" },
-    "merge": { "title": "PDF فائلیں ملائیں", "description": "متعدد دستاویزات کو ایک منظم PDF میں یکجا کریں۔" },
-    "split": { "title": "PDF تقسیم کریں", "description": "دستاویز کو صفحہ کی حد کے مطابق تقسیم کریں اور ہر حصہ برآمد کریں۔" },
-    "compress": { "title": "PDF کمپریس کریں", "description": "دستاویزات کو واضح اور پڑھنے کے قابل رکھتے ہوئے فائل کا سائز کم کریں۔" },
-    "ocr": { "title": "OCR اسکینر", "description": "اسکین شدہ تصاویر اور PDF سے قابل ترمیم، قابل تلاش متن نکالیں۔" },
-    "translate": { "title": "PDF کا ترجمہ کریں", "description": "دستاویز کے متن کا دوسری زبان میں ترجمہ کریں۔" },
-    "protect": { "title": "PDF کو پاس ورڈ سے محفوظ کریں", "description": "شیئر کرنے سے پہلے حساس دستاویزات کو پاس ورڈ سے خفیہ کریں۔" },
-    "watermark": { "title": "PDF پر واٹر مارک لگائیں", "description": "اپنی دستاویزات کو حسب ضرورت واٹر مارک سے نمایاں اور محفوظ کریں۔" },
-    "rotate": { "title": "PDF گھمائیں", "description": "سیکنڈوں میں ترچھے یا الٹے صفحات درست کریں۔" },
-    "extractPages": { "title": "صفحات نکالیں", "description": "دستاویز سے مخصوص صفحات ایک نئی فائل میں نکالیں۔" },
-    "deletePages": { "title": "صفحات حذف کریں", "description": "دستاویز سے غیر ضروری صفحات مستقل طور پر ہٹائیں۔" },
-    "wordToPdf": { "title": "Word سے PDF", "description": "Word دستاویزات کو خوبصورت، قابل اشتراک PDF میں تبدیل کریں۔" },
-    "excelToPdf": { "title": "Excel سے PDF", "description": "اسپریڈ شیٹس کو صاف ستھرے، پرنٹ کے قابل PDF میں تبدیل کریں۔" },
-    "pptToPdf": { "title": "PowerPoint سے PDF", "description": "پریزنٹیشنز کو قابل اشتراک، پرنٹ کے لیے تیار PDF میں تبدیل کریں۔" },
-    "imageToPdf": { "title": "تصویر سے PDF", "description": "JPG یا PNG تصاویر کو ایک PDF میں یکجا کریں۔" },
-    "pdfToImage": { "title": "PDF سے تصویر", "description": "PDF کے ہر صفحے کو PNG یا JPG تصویر کے طور پر برآمد کریں۔" },
-    "pdfToWord": { "title": "PDF سے Word", "description": "PDF کے متن کو قابل ترمیم Word دستاویز میں تبدیل کریں۔" }
+    "convert": {
+      "title": "فائلیں تبدیل کریں",
+      "description": "دستاویزات کو PDF، Word، Excel، PowerPoint اور تصویری فارمیٹس کے درمیان تبدیل کریں۔"
+    },
+    "merge": {
+      "title": "PDF فائلیں ملائیں",
+      "description": "متعدد دستاویزات کو ایک منظم PDF میں یکجا کریں۔"
+    },
+    "split": {
+      "title": "PDF تقسیم کریں",
+      "description": "دستاویز کو صفحہ کی حد کے مطابق تقسیم کریں اور ہر حصہ برآمد کریں۔"
+    },
+    "compress": {
+      "title": "PDF کمپریس کریں",
+      "description": "دستاویزات کو واضح اور پڑھنے کے قابل رکھتے ہوئے فائل کا سائز کم کریں۔"
+    },
+    "ocr": {
+      "title": "OCR اسکینر",
+      "description": "اسکین شدہ تصاویر اور PDF سے قابل ترمیم، قابل تلاش متن نکالیں۔"
+    },
+    "translate": {
+      "title": "PDF کا ترجمہ کریں",
+      "description": "دستاویز کے متن کا دوسری زبان میں ترجمہ کریں۔"
+    },
+    "protect": {
+      "title": "PDF کو پاس ورڈ سے محفوظ کریں",
+      "description": "شیئر کرنے سے پہلے حساس دستاویزات کو پاس ورڈ سے خفیہ کریں۔"
+    },
+    "watermark": {
+      "title": "PDF پر واٹر مارک لگائیں",
+      "description": "اپنی دستاویزات کو حسب ضرورت واٹر مارک سے نمایاں اور محفوظ کریں۔"
+    },
+    "rotate": {
+      "title": "PDF گھمائیں",
+      "description": "سیکنڈوں میں ترچھے یا الٹے صفحات درست کریں۔"
+    },
+    "extractPages": {
+      "title": "صفحات نکالیں",
+      "description": "دستاویز سے مخصوص صفحات ایک نئی فائل میں نکالیں۔"
+    },
+    "deletePages": {
+      "title": "صفحات حذف کریں",
+      "description": "دستاویز سے غیر ضروری صفحات مستقل طور پر ہٹائیں۔"
+    },
+    "wordToPdf": {
+      "title": "Word سے PDF",
+      "description": "Word دستاویزات کو خوبصورت، قابل اشتراک PDF میں تبدیل کریں۔"
+    },
+    "excelToPdf": {
+      "title": "Excel سے PDF",
+      "description": "اسپریڈ شیٹس کو صاف ستھرے، پرنٹ کے قابل PDF میں تبدیل کریں۔"
+    },
+    "pptToPdf": {
+      "title": "PowerPoint سے PDF",
+      "description": "پریزنٹیشنز کو قابل اشتراک، پرنٹ کے لیے تیار PDF میں تبدیل کریں۔"
+    },
+    "imageToPdf": {
+      "title": "تصویر سے PDF",
+      "description": "JPG یا PNG تصاویر کو ایک PDF میں یکجا کریں۔"
+    },
+    "pdfToImage": {
+      "title": "PDF سے تصویر",
+      "description": "PDF کے ہر صفحے کو PNG یا JPG تصویر کے طور پر برآمد کریں۔"
+    },
+    "pdfToWord": {
+      "title": "PDF سے Word",
+      "description": "PDF کے متن کو قابل ترمیم Word دستاویز میں تبدیل کریں۔"
+    }
   },
   "translateTool": {
     "uploadTitle": "١۔ دستاویز اپ لوڈ کریں",
@@ -99,6 +152,7 @@
     "stageDone": "ترجمہ مکمل ہو گیا",
     "resultSummary": "{{source}} سے {{target}} میں ترجمہ کیا گیا",
     "errorNoText": "اس PDF میں کوئی قابل استخراج متن نہیں ہے — یہ اسکین شدہ دستاویز یا تصویر ہو سکتی ہے۔ پہلے OCR ٹول آزمائیں۔",
-    "errorGeneric": "ہم اس دستاویز کا ترجمہ نہیں کر سکے۔ براہ کرم دوبارہ کوشش کریں۔"
+    "errorGeneric": "ہم اس دستاویز کا ترجمہ نہیں کر سکے۔ براہ کرم دوبارہ کوشش کریں۔",
+    "autoDetect": "خودکار پتہ لگائیں"
   }
 }
