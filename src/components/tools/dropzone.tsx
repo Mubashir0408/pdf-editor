@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { UploadCloud } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -22,15 +23,19 @@ export function Dropzone({
   onFilesAdded,
   accept,
   multiple = true,
-  title = "Drag & drop files here",
-  subtitle = "or click to browse from your device",
-  formats = "PDF, DOCX, XLSX, PPTX, JPG, PNG up to 100MB",
+  title,
+  subtitle,
+  formats,
   className,
   tone = "default",
 }: DropzoneProps) {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const isHero = tone === "hero";
+  const resolvedTitle = title ?? t("common.dropFilesHere");
+  const resolvedSubtitle = subtitle ?? t("common.orClickToBrowse");
+  const resolvedFormats = formats ?? `PDF, DOCX, XLSX, PPTX, JPG, PNG ${t("common.upTo100mb")}`;
 
   const handleFiles = (fileList: FileList | null) => {
     if (!fileList || fileList.length === 0) return;
@@ -101,11 +106,11 @@ export function Dropzone({
       </motion.div>
 
       <div className="relative">
-        <p className={cn("text-base font-medium", isHero ? "text-white" : "text-foreground")}>{title}</p>
-        <p className={cn("mt-1 text-sm", isHero ? "text-white/75" : "text-muted-foreground")}>{subtitle}</p>
+        <p className={cn("text-base font-medium", isHero ? "text-white" : "text-foreground")}>{resolvedTitle}</p>
+        <p className={cn("mt-1 text-sm", isHero ? "text-white/75" : "text-muted-foreground")}>{resolvedSubtitle}</p>
       </div>
 
-      <p className={cn("relative text-xs", isHero ? "text-white/60" : "text-muted-foreground/70")}>{formats}</p>
+      <p className={cn("relative text-xs", isHero ? "text-white/60" : "text-muted-foreground/70")}>{resolvedFormats}</p>
     </motion.div>
   );
 }

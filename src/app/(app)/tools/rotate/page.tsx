@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { RotateCw, RotateCcw, ArrowRight } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -15,7 +16,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { rotatePdf } from "@/lib/api/rotate";
@@ -30,8 +30,8 @@ const faqs = [
 ];
 
 export default function RotatePage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("rotate");
 
   const { file, uploadedId, pageCount, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
     useSingleFileUpload({ fetchPageCount: true });
@@ -102,8 +102,8 @@ export default function RotatePage() {
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={RotateCw}
-        title="Rotate PDF"
-        description="Fix sideways or upside-down pages in seconds."
+        title={t("tools.rotate.title")}
+        description={t("tools.rotate.description")}
         gradientFrom="#36CFC9"
         gradientTo="#5B7FFF"
       />

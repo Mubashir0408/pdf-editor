@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Image as ImageIcon, ArrowRight } from "lucide-react";
 import { Reorder } from "framer-motion";
 
@@ -14,7 +15,6 @@ import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { uploadFile } from "@/lib/api/upload";
 import { convertImageToPdf } from "@/lib/api/imageToPdf";
@@ -44,8 +44,8 @@ function nextClientId() {
 }
 
 export default function ImageToPdfPage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("image-to-pdf");
 
   const [files, setFiles] = React.useState<ImageFile[]>([]);
   React.useEffect(() => {
@@ -111,8 +111,8 @@ export default function ImageToPdfPage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={ImageIcon}
-        title="Image to PDF"
-        description="Combine JPG or PNG images into a single PDF."
+        title={t("tools.imageToPdf.title")}
+        description={t("tools.imageToPdf.description")}
         gradientFrom="#7C5CFF"
         gradientTo="#36CFC9"
       />

@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/select";
 import { languages } from "@/lib/mock-data";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 
 const faqs = [
@@ -32,7 +31,6 @@ const faqs = [
 
 export default function TranslatePage() {
   const { consume } = usePendingFile();
-  useRecordToolUsage("translate");
   const [file, setFile] = React.useState<File | null>(null);
   React.useEffect(() => {
     const pending = consume();

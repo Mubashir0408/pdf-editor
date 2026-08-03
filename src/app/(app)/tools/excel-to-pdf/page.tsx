@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Sheet, ArrowRight } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -12,7 +13,6 @@ import { ToolFaq } from "@/components/tools/tool-faq";
 import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { convertExcelToPdf } from "@/lib/api/excelToPdf";
@@ -27,8 +27,8 @@ const faqs = [
 ];
 
 export default function ExcelToPdfPage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("excel-to-pdf");
 
   const { file, uploadedId, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
     useSingleFileUpload();
@@ -72,8 +72,8 @@ export default function ExcelToPdfPage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={Sheet}
-        title="Excel to PDF"
-        description="Turn spreadsheets into clean, printable PDFs."
+        title={t("tools.excelToPdf.title")}
+        description={t("tools.excelToPdf.description")}
         gradientFrom="#22C55E"
         gradientTo="#5B7FFF"
       />

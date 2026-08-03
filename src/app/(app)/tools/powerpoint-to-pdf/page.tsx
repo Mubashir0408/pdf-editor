@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { MonitorPlay, ArrowRight } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -12,7 +13,6 @@ import { ToolFaq } from "@/components/tools/tool-faq";
 import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { convertPowerpointToPdf } from "@/lib/api/powerpointToPdf";
@@ -27,8 +27,8 @@ const faqs = [
 ];
 
 export default function PowerpointToPdfPage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("ppt-to-pdf");
 
   const { file, uploadedId, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
     useSingleFileUpload();
@@ -72,8 +72,8 @@ export default function PowerpointToPdfPage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={MonitorPlay}
-        title="PowerPoint to PDF"
-        description="Convert presentations into shareable, print-ready PDFs."
+        title={t("tools.pptToPdf.title")}
+        description={t("tools.pptToPdf.description")}
         gradientFrom="#F59E0B"
         gradientTo="#EF4444"
       />

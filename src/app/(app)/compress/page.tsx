@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Minimize2, ArrowRight, FileText } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -15,7 +16,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { formatBytes, cn } from "@/lib/utils";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 
 const levels = [
@@ -31,8 +31,8 @@ const faqs = [
 ];
 
 export default function CompressPage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("compress");
   const [file, setFile] = React.useState<File | null>(null);
   React.useEffect(() => {
     const pending = consume();
@@ -54,8 +54,8 @@ export default function CompressPage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={Minimize2}
-        title="Compress PDF"
-        description="Shrink file size while keeping documents sharp and readable."
+        title={t("tools.compress.title")}
+        description={t("tools.compress.description")}
         gradientFrom="#22C55E"
         gradientTo="#36CFC9"
       />

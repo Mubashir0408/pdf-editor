@@ -1,19 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 export function ToolErrorState({
-  title = "Something went wrong",
-  description = "We couldn't process this file. Please try again.",
+  title,
+  description,
   onRetry,
 }: {
   title?: string;
   description?: string;
   onRetry: () => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.97 }}
@@ -25,11 +28,13 @@ export function ToolErrorState({
         <AlertTriangle className="size-7" strokeWidth={1.75} />
       </div>
       <div>
-        <p className="text-base font-semibold text-foreground">{title}</p>
-        <p className="mt-1 max-w-sm text-sm text-muted-foreground">{description}</p>
+        <p className="text-base font-semibold text-foreground">{title ?? t("common.somethingWentWrong")}</p>
+        <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+          {description ?? t("common.couldNotProcessFile")}
+        </p>
       </div>
       <Button variant="outline" onClick={onRetry}>
-        <RotateCcw /> Try again
+        <RotateCcw /> {t("common.tryAgain")}
       </Button>
     </motion.div>
   );

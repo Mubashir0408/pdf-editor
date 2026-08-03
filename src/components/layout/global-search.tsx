@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { Search, RefreshCw, Layers, Scissors, Sparkles } from "lucide-react";
 
 import {
@@ -20,6 +21,7 @@ import { allNavItems } from "@/lib/nav-config";
 export function GlobalSearch() {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -45,8 +47,8 @@ export function GlobalSearch() {
         className="h-9 w-full max-w-sm justify-start gap-2 rounded-lg text-muted-foreground font-normal sm:pr-2.5"
       >
         <Search className="size-4" />
-        <span className="hidden sm:inline">Search everything...</span>
-        <span className="sm:hidden">Search</span>
+        <span className="hidden sm:inline">{t("common.search")}</span>
+        <span className="sm:hidden">{t("common.search")}</span>
         <CommandShortcut className="ml-auto hidden rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] sm:inline-block">
           ⌘K
         </CommandShortcut>
@@ -73,7 +75,7 @@ export function GlobalSearch() {
           <CommandGroup heading="Navigate">
             {allNavItems.map((item) => (
               <CommandItem key={item.href} onSelect={() => go(item.href)}>
-                <item.icon /> {item.label}
+                <item.icon /> {t(item.labelKey)}
               </CommandItem>
             ))}
           </CommandGroup>

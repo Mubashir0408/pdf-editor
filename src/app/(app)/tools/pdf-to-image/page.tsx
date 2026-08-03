@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { ImageDown, ArrowRight } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -12,7 +13,6 @@ import { ToolFaq } from "@/components/tools/tool-faq";
 import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { convertPdfToImage } from "@/lib/api/pdfToImage";
@@ -28,8 +28,8 @@ const faqs = [
 ];
 
 export default function PdfToImagePage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("pdf-to-image");
 
   const { file, uploadedId, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
     useSingleFileUpload();
@@ -74,8 +74,8 @@ export default function PdfToImagePage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={ImageDown}
-        title="PDF to Image"
-        description="Export every page of a PDF as a PNG or JPG image."
+        title={t("tools.pdfToImage.title")}
+        description={t("tools.pdfToImage.description")}
         gradientFrom="#F59E0B"
         gradientTo="#7C5CFF"
       />

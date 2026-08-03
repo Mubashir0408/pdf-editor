@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { ScanText, Copy, Download, Check } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -14,7 +15,6 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 
 const faqs = [
@@ -42,8 +42,8 @@ Thank you for your business. Payment is due within 15 days
 of the invoice date. Late payments may incur a 1.5% monthly fee.`;
 
 export default function OcrPage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("ocr");
   const [file, setFile] = React.useState<File | null>(null);
   React.useEffect(() => {
     const pending = consume();
@@ -68,8 +68,8 @@ export default function OcrPage() {
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={ScanText}
-        title="OCR Scanner"
-        description="Extract editable, searchable text from scanned images and PDFs."
+        title={t("tools.ocr.title")}
+        description={t("tools.ocr.description")}
         gradientFrom="#36CFC9"
         gradientTo="#22C55E"
       />

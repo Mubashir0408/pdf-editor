@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { I18nProvider } from "@/components/providers/i18n-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,10 +18,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafafc" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b1220" },
-  ],
+  themeColor: "#fafafc",
 };
 
 export default function RootLayout({
@@ -36,17 +33,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="h-full min-h-screen bg-background font-sans text-foreground antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <I18nProvider>
           <TooltipProvider delayDuration={200}>
             {children}
             <Toaster />
           </TooltipProvider>
-        </ThemeProvider>
+        </I18nProvider>
       </body>
     </html>
   );

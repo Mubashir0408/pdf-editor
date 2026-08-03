@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -16,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { protectPdf } from "@/lib/api/protect";
@@ -31,8 +31,8 @@ const faqs = [
 ];
 
 export default function ProtectPage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("protect");
 
   const { file, uploadedId, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
     useSingleFileUpload();
@@ -92,8 +92,8 @@ export default function ProtectPage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={Lock}
-        title="Password Protect PDF"
-        description="Encrypt sensitive documents with a password before sharing."
+        title={t("tools.protect.title")}
+        description={t("tools.protect.description")}
         gradientFrom="#EF4444"
         gradientTo="#F59E0B"
       />

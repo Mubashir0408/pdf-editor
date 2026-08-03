@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { FileEdit, ArrowRight } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -12,7 +13,6 @@ import { ToolFaq } from "@/components/tools/tool-faq";
 import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { convertPdfToWord } from "@/lib/api/pdfToWord";
@@ -27,8 +27,8 @@ const faqs = [
 ];
 
 export default function PdfToWordPage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("pdf-to-word");
 
   const { file, uploadedId, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
     useSingleFileUpload();
@@ -72,8 +72,8 @@ export default function PdfToWordPage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={FileEdit}
-        title="PDF to Word"
-        description="Turn a PDF's text into an editable Word document."
+        title={t("tools.pdfToWord.title")}
+        description={t("tools.pdfToWord.description")}
         gradientFrom="#5B7FFF"
         gradientTo="#7C5CFF"
       />

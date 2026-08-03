@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Layers, ArrowRight } from "lucide-react";
 import { Reorder } from "framer-motion";
 
@@ -14,7 +15,6 @@ import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { uploadFile } from "@/lib/api/upload";
 import { mergePdfs } from "@/lib/api/merge";
@@ -46,8 +46,8 @@ function nextClientId() {
 }
 
 export default function MergePage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("merge");
 
   const [files, setFiles] = React.useState<MergeFile[]>([]);
   React.useEffect(() => {
@@ -116,8 +116,8 @@ export default function MergePage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={Layers}
-        title="Merge PDFs"
-        description="Combine multiple documents into a single organized PDF."
+        title={t("tools.merge.title")}
+        description={t("tools.merge.description")}
         gradientFrom="#7C5CFF"
         gradientTo="#B45CFF"
       />

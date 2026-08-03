@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Stamp, ArrowRight, FileText } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -24,7 +25,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { watermarkPdf } from "@/lib/api/watermark";
@@ -48,8 +48,8 @@ const faqs = [
 ];
 
 export default function WatermarkPage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("watermark");
 
   const { file, uploadedId, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
     useSingleFileUpload();
@@ -112,8 +112,8 @@ export default function WatermarkPage() {
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={Stamp}
-        title="Watermark PDF"
-        description="Brand and protect your documents with a custom watermark."
+        title={t("tools.watermark.title")}
+        description={t("tools.watermark.description")}
         gradientFrom="#7C5CFF"
         gradientTo="#EF4444"
       />

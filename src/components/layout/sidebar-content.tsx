@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Sparkles, ChevronsLeft } from "lucide-react";
 
@@ -28,19 +29,21 @@ export function Logo({ collapsed }: { collapsed?: boolean }) {
 
 export function SidebarNav({ collapsed }: { collapsed?: boolean }) {
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   return (
     <nav className="flex flex-1 flex-col gap-5 overflow-y-auto scrollbar-thin px-2.5 py-1">
       {navGroups.map((group, groupIndex) => (
-        <div key={group.label || groupIndex} className="flex flex-col gap-1">
-          {!collapsed && group.label && (
+        <div key={group.labelKey || groupIndex} className="flex flex-col gap-1">
+          {!collapsed && group.labelKey && (
             <span className="px-2.5 text-[11px] font-semibold tracking-wider text-muted-foreground/70 uppercase">
-              {group.label}
+              {t(group.labelKey)}
             </span>
           )}
           {group.items.map((item) => {
             const active =
               pathname === item.href || pathname.startsWith(item.href + "/");
+            const label = t(item.labelKey);
             const link = (
               <Link
                 key={item.href}
@@ -62,7 +65,7 @@ export function SidebarNav({ collapsed }: { collapsed?: boolean }) {
                 )}
                 <item.icon className="relative z-10 size-[18px] shrink-0" strokeWidth={2} />
                 {!collapsed && (
-                  <span className="relative z-10 flex-1 truncate">{item.label}</span>
+                  <span className="relative z-10 flex-1 truncate">{label}</span>
                 )}
                 {!collapsed && item.badge && (
                   <Badge variant="accent" className="relative z-10 h-5 px-1.5 text-[10px]">
@@ -76,7 +79,7 @@ export function SidebarNav({ collapsed }: { collapsed?: boolean }) {
               return (
                 <Tooltip key={item.href}>
                   <TooltipTrigger asChild>{link}</TooltipTrigger>
-                  <TooltipContent side="right">{item.label}</TooltipContent>
+                  <TooltipContent side="right">{label}</TooltipContent>
                 </Tooltip>
               );
             }

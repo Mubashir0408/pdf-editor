@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Scissors, ArrowRight } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -19,7 +20,6 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { splitPdf } from "@/lib/api/split";
@@ -55,8 +55,8 @@ function parseRangeGroups(input: string, maxPage: number): number[][] {
 }
 
 export default function SplitPage() {
+  const { t } = useTranslation();
   const { consume } = usePendingFile();
-  useRecordToolUsage("split");
 
   const { file, uploadedId, pageCount, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
     useSingleFileUpload({ fetchPageCount: true });
@@ -120,8 +120,8 @@ export default function SplitPage() {
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={Scissors}
-        title="Split PDF"
-        description="Break a document apart by page range and export each piece."
+        title={t("tools.split.title")}
+        description={t("tools.split.description")}
         gradientFrom="#36CFC9"
         gradientTo="#5B7FFF"
       />

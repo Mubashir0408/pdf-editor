@@ -9,7 +9,6 @@ import { ChatComposer } from "@/components/chat/composer";
 import { Button } from "@/components/ui/button";
 import { RightPanel, RightPanelSheet } from "@/components/layout/right-panel";
 import { suggestedPrompts } from "@/lib/mock-data";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import type { ChatMessage, ChatSource } from "@/lib/types";
 
 const CANNED_RESPONSES: { content: string; sources: ChatSource[] }[] = [
@@ -42,7 +41,6 @@ const CANNED_RESPONSES: { content: string; sources: ChatSource[] }[] = [
 let responseIndex = 0;
 
 export default function ChatPage() {
-  useRecordToolUsage("ai-chat");
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = React.useState(false);
   const [attachedFile, setAttachedFile] = React.useState<File | null>(null);

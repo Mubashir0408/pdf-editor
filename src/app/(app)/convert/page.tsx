@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { RefreshCw, ArrowRight } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -16,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { FileIcon } from "@/components/shared/file-icon";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
-import { useRecordToolUsage } from "@/hooks/use-recent-tools";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { cn } from "@/lib/utils";
 import type { FileType } from "@/lib/types";
@@ -39,9 +39,9 @@ const faqs = [
 ];
 
 function ConvertPageInner() {
+  const { t } = useTranslation();
   const params = useSearchParams();
   const { consume } = usePendingFile();
-  useRecordToolUsage("convert");
   const [file, setFile] = React.useState<File | null>(null);
   React.useEffect(() => {
     const pending = consume();
@@ -64,8 +64,8 @@ function ConvertPageInner() {
     <div className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
       <ToolHero
         icon={RefreshCw}
-        title="Convert files"
-        description="Transform documents between PDF, Word, Excel, PowerPoint, and image formats — free, and no account needed."
+        title={t("tools.convert.title")}
+        description={t("tools.convert.description")}
         gradientFrom="#5B7FFF"
         gradientTo="#7C5CFF"
       />

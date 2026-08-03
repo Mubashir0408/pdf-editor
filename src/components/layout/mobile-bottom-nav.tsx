@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
@@ -10,6 +11,7 @@ import { mobileNavItems } from "@/lib/nav-config";
 
 export function MobileBottomNav() {
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/90 backdrop-blur-lg lg:hidden pb-[env(safe-area-inset-bottom)]">
@@ -37,7 +39,7 @@ export function MobileBottomNav() {
                 strokeWidth={2}
               />
               <span className={cn(active ? "text-primary" : "text-muted-foreground")}>
-                {item.label}
+                {t(item.labelKey)}
               </span>
             </Link>
           );

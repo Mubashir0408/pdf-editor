@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { CheckCircle2, Download, Eye, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,8 @@ export function ResultCard({
   onPreview,
   downloadUrl,
 }: ResultCardProps) {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.97 }}
@@ -40,9 +43,9 @@ export function ResultCard({
         <CheckCircle2 className="size-7" strokeWidth={1.75} />
       </div>
       <div>
-        <p className="text-base font-semibold text-foreground">All done!</p>
+        <p className="text-base font-semibold text-foreground">{t("common.allDone")}</p>
         <p className="mt-1 text-sm text-muted-foreground">
-          {summary ?? "Your file is ready to download."}
+          {summary ?? t("common.fileReadyToDownload")}
         </p>
       </div>
 
@@ -58,21 +61,21 @@ export function ResultCard({
         <Button variant="gradient" asChild={!!downloadUrl}>
           {downloadUrl ? (
             <a href={downloadUrl} download={fileName}>
-              <Download /> Download
+              <Download /> {t("common.download")}
             </a>
           ) : (
             <>
-              <Download /> Download
+              <Download /> {t("common.download")}
             </>
           )}
         </Button>
         {onPreview && (
           <Button variant="outline" onClick={onPreview}>
-            <Eye /> Preview
+            <Eye /> {t("common.preview")}
           </Button>
         )}
         <Button variant="ghost" onClick={onReset}>
-          <RotateCcw /> Start over
+          <RotateCcw /> {t("common.startOver")}
         </Button>
       </div>
     </motion.div>
