@@ -28,3 +28,22 @@ export const uploadLimiter = rateLimit({
     next(ApiError.tooManyRequests("Too many upload requests. Please try again later."));
   },
 });
+
+/**
+ * Applied to the tools that spend real CPU/memory per request — a headless
+ * Chromium render (Word/Excel/PowerPoint → PDF), OCR (Translate's scanned-
+ * page fallback), or batched calls to an external translation API — as
+ * opposed to the cheap, pure in-memory pdf-lib operations (merge, split,
+ * rotate, ...) that the generous global limiter already covers. Kept apart
+ * from `uploadLimiter` since a single legitimate conversion is one request,
+ * not the many small ones uploads can involve.
+ */
+export const heavyProcessingLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (_req, _res, next) => {
+    next(ApiError.tooManyRequests("Too many conversion requests. Please try again later."));
+  },
+});

@@ -60,11 +60,11 @@ export function Dropzone({
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") inputRef.current?.click();
       }}
-      aria-label="Upload files"
+      aria-label={resolvedTitle}
       whileHover={{ scale: 1.005 }}
       whileTap={{ scale: 0.995 }}
       className={cn(
-        "relative flex cursor-pointer flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl text-center transition-colors",
+        "relative flex cursor-pointer flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl text-center transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         isHero
           ? cn(
               "glass-panel border-2 border-dashed px-6 py-10 shadow-2xl shadow-black/20",

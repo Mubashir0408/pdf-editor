@@ -51,7 +51,7 @@ export function MessageBubble({
         {!isUser && message.sources && message.sources.length > 0 && (
           <button
             onClick={onViewSources}
-            className="flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+            className="flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <FileText className="size-3" />
             {message.sources.length} source{message.sources.length > 1 ? "s" : ""}

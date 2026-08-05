@@ -1,12 +1,7 @@
 import type { CorsOptions } from "cors";
 
 import { env } from "./env";
-
-/**
- * TODO(deploy): set the real production frontend origin(s) here once the
- * frontend is deployed.
- */
-const PRODUCTION_ORIGINS: string[] = [];
+import { logger } from "./logger";
 
 /**
  * Next.js falls back to the next free port whenever its preferred one is
@@ -20,6 +15,13 @@ const PRODUCTION_ORIGINS: string[] = [];
  */
 const LOCALHOST_ORIGIN = /^http:\/\/localhost:\d+$/;
 
+if (env.isProduction && env.frontendOrigins.length === 0) {
+  logger.warn(
+    "FRONTEND_ORIGIN is not set — every cross-origin request will be rejected. " +
+      "Set it to your deployed frontend's URL(s) (comma-separated) before going live."
+  );
+}
+
 export const corsOptions: CorsOptions = {
   origin: env.isDevelopment
     ? (origin, callback) => {
@@ -29,7 +31,7 @@ export const corsOptions: CorsOptions = {
         }
         callback(new Error(`Origin "${origin}" is not allowed by CORS.`));
       }
-    : PRODUCTION_ORIGINS,
+    : env.frontendOrigins,
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],

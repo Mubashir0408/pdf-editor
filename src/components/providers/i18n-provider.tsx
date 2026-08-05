@@ -3,7 +3,7 @@
 import * as React from "react";
 import { I18nextProvider } from "react-i18next";
 
-import i18n from "@/lib/i18n/i18n";
+import i18n, { ensureLocaleLoaded } from "@/lib/i18n/i18n";
 import { DEFAULT_LOCALE, LOCALE_STORAGE_KEY, isSupportedLocale, getLocaleInfo } from "@/lib/i18n/locales";
 
 /**
@@ -35,21 +35,24 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     i18n.on("languageChanged", handleLanguageChanged);
 
     const timer = setTimeout(() => {
-      let stored: string | null = null;
-      try {
-        stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-      } catch {
-        // localStorage unavailable — fall back to the default locale
-      }
+      void (async () => {
+        let stored: string | null = null;
+        try {
+          stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
+        } catch {
+          // localStorage unavailable — fall back to the default locale
+        }
 
-      const initial = stored && isSupportedLocale(stored) ? stored : DEFAULT_LOCALE;
-      if (initial !== i18n.language) {
-        void i18n.changeLanguage(initial);
-      }
+        const initial = stored && isSupportedLocale(stored) ? stored : DEFAULT_LOCALE;
+        if (initial !== i18n.language) {
+          await ensureLocaleLoaded(initial);
+          await i18n.changeLanguage(initial);
+        }
 
-      const info = getLocaleInfo(initial);
-      document.documentElement.lang = initial;
-      document.documentElement.dir = info.dir;
+        const info = getLocaleInfo(initial);
+        document.documentElement.lang = initial;
+        document.documentElement.dir = info.dir;
+      })();
     }, 0);
 
     return () => {

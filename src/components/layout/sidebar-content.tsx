@@ -49,7 +49,7 @@ export function SidebarNav({ collapsed }: { collapsed?: boolean }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "group relative flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors",
+                  "group relative flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                   collapsed && "justify-center px-0 py-2.5",
                   active
                     ? "text-primary"
@@ -102,7 +102,7 @@ export function CollapseToggle({
     <button
       onClick={onToggle}
       aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-      className="hidden lg:flex items-center justify-center rounded-lg p-1.5 text-muted-foreground hover:bg-sidebar-accent hover:text-foreground transition-colors"
+      className="hidden lg:flex items-center justify-center rounded-lg p-1.5 text-muted-foreground hover:bg-sidebar-accent hover:text-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <ChevronsLeft
         className={cn("size-4 transition-transform duration-300", collapsed && "rotate-180")}

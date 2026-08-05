@@ -4,6 +4,7 @@ import { createApp } from "./app";
 import { env } from "./config/env";
 import { logger } from "./config/logger";
 import { ensureDirSync } from "./utils/pathHelpers";
+import { startTempFileCleanup } from "./utils/tempFileCleanup";
 import { htmlRendererService } from "./services";
 
 // Multer (uploads) and DownloadService (processed output) will fail on
@@ -13,6 +14,7 @@ ensureDirSync(env.uploadDir);
 ensureDirSync(env.generatedDir);
 
 const app = createApp();
+const cleanupInterval = startTempFileCleanup();
 
 let currentServer: Server | undefined;
 
@@ -56,6 +58,7 @@ startServer();
 function shutdown(signal: string) {
   logger.info({ signal }, "Shutting down gracefully...");
 
+  clearInterval(cleanupInterval);
   void htmlRendererService.closeBrowser();
 
   if (!currentServer) {

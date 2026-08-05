@@ -94,7 +94,16 @@ export class DownloadService {
  * otherwise need escaping inside the header value.
  */
 function buildContentDisposition(filename: string): string {
-  const asciiFallback = filename.replace(/[^\x20-\x7E]/g, "_");
+  // `?name=` is client-controlled (it round-trips through the download URL
+  // this same service generated, but nothing stops a caller from hitting
+  // the endpoint directly with an arbitrary value) — a literal `"` or `\`
+  // in that value would otherwise break out of the quoted-string and let
+  // the rest of the value be interpreted as new Content-Disposition
+  // parameters. Backslash-escaping both, per RFC 6266/2616, keeps it a
+  // single well-formed quoted string no matter what's inside.
+  const asciiFallback = filename
+    .replace(/[^\x20-\x7E]/g, "_")
+    .replace(/[\\"]/g, (char) => `\\${char}`);
   const encoded = encodeURIComponent(filename);
   return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${encoded}`;
 }

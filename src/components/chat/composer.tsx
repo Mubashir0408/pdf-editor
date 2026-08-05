@@ -39,7 +39,11 @@ export function ChatComposer({
           <span className="max-w-40 truncate text-xs font-medium text-foreground">
             {attachedFile.name}
           </span>
-          <button onClick={onRemoveAttachment} aria-label="Remove attachment">
+          <button
+            onClick={onRemoveAttachment}
+            aria-label="Remove attachment"
+            className="rounded outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
             <X className="size-3.5 text-muted-foreground hover:text-foreground" />
           </button>
         </div>

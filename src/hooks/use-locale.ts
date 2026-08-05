@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import i18n from "@/lib/i18n/i18n";
+import i18n, { ensureLocaleLoaded } from "@/lib/i18n/i18n";
 import { locales, LOCALE_STORAGE_KEY, getLocaleInfo } from "@/lib/i18n/locales";
 
 function applyDocumentLocale(code: string) {
@@ -24,13 +24,16 @@ export function useLocale() {
   }, []);
 
   const setLocale = React.useCallback((code: string) => {
-    void i18n.changeLanguage(code);
+    void (async () => {
+      await ensureLocaleLoaded(code);
+      await i18n.changeLanguage(code);
+      applyDocumentLocale(code);
+    })();
     try {
       window.localStorage.setItem(LOCALE_STORAGE_KEY, code);
     } catch {
       // localStorage unavailable (private browsing, etc.) — safe to no-op
     }
-    applyDocumentLocale(code);
   }, []);
 
   return { locale, setLocale, locales };

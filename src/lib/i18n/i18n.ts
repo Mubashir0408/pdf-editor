@@ -2,49 +2,55 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import en from "./translations/en.json";
-import de from "./translations/de.json";
-import fr from "./translations/fr.json";
-import es from "./translations/es.json";
-import it from "./translations/it.json";
-import pt from "./translations/pt.json";
-import tr from "./translations/tr.json";
-import ar from "./translations/ar.json";
-import hi from "./translations/hi.json";
-import ur from "./translations/ur.json";
-import zh from "./translations/zh.json";
-import ja from "./translations/ja.json";
 import { DEFAULT_LOCALE } from "./locales";
 
-const resources = {
-  en: { translation: en },
-  de: { translation: de },
-  fr: { translation: fr },
-  es: { translation: es },
-  it: { translation: it },
-  pt: { translation: pt },
-  tr: { translation: tr },
-  ar: { translation: ar },
-  hi: { translation: hi },
-  ur: { translation: ur },
-  zh: { translation: zh },
-  ja: { translation: ja },
-};
-
 /**
- * All 12 locales' dictionaries are bundled statically (no async fetch) —
- * they're modest in size and this keeps language switching instant, with
- * no loading state needed. Guarded against re-init since this module is
- * evaluated on both the server-render pass of the `I18nProvider` client
- * component and again in the browser.
+ * Only the default locale's dictionary is bundled eagerly — it's the one
+ * every visitor needs immediately (matching the server's always-English
+ * render). The other 11 are a genuinely unused ~73KB of JSON for the ~11
+ * in every 12 visitors who never switch language, so they're loaded on
+ * demand instead (see `ensureLocaleLoaded` below), the same way any other
+ * route-level code-splitting works in this app.
  */
 if (!i18n.isInitialized) {
   void i18n.use(initReactI18next).init({
-    resources,
+    resources: { en: { translation: en } },
     lng: DEFAULT_LOCALE,
     fallbackLng: DEFAULT_LOCALE,
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
   });
+}
+
+const LOCALE_LOADERS: Record<string, () => Promise<{ default: Record<string, unknown> }>> = {
+  de: () => import("./translations/de.json"),
+  fr: () => import("./translations/fr.json"),
+  es: () => import("./translations/es.json"),
+  it: () => import("./translations/it.json"),
+  pt: () => import("./translations/pt.json"),
+  tr: () => import("./translations/tr.json"),
+  ar: () => import("./translations/ar.json"),
+  hi: () => import("./translations/hi.json"),
+  ur: () => import("./translations/ur.json"),
+  zh: () => import("./translations/zh.json"),
+  ja: () => import("./translations/ja.json"),
+};
+
+const loadedLocales = new Set<string>(["en"]);
+
+/** Fetches and registers a locale's dictionary the first time it's needed;
+ *  a no-op on every call after that. Must resolve before `i18n.changeLanguage`
+ *  is called for that locale, or `t()` would render fallback/English text
+ *  for a moment until the chunk arrives. */
+export async function ensureLocaleLoaded(code: string): Promise<void> {
+  if (loadedLocales.has(code)) return;
+
+  const load = LOCALE_LOADERS[code];
+  if (!load) return;
+
+  const mod = await load();
+  i18n.addResourceBundle(code, "translation", mod.default, true, true);
+  loadedLocales.add(code);
 }
 
 export default i18n;

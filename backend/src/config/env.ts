@@ -17,9 +17,14 @@ const envSchema = z.object({
   MAX_UPLOAD_SIZE: z.coerce.number().int().positive().default(104_857_600),
   GENERATED_PATH: z.string().min(1).default("generated"),
 
-  OLLAMA_BASE_URL: z.string().url().default("http://localhost:11434"),
+  /** Comma-separated list of allowed frontend origins in production, e.g.
+   *  "https://app.example.com,https://example.com" — see config/cors.ts. */
+  FRONTEND_ORIGIN: z.string().optional(),
 
-  JWT_SECRET: z.string().min(1).default("dev-secret-change-me"),
+  /** How long an uploaded or generated file may sit on disk before the
+   *  periodic sweep (server.ts) deletes it — covers files left behind by
+   *  abandoned uploads or downloads that never happened. */
+  TEMP_FILE_MAX_AGE_MS: z.coerce.number().int().positive().default(60 * 60 * 1000),
 });
 
 function loadEnv() {
@@ -48,4 +53,12 @@ export const env = {
   /** Absolute, OS-correct paths — resolved once here so nothing else needs to. */
   uploadDir: path.resolve(process.cwd(), parsedEnv.UPLOAD_PATH),
   generatedDir: path.resolve(process.cwd(), parsedEnv.GENERATED_PATH),
+  /** Parsed once from the comma-separated `FRONTEND_ORIGIN` — empty in
+   *  production until it's actually configured, which `config/cors.ts`
+   *  treats as "reject every cross-origin request" rather than silently
+   *  allowing anything. */
+  frontendOrigins: (parsedEnv.FRONTEND_ORIGIN ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
 } as const;

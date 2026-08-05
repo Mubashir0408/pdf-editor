@@ -14,6 +14,28 @@ import routes from "./routes";
  *  near file size; uploads always go through Multer's multipart parser. */
 const JSON_BODY_LIMIT = "1mb";
 
+/**
+ * This server never renders HTML or serves its own scripts/styles — it's a
+ * JSON API plus file downloads — so the policy is written as tight as that
+ * allows rather than relying on helmet's general-purpose defaults (which
+ * assume a server might serve a page): no script/style/frame source is
+ * trusted at all, `object-src`/`base-uri` are fully locked down, and
+ * `frame-ancestors 'none'` stops this origin's responses from ever being
+ * framed by another site. Written out explicitly (instead of `helmet()`
+ * with no arguments) so the policy is reviewable here rather than
+ * implicit in whatever helmet's defaults happen to be this version.
+ */
+const CSP_DIRECTIVES = {
+  defaultSrc: ["'none'"],
+  baseUri: ["'none'"],
+  frameAncestors: ["'none'"],
+  objectSrc: ["'none'"],
+  scriptSrc: ["'none'"],
+  styleSrc: ["'none'"],
+  imgSrc: ["'self'"],
+  connectSrc: ["'self'"],
+};
+
 export function createApp(): Express {
   const app = express();
 
@@ -24,7 +46,12 @@ export function createApp(): Express {
   // request you most need traceability on.
   app.disable("x-powered-by");
   app.use(requestLogger);
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: { directives: CSP_DIRECTIVES },
+      crossOriginResourcePolicy: { policy: "cross-origin" },
+    })
+  );
   app.use(cors(corsOptions));
   app.use(compression());
 

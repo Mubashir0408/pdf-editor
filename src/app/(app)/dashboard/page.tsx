@@ -1,39 +1,16 @@
-"use client";
+import type { Metadata } from "next";
 
-import { useTranslation } from "react-i18next";
+import { buildPageMetadata } from "@/lib/seo";
+import DashboardView from "./dashboard-view";
 
-import { DashboardHero } from "@/components/dashboard/hero";
-import { QuickActionsGrid } from "@/components/dashboard/quick-actions";
-import { quickActions, popularToolIds } from "@/lib/mock-data";
+export const metadata: Metadata = buildPageMetadata({
+  title: "Free Online PDF Tools",
+  description:
+    "Your PDF workspace — merge, split, compress, convert, translate, and chat with your documents. Every tool in one place, free and no sign-up required.",
+  path: "/dashboard",
+  keywords: ["pdf tools", "online pdf editor", "free pdf tools", "pdf workspace"],
+});
 
-export default function DashboardPage() {
-  const { t } = useTranslation();
-
-  const popularTools = popularToolIds
-    .map((id) => quickActions.find((a) => a.id === id))
-    .filter((a): a is NonNullable<typeof a> => !!a);
-
-  return (
-    <div className="pb-16">
-      <DashboardHero />
-
-      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 pt-10 sm:px-6 lg:px-8">
-        <section className="flex flex-col gap-4">
-          <div>
-            <h2 className="text-lg font-semibold tracking-tight text-foreground">{t("dashboard.popularTitle")}</h2>
-            <p className="text-sm text-muted-foreground">{t("dashboard.popularSubtitle")}</p>
-          </div>
-          <QuickActionsGrid actions={popularTools} />
-        </section>
-
-        <section className="flex flex-col gap-4">
-          <div>
-            <h2 className="text-lg font-semibold tracking-tight text-foreground">{t("dashboard.allToolsTitle")}</h2>
-            <p className="text-sm text-muted-foreground">{t("dashboard.allToolsSubtitle")}</p>
-          </div>
-          <QuickActionsGrid actions={quickActions} />
-        </section>
-      </div>
-    </div>
-  );
+export default function Page() {
+  return <DashboardView />;
 }
