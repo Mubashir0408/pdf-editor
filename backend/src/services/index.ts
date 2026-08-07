@@ -19,6 +19,8 @@ import { PdfToImageService } from "./pdfToImage.service";
 import { PdfToWordService } from "./pdfToWord.service";
 import { TranslationJobsService } from "./translationJobs.service";
 import { PdfTranslateService } from "./pdfTranslate.service";
+import { GeminiService } from "./gemini.service";
+import { ChatService } from "./chat.service";
 
 /**
  * Composition root: every service is constructed exactly once here, with
@@ -55,3 +57,6 @@ export const pdfTranslateService = new PdfTranslateService(
   downloadService,
   translationJobsService
 );
+
+export const geminiService = new GeminiService();
+export const chatService = new ChatService(geminiService);

@@ -25,6 +25,12 @@ const envSchema = z.object({
    *  periodic sweep (server.ts) deletes it — covers files left behind by
    *  abandoned uploads or downloads that never happened. */
   TEMP_FILE_MAX_AGE_MS: z.coerce.number().int().positive().default(60 * 60 * 1000),
+
+  /** Server-only Gemini API key for AI Chat — never sent to the frontend.
+   *  Optional at boot (so a missing key doesn't take down the whole app);
+   *  the chat endpoint itself returns a clear error if it's unset. */
+  GEMINI_API_KEY: z.string().optional(),
+  GEMINI_MODEL: z.string().min(1).default("gemini-2.5-flash"),
 });
 
 function loadEnv() {
