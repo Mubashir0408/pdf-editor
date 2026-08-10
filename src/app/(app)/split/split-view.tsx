@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { UsageBanner } from "@/components/shared/usage-banner";
 import { cn } from "@/lib/utils";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
@@ -66,6 +67,7 @@ export default function SplitPage() {
   const [processing, setProcessing] = React.useState(false);
   const [processError, setProcessError] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
+  const [usageRefreshKey, setUsageRefreshKey] = React.useState(0);
 
   React.useEffect(() => {
     const pending = consume();
@@ -106,6 +108,7 @@ export default function SplitPage() {
       setProcessError(getApiErrorMessage(err));
     } finally {
       setProcessing(false);
+      setUsageRefreshKey((k) => k + 1);
     }
   };
 
@@ -125,6 +128,8 @@ export default function SplitPage() {
         gradientFrom="#36CFC9"
         gradientTo="#5B7FFF"
       />
+
+      <UsageBanner feature="split" refreshKey={usageRefreshKey} />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">

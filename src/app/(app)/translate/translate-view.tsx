@@ -15,6 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
+import { UsageBanner } from "@/components/shared/usage-banner";
 import {
   Select,
   SelectContent,
@@ -44,12 +45,22 @@ export default function TranslatePage() {
 
   const [sourceLang, setSourceLang] = React.useState("auto");
   const [targetLang, setTargetLang] = React.useState("es");
+  const [usageRefreshKey, setUsageRefreshKey] = React.useState(0);
 
   React.useEffect(() => {
     const pending = consume();
     if (pending) void upload(pending);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // The translate job runs asynchronously (start -> poll -> done/error), so
+  // usage is only known to have succeeded/failed once the job settles here
+  // — not when `start()` merely kicks it off.
+  React.useEffect(() => {
+    if (jobStatus === "done" || jobStatus === "error") {
+      setUsageRefreshKey((k) => k + 1);
+    }
+  }, [jobStatus]);
 
   const handleReset = () => {
     resetUpload();
@@ -101,6 +112,8 @@ export default function TranslatePage() {
         gradientFrom="#5B7FFF"
         gradientTo="#36CFC9"
       />
+
+      <UsageBanner feature="translate" refreshKey={usageRefreshKey} />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">

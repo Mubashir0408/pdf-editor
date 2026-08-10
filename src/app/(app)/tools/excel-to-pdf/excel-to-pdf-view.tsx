@@ -13,6 +13,7 @@ import { ToolFaq } from "@/components/tools/tool-faq";
 import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { UsageBanner } from "@/components/shared/usage-banner";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { convertExcelToPdf } from "@/lib/api/excelToPdf";
@@ -36,6 +37,7 @@ export default function ExcelToPdfPage() {
   const [processing, setProcessing] = React.useState(false);
   const [processError, setProcessError] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
+  const [usageRefreshKey, setUsageRefreshKey] = React.useState(0);
 
   React.useEffect(() => {
     const pending = consume();
@@ -61,6 +63,7 @@ export default function ExcelToPdfPage() {
       setProcessError(getApiErrorMessage(err));
     } finally {
       setProcessing(false);
+      setUsageRefreshKey((k) => k + 1);
     }
   };
 
@@ -77,6 +80,8 @@ export default function ExcelToPdfPage() {
         gradientFrom="#22C55E"
         gradientTo="#5B7FFF"
       />
+
+      <UsageBanner feature="excel-to-pdf" refreshKey={usageRefreshKey} />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">

@@ -15,6 +15,7 @@ import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { UsageBanner } from "@/components/shared/usage-banner";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { uploadFile } from "@/lib/api/upload";
 import { convertImageToPdf } from "@/lib/api/imageToPdf";
@@ -56,6 +57,7 @@ export default function ImageToPdfPage() {
   const [status, setStatus] = React.useState<Status>("idle");
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
+  const [usageRefreshKey, setUsageRefreshKey] = React.useState(0);
 
   const isBusy = status === "uploading" || status === "converting";
 
@@ -99,6 +101,8 @@ export default function ImageToPdfPage() {
     } catch (err) {
       setErrorMessage(getApiErrorMessage(err));
       setStatus("error");
+    } finally {
+      setUsageRefreshKey((k) => k + 1);
     }
   };
 
@@ -116,6 +120,8 @@ export default function ImageToPdfPage() {
         gradientFrom="#7C5CFF"
         gradientTo="#36CFC9"
       />
+
+      <UsageBanner feature="image-to-pdf" refreshKey={usageRefreshKey} />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">

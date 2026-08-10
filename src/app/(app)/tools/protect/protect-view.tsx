@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
+import { UsageBanner } from "@/components/shared/usage-banner";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { protectPdf } from "@/lib/api/protect";
@@ -45,6 +46,7 @@ export default function ProtectPage() {
   const [processing, setProcessing] = React.useState(false);
   const [processError, setProcessError] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
+  const [usageRefreshKey, setUsageRefreshKey] = React.useState(0);
 
   React.useEffect(() => {
     const pending = consume();
@@ -81,6 +83,7 @@ export default function ProtectPage() {
       setProcessError(getApiErrorMessage(err));
     } finally {
       setProcessing(false);
+      setUsageRefreshKey((k) => k + 1);
     }
   };
 
@@ -97,6 +100,8 @@ export default function ProtectPage() {
         gradientFrom="#EF4444"
         gradientTo="#F59E0B"
       />
+
+      <UsageBanner feature="protect" refreshKey={usageRefreshKey} />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">

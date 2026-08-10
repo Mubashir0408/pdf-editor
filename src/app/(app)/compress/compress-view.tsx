@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { Minimize2, ArrowRight, FileText } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -14,9 +15,12 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { UsageBanner } from "@/components/shared/usage-banner";
 import { formatBytes, cn } from "@/lib/utils";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
+import { checkInUsage } from "@/lib/api/usage";
+import { getApiErrorMessage } from "@/lib/api/errors";
 
 const levels = [
   { id: "low", label: "Low compression", desc: "Best quality, smaller savings", ratio: 0.85 },
@@ -41,6 +45,8 @@ export default function CompressPage() {
   }, []);
   const [level, setLevel] = React.useState<(typeof levels)[number]["id"]>("recommended");
   const { status, progress, start, reset } = useSimulatedTask(2200);
+  const [usageRefreshKey, setUsageRefreshKey] = React.useState(0);
+  const [checkingUsage, setCheckingUsage] = React.useState(false);
 
   const selected = levels.find((l) => l.id === level)!;
   const estimatedSize = file ? Math.round(file.size * selected.ratio) : 0;
@@ -48,6 +54,19 @@ export default function CompressPage() {
   const handleReset = () => {
     setFile(null);
     reset();
+  };
+
+  const handleStart = async () => {
+    setCheckingUsage(true);
+    try {
+      await checkInUsage("compress");
+      start();
+    } catch (err) {
+      toast.error(getApiErrorMessage(err));
+    } finally {
+      setCheckingUsage(false);
+      setUsageRefreshKey((k) => k + 1);
+    }
   };
 
   return (
@@ -59,6 +78,8 @@ export default function CompressPage() {
         gradientFrom="#22C55E"
         gradientTo="#36CFC9"
       />
+
+      <UsageBanner feature="compress" refreshKey={usageRefreshKey} />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">
@@ -137,7 +158,13 @@ export default function CompressPage() {
               )}
 
               {status !== "processing" && (
-                <Button variant="gradient" size="lg" onClick={start} className="self-start">
+                <Button
+                  variant="gradient"
+                  size="lg"
+                  onClick={handleStart}
+                  disabled={checkingUsage}
+                  className="self-start"
+                >
                   Compress file <ArrowRight />
                 </Button>
               )}

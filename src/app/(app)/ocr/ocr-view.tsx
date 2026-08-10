@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { ScanText, Copy, Download, Check } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -14,8 +15,11 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { UsageBanner } from "@/components/shared/usage-banner";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
+import { checkInUsage } from "@/lib/api/usage";
+import { getApiErrorMessage } from "@/lib/api/errors";
 
 const faqs = [
   { q: "What file types can I scan?", a: "JPG, PNG images, and scanned PDFs up to 50MB." },
@@ -52,10 +56,25 @@ export default function OcrPage() {
   }, []);
   const [copied, setCopied] = React.useState(false);
   const { status, progress, start, reset } = useSimulatedTask(2000);
+  const [usageRefreshKey, setUsageRefreshKey] = React.useState(0);
+  const [checkingUsage, setCheckingUsage] = React.useState(false);
 
   const handleReset = () => {
     setFile(null);
     reset();
+  };
+
+  const handleStart = async () => {
+    setCheckingUsage(true);
+    try {
+      await checkInUsage("ocr");
+      start();
+    } catch (err) {
+      toast.error(getApiErrorMessage(err));
+    } finally {
+      setCheckingUsage(false);
+      setUsageRefreshKey((k) => k + 1);
+    }
   };
 
   const copyText = async () => {
@@ -73,6 +92,8 @@ export default function OcrPage() {
         gradientFrom="#36CFC9"
         gradientTo="#22C55E"
       />
+
+      <UsageBanner feature="ocr" refreshKey={usageRefreshKey} />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">
@@ -96,7 +117,13 @@ export default function OcrPage() {
               />
 
               {status === "idle" && (
-                <Button variant="gradient" size="lg" onClick={start} className="self-start">
+                <Button
+                  variant="gradient"
+                  size="lg"
+                  onClick={handleStart}
+                  disabled={checkingUsage}
+                  className="self-start"
+                >
                   <ScanText /> Extract text
                 </Button>
               )}

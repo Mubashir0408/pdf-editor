@@ -15,6 +15,7 @@ import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { UsageBanner } from "@/components/shared/usage-banner";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { uploadFile } from "@/lib/api/upload";
 import { mergePdfs } from "@/lib/api/merge";
@@ -58,6 +59,7 @@ export default function MergePage() {
   const [status, setStatus] = React.useState<MergeStatus>("idle");
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
+  const [usageRefreshKey, setUsageRefreshKey] = React.useState(0);
 
   const isBusy = status === "uploading" || status === "merging";
 
@@ -104,6 +106,8 @@ export default function MergePage() {
     } catch (err) {
       setErrorMessage(getApiErrorMessage(err));
       setStatus("error");
+    } finally {
+      setUsageRefreshKey((k) => k + 1);
     }
   };
 
@@ -121,6 +125,8 @@ export default function MergePage() {
         gradientFrom="#7C5CFF"
         gradientTo="#B45CFF"
       />
+
+      <UsageBanner feature="merge" refreshKey={usageRefreshKey} />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">

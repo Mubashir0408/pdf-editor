@@ -18,7 +18,7 @@ import imageToPdfRoutes from "./imageToPdf.routes";
 import pdfToImageRoutes from "./pdfToImage.routes";
 import pdfToWordRoutes from "./pdfToWord.routes";
 import translateRoutes from "./translate.routes";
-import chatRoutes from "./chat.routes";
+import usageRoutes from "./usage.routes";
 
 const router = Router();
 
@@ -38,7 +38,7 @@ router.use("/image-to-pdf", imageToPdfRoutes);
 router.use("/pdf-to-image", pdfToImageRoutes);
 router.use("/pdf-to-word", pdfToWordRoutes);
 router.use("/translate", translateRoutes);
-router.use("/chat", chatRoutes);
+router.use("/usage", usageRoutes);
 router.use("/download", downloadRoutes);
 router.use("/pdf-info", pdfInfoRoutes);
 

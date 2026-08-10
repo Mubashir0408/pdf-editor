@@ -4,6 +4,7 @@ import * as React from "react";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { RefreshCw, ArrowRight } from "lucide-react";
 
 import { ToolHero } from "@/components/tools/tool-hero";
@@ -16,8 +17,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { FileIcon } from "@/components/shared/file-icon";
+import { UsageBanner } from "@/components/shared/usage-banner";
 import { useSimulatedTask } from "@/hooks/use-simulated-task";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
+import { checkInUsage } from "@/lib/api/usage";
+import { getApiErrorMessage } from "@/lib/api/errors";
 import { cn } from "@/lib/utils";
 import type { FileType } from "@/lib/types";
 
@@ -52,12 +56,27 @@ function ConvertPageInner() {
     (params.get("to") as FileType) || "pdf"
   );
   const { status, progress, start, reset } = useSimulatedTask(2400);
+  const [usageRefreshKey, setUsageRefreshKey] = React.useState(0);
+  const [checkingUsage, setCheckingUsage] = React.useState(false);
 
   const sourceType = file ? inferFileType(file.name) : null;
 
   const handleReset = () => {
     setFile(null);
     reset();
+  };
+
+  const handleStart = async () => {
+    setCheckingUsage(true);
+    try {
+      await checkInUsage("convert");
+      start();
+    } catch (err) {
+      toast.error(getApiErrorMessage(err));
+    } finally {
+      setCheckingUsage(false);
+      setUsageRefreshKey((k) => k + 1);
+    }
   };
 
   return (
@@ -69,6 +88,8 @@ function ConvertPageInner() {
         gradientFrom="#5B7FFF"
         gradientTo="#7C5CFF"
       />
+
+      <UsageBanner feature="convert" refreshKey={usageRefreshKey} />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">
@@ -135,7 +156,13 @@ function ConvertPageInner() {
               )}
 
               {file && status !== "processing" && (
-                <Button variant="gradient" size="lg" onClick={start} className="self-start">
+                <Button
+                  variant="gradient"
+                  size="lg"
+                  onClick={handleStart}
+                  disabled={checkingUsage}
+                  className="self-start"
+                >
                   Convert to {target.toUpperCase()} <ArrowRight />
                 </Button>
               )}

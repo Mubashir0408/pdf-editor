@@ -13,6 +13,7 @@ import { ToolFaq } from "@/components/tools/tool-faq";
 import { RelatedTools } from "@/components/tools/related-tools";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { UsageBanner } from "@/components/shared/usage-banner";
 import { usePendingFile } from "@/components/providers/pending-file-provider";
 import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
 import { convertPdfToImage } from "@/lib/api/pdfToImage";
@@ -38,6 +39,7 @@ export default function PdfToImagePage() {
   const [processing, setProcessing] = React.useState(false);
   const [processError, setProcessError] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
+  const [usageRefreshKey, setUsageRefreshKey] = React.useState(0);
 
   React.useEffect(() => {
     const pending = consume();
@@ -63,6 +65,7 @@ export default function PdfToImagePage() {
       setProcessError(getApiErrorMessage(err));
     } finally {
       setProcessing(false);
+      setUsageRefreshKey((k) => k + 1);
     }
   };
 
@@ -79,6 +82,8 @@ export default function PdfToImagePage() {
         gradientFrom="#F59E0B"
         gradientTo="#7C5CFF"
       />
+
+      <UsageBanner feature="pdf-to-image" refreshKey={usageRefreshKey} />
 
       <Card className="py-6">
         <CardContent className="flex flex-col gap-6">

@@ -82,7 +82,3 @@ export interface TranslateJobStatus {
   result?: TranslateJobResult;
   error?: string;
 }
-
-export interface ChatResponse {
-  reply: string;
-}

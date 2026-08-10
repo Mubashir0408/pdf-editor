@@ -1,11 +1,74 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { Menu, LogOut, User as UserIcon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { GlobalSearch } from "@/components/layout/global-search";
 import { Logo } from "@/components/layout/sidebar-content";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { useAuth } from "@/components/providers/auth-provider";
+
+function AccountMenu() {
+  const router = useRouter();
+  const { user, loading, isConfigured, signOut } = useAuth();
+
+  if (!isConfigured || loading) return null;
+
+  if (!user) {
+    return (
+      <div className="hidden items-center gap-1.5 sm:flex">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href="/login">Log in</Link>
+        </Button>
+        <Button variant="gradient" size="sm" asChild>
+          <Link href="/signup">Sign up</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  const initial = (user.email ?? "?").charAt(0).toUpperCase();
+
+  const handleLogout = async () => {
+    await signOut();
+    toast.success("Signed out");
+    router.push("/dashboard");
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="rounded-full" aria-label="Account menu">
+          <Avatar className="size-8">
+            <AvatarFallback>{initial}</AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel className="flex items-center gap-2 truncate text-xs font-normal text-muted-foreground">
+          <UserIcon className="size-3.5 shrink-0" />
+          <span className="truncate">{user.email}</span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleLogout}>
+          <LogOut /> Log out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   return (
@@ -29,6 +92,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 
       <div className="flex items-center gap-1.5 sm:gap-2">
         <LanguageSwitcher className="hidden border-0 bg-transparent shadow-none hover:bg-muted sm:flex" />
+        <AccountMenu />
       </div>
     </header>
   );

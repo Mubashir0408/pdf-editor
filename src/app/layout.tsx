@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/components/providers/i18n-provider";
+import { AuthProvider } from "@/components/providers/auth-provider";
 import { SITE_NAME, SITE_URL, DEFAULT_DESCRIPTION, DEFAULT_KEYWORDS } from "@/lib/seo";
 import "./globals.css";
 
@@ -77,12 +78,14 @@ export default function RootLayout({
           // sequence prematurely closing this tag, not an XSS concern here.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }}
         />
-        <I18nProvider>
-          <TooltipProvider delayDuration={200}>
-            {children}
-            <Toaster />
-          </TooltipProvider>
-        </I18nProvider>
+        <AuthProvider>
+          <I18nProvider>
+            <TooltipProvider delayDuration={200}>
+              {children}
+              <Toaster />
+            </TooltipProvider>
+          </I18nProvider>
+        </AuthProvider>
       </body>
     </html>
   );

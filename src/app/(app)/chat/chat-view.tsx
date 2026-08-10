@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Sparkles, PanelRightOpen, MessageSquarePlus, FileText } from "lucide-react";
-import { toast } from "sonner";
 
 import { SourcesPanel } from "@/components/chat/sources-panel";
 import { MessageBubble, TypingBubble, ModelBadge } from "@/components/chat/message-bubble";
@@ -10,35 +9,56 @@ import { ChatComposer } from "@/components/chat/composer";
 import { Button } from "@/components/ui/button";
 import { RightPanel, RightPanelSheet } from "@/components/layout/right-panel";
 import { suggestedPrompts } from "@/lib/mock-data";
-import { useSingleFileUpload } from "@/hooks/use-single-file-upload";
-import { sendChatMessage } from "@/lib/api/chat";
-import { getApiErrorMessage } from "@/lib/api/errors";
 import type { ChatMessage, ChatSource } from "@/lib/types";
+
+const CANNED_RESPONSES: { content: string; sources: ChatSource[] }[] = [
+  {
+    content:
+      "Here's a summary of the key points: the document outlines three main priorities, with the highest-impact item being the Q3 rollout timeline. Two dependencies are flagged on page 4 that should be resolved before kickoff.",
+    sources: [
+      { id: "sx1", fileName: "Attached document", page: 2, snippet: "Three strategic priorities are outlined for the upcoming quarter..." },
+      { id: "sx2", fileName: "Attached document", page: 4, snippet: "Two dependencies must be resolved prior to the rollout kickoff..." },
+    ],
+  },
+  {
+    content:
+      "I found relevant figures on pages 6 and 9. Revenue-related numbers increased notably, while operating costs stayed roughly flat quarter over quarter — worth highlighting in your summary.",
+    sources: [
+      { id: "sx3", fileName: "Attached document", page: 6, snippet: "Revenue increased 18% compared to the prior quarter..." },
+      { id: "sx4", fileName: "Attached document", page: 9, snippet: "Operating costs remained flat at approximately $1.2M..." },
+    ],
+  },
+  {
+    content:
+      "Based on the document, here are the risks called out explicitly: vendor lock-in on page 3, a compliance deadline on page 7, and an unresolved staffing gap mentioned in the appendix.",
+    sources: [
+      { id: "sx5", fileName: "Attached document", page: 3, snippet: "Reliance on a single vendor introduces switching-cost risk..." },
+      { id: "sx6", fileName: "Attached document", page: 7, snippet: "Compliance filing is due within 30 days of publication..." },
+    ],
+  },
+];
+
+let responseIndex = 0;
 
 export default function ChatPage() {
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = React.useState(false);
+  const [attachedFile, setAttachedFile] = React.useState<File | null>(null);
   const [sourcesOpen, setSourcesOpen] = React.useState(false);
   const [activeSources, setActiveSources] = React.useState<ChatSource[]>([]);
   const scrollRef = React.useRef<HTMLDivElement>(null);
-  const attachment = useSingleFileUpload();
 
   React.useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, isTyping]);
 
-  React.useEffect(() => {
-    if (attachment.status === "error" && attachment.error) {
-      toast.error(attachment.error);
-    }
-  }, [attachment.status, attachment.error]);
-
   const handleNewChat = () => {
     setMessages([]);
-    attachment.reset();
+    setAttachedFile(null);
+    setActiveSources([]);
   };
 
-  const send = async (text: string) => {
+  const send = (text: string) => {
     const userMsg: ChatMessage = {
       id: `u-${Date.now()}`,
       role: "user",
@@ -48,32 +68,23 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
 
-    try {
-      const { reply } = await sendChatMessage(text, attachment.uploadedId ?? undefined);
+    setTimeout(() => {
+      const canned = CANNED_RESPONSES[responseIndex % CANNED_RESPONSES.length];
+      responseIndex += 1;
       const assistantMsg: ChatMessage = {
         id: `a-${Date.now()}`,
         role: "assistant",
-        content: reply,
+        content: canned.content,
         timestamp: new Date().toISOString(),
+        sources: canned.sources,
       };
       setMessages((prev) => [...prev, assistantMsg]);
-    } catch (err) {
-      const message = getApiErrorMessage(err);
-      const assistantMsg: ChatMessage = {
-        id: `a-${Date.now()}`,
-        role: "assistant",
-        content: `Sorry, I ran into a problem: ${message}`,
-        timestamp: new Date().toISOString(),
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
-      toast.error(message);
-    } finally {
+      setActiveSources(canned.sources);
       setIsTyping(false);
-    }
+    }, 1400);
   };
 
   const hasMessages = messages.length > 0;
-  const isBusy = isTyping || attachment.status === "uploading";
 
   return (
     <div className="flex h-[calc(100svh-4rem)]">
@@ -81,11 +92,9 @@ export default function ChatPage() {
         <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-6">
           <div>
             <p className="text-sm font-semibold text-foreground">AI Chat</p>
-            {attachment.file && (
+            {attachedFile && (
               <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                <FileText className="size-3" />
-                {attachment.file.name}
-                {attachment.status === "uploading" && " (uploading…)"}
+                <FileText className="size-3" /> {attachedFile.name}
               </p>
             )}
           </div>
@@ -154,10 +163,10 @@ export default function ChatPage() {
         <div className="mx-auto w-full max-w-2xl">
           <ChatComposer
             onSend={send}
-            attachedFile={attachment.file}
-            onAttach={attachment.upload}
-            onRemoveAttachment={attachment.reset}
-            disabled={isBusy}
+            attachedFile={attachedFile}
+            onAttach={setAttachedFile}
+            onRemoveAttachment={() => setAttachedFile(null)}
+            disabled={isTyping}
           />
         </div>
       </div>
