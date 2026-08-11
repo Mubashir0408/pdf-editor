@@ -5,7 +5,7 @@ import SignupView from "./signup-view";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Sign Up",
-  description: "Create a free DocuFlow AI account for unlimited access to every PDF tool.",
+  description: "Create a free Docy account for unlimited access to every PDF tool.",
   path: "/signup",
   index: false,
 });

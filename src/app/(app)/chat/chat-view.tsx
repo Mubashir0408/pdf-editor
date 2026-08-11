@@ -122,7 +122,7 @@ export default function ChatPage() {
                   <Sparkles className="size-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-semibold text-foreground">Ask DocuFlow AI anything</h1>
+                  <h1 className="text-xl font-semibold text-foreground">Ask Docy anything</h1>
                   <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
                     Attach a document and ask questions, or start typing to chat freely. No account needed.
                   </p>

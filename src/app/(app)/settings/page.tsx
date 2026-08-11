@@ -5,7 +5,7 @@ import SettingsView from "./settings-view";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Settings",
-  description: "Choose your preferred display language for DocuFlow AI.",
+  description: "Choose your preferred display language for Docy.",
   path: "/settings",
   index: false,
 });

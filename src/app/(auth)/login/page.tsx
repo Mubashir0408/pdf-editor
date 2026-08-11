@@ -5,7 +5,7 @@ import LoginView from "./login-view";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Log In",
-  description: "Sign in to DocuFlow AI for unlimited access to every PDF tool.",
+  description: "Sign in to Docy for unlimited access to every PDF tool.",
   path: "/login",
   index: false,
 });

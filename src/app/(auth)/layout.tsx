@@ -1,15 +1,10 @@
-import { Logo } from "@/components/layout/sidebar-content";
-
 /**
- * Deliberately minimal — no sidebar/topbar chrome — but built from the same
- * background token and the same `Logo` used everywhere else, so it reads as
- * part of the app rather than a separate design.
+ * Deliberately minimal — no sidebar/topbar chrome. Just the background
+ * token, so it reads as part of the app rather than a separate design.
+ * Each page under this route group (login, signup) owns its own full-page
+ * structure and branding placement rather than inheriting a fixed one here
+ * — login uses a two-column layout, signup keeps the original centered card.
  */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-8 bg-background px-4 py-12">
-      <Logo />
-      {children}
-    </div>
-  );
+  return <div className="min-h-svh bg-background">{children}</div>;
 }

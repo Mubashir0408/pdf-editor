@@ -92,7 +92,7 @@ export function ChatComposer({
         </Button>
       </div>
       <p className="mt-2 text-center text-[11px] text-muted-foreground/70">
-        DocuFlow AI can make mistakes. Verify important information.
+        Docy can make mistakes. Verify important information.
       </p>
     </div>
   );

@@ -87,7 +87,7 @@ export function TypingBubble() {
 export function ModelBadge() {
   return (
     <Badge variant="secondary" className="gap-1">
-      <Sparkles className="size-3" /> DocuFlow Assistant
+      <Sparkles className="size-3" /> Docy Assistant
     </Badge>
   );
 }

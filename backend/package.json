@@ -2,7 +2,7 @@
   "name": "docuflow-ai-backend",
   "version": "0.1.0",
   "private": true,
-  "description": "Backend API for DocuFlow AI — file upload and (future) PDF processing services.",
+  "description": "Backend API for Docy — file upload and (future) PDF processing services.",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",

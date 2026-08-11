@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { Sparkles, ChevronsLeft } from "lucide-react";
+import { FileText, ChevronsLeft } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { navGroups } from "@/lib/nav-config";
@@ -16,11 +16,11 @@ export function Logo({ collapsed }: { collapsed?: boolean }) {
   return (
     <Link href="/dashboard" className="flex items-center gap-2.5 px-1">
       <div className="relative flex size-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary shadow-sm shadow-primary/30">
-        <Sparkles className="size-4 text-white" strokeWidth={2.5} />
+        <FileText className="size-4 text-white" strokeWidth={2.5} />
       </div>
       {!collapsed && (
         <span className="text-[15px] font-semibold tracking-tight text-foreground">
-          DocuFlow<span className="text-primary">AI</span>
+          Doc<span className="text-primary">y</span>
         </span>
       )}
     </Link>

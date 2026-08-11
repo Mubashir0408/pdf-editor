@@ -1,14 +1,19 @@
 import type { NextConfig } from "next";
 
 const BACKEND_ORIGIN = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000").replace(/\/$/, "");
+/** Empty (and therefore a no-op below) until NEXT_PUBLIC_SUPABASE_URL is
+ *  actually configured — same fail-open pattern as the rest of the auth
+ *  integration. */
+const SUPABASE_ORIGIN = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").replace(/\/$/, "");
 
 /**
  * This app has no inline event-handler attributes and no external script
  * sources, but Next.js's own hydration bootstrap is an inline `<script>` —
  * without a nonce-based setup (a bigger change than this pass warrants),
  * `'unsafe-inline'` on script-src is required for the app to boot at all.
- * Everything else is locked to `'self'` plus the one real external
- * dependency this frontend talks to: the backend API origin.
+ * Everything else is locked to `'self'` plus the real external dependencies
+ * this frontend talks to: the backend API origin, and (once configured)
+ * Supabase's REST/auth API for login/signup.
  *
  * Dev mode additionally needs `'unsafe-eval'` — Next's Fast Refresh/HMR
  * client evaluates code via `eval()`, which a stricter CSP blocks outright
@@ -25,7 +30,7 @@ const CSP = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
-  `connect-src 'self' ${BACKEND_ORIGIN}${isDev ? " ws://localhost:* http://localhost:*" : ""}`,
+  `connect-src 'self' ${BACKEND_ORIGIN}${SUPABASE_ORIGIN ? ` ${SUPABASE_ORIGIN}` : ""}${isDev ? " ws://localhost:* http://localhost:*" : ""}`,
   "upgrade-insecure-requests",
 ].join("; ");
 

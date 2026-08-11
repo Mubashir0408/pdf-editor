@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const SITE_NAME = "DocuFlow AI";
+export const SITE_NAME = "Docy";
 
 /** Falls back to localhost for local dev — set NEXT_PUBLIC_SITE_URL to the
  *  real deployed origin in production so canonical/OG/sitemap URLs are
@@ -20,7 +20,7 @@ export const DEFAULT_KEYWORDS = [
 ];
 
 interface BuildPageMetadataParams {
-  /** Plain page title — the root layout's title template appends "· DocuFlow AI" automatically. */
+  /** Plain page title — the root layout's title template appends "· Docy" automatically. */
   title: string;
   description: string;
   /** Route path starting with "/", e.g. "/merge" — used to build the canonical URL. */

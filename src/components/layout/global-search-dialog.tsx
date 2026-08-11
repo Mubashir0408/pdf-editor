@@ -32,7 +32,7 @@ export function GlobalSearchDialog({
   const { t } = useTranslation();
 
   return (
-    <CommandDialog open={open} onOpenChange={onOpenChange} title="Search DocuFlow AI">
+    <CommandDialog open={open} onOpenChange={onOpenChange} title="Search Docy">
       <CommandInput placeholder="Search tools and actions..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>

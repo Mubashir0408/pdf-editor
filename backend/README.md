@@ -1,4 +1,4 @@
-# DocuFlow AI — Backend
+# Docy — Backend
 
 Express + TypeScript API for a stateless PDF tool site (in the spirit of
 iLovePDF) — no accounts, no saved documents, no database. Every request

@@ -32,7 +32,7 @@ function startServer(retriesLeft = 5): void {
   const server = app.listen(env.PORT, () => {
     logger.info(
       { port: env.PORT, env: env.NODE_ENV, uploadDir: env.uploadDir, generatedDir: env.generatedDir },
-      `DocuFlow AI backend listening on http://localhost:${env.PORT}`
+      `Docy backend listening on http://localhost:${env.PORT}`
     );
   });
 

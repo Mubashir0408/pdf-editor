@@ -7,7 +7,7 @@ export const contentType = "image/png";
  *  the fallback `openGraph.images` for every route that doesn't define its
  *  own, so all ~20 tool pages get a real, on-brand preview image without
  *  needing 20 separate assets. Matches the actual in-app logo (gradient
- *  mark + "DocuFlow AI" wordmark, see sidebar-content.tsx's `Logo`). */
+ *  mark + "Docy" wordmark, see sidebar-content.tsx's `Logo`). */
 export default function OpengraphImage() {
   return new ImageResponse(
     (
@@ -43,14 +43,15 @@ export default function OpengraphImage() {
           >
             <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
               <path
-                d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z"
+                d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6z"
                 fill="white"
               />
+              <path d="M14 2v6h6" fill="white" fillOpacity="0.5" />
             </svg>
           </div>
           <div style={{ display: "flex", fontSize: 84, fontWeight: 700, color: "#12121a" }}>
-            DocuFlow
-            <span style={{ color: "#5b7fff" }}>AI</span>
+            Doc
+            <span style={{ color: "#5b7fff" }}>y</span>
           </div>
         </div>
         <div style={{ display: "flex", marginTop: 28, fontSize: 32, color: "#6b6b7b" }}>

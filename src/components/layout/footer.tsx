@@ -14,7 +14,7 @@ export function Footer() {
         <Logo />
         <p className="text-xs text-muted-foreground">{t("footer.tagline")}</p>
         <p className="text-xs text-muted-foreground">
-          © {year} DocuFlow AI. {t("footer.rights")}
+          © {year} Docy. {t("footer.rights")}
         </p>
       </div>
     </footer>

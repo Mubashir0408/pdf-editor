@@ -1,4 +1,4 @@
-# DocuFlow AI
+# Docy
 
 A public, no-account PDF tool site (convert, merge, split, and more) —
 Next.js frontend + Express/TypeScript backend.

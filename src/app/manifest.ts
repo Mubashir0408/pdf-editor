@@ -5,7 +5,7 @@ import { SITE_NAME, DEFAULT_DESCRIPTION } from "@/lib/seo";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: SITE_NAME,
-    short_name: "DocuFlow",
+    short_name: "Docy",
     description: DEFAULT_DESCRIPTION,
     start_url: "/dashboard",
     display: "standalone",

@@ -18,7 +18,8 @@ export default function AppleIcon() {
         }}
       >
         <svg width="96" height="96" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" fill="white" />
+          <path d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6z" fill="white" />
+          <path d="M14 2v6h6" fill="white" fillOpacity="0.5" />
         </svg>
       </div>
     ),
