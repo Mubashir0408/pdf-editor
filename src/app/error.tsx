@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import * as Sentry from "@sentry/nextjs";
 import { motion } from "framer-motion";
 import { AlertTriangle, RotateCcw, Home } from "lucide-react";
 
@@ -15,8 +16,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   React.useEffect(() => {
-    // In production this would report to an error-tracking service.
-    console.error(error);
+    Sentry.captureException(error);
   }, [error]);
 
   return (
