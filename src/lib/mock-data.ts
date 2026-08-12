@@ -25,6 +25,42 @@ export const quickActions: QuickAction[] = [
 /** Curated subset shown in the "Popular tools" section on the homepage. */
 export const popularToolIds = ["convert", "merge", "compress", "ai-chat", "ocr", "watermark"];
 
+/**
+ * Groups the remaining tools (everything not already surfaced in "Popular")
+ * into logical categories for the dashboard's tool grid, instead of one
+ * flat list of every tool. `titleKey`/`subtitleKey` are i18next keys under
+ * `dashboard.*`. Every id here must exist in `quickActions` above — this
+ * only organizes the existing tool set, it doesn't define new tools.
+ */
+export const toolGroups: { id: string; titleKey: string; subtitleKey: string; toolIds: string[] }[] = [
+  {
+    id: "edit",
+    titleKey: "dashboard.editTitle",
+    subtitleKey: "dashboard.editSubtitle",
+    toolIds: ["split", "rotate", "watermark", "protect", "extract", "delete-pages"],
+  },
+  {
+    id: "convert",
+    titleKey: "dashboard.convertTitle",
+    subtitleKey: "dashboard.convertSubtitle",
+    toolIds: [
+      "word-to-pdf",
+      "excel-to-pdf",
+      "ppt-to-pdf",
+      "image-to-pdf",
+      "pdf-to-word",
+      "pdf-to-excel",
+      "pdf-to-image",
+    ],
+  },
+  {
+    id: "ai-text",
+    titleKey: "dashboard.aiTextTitle",
+    subtitleKey: "dashboard.aiTextSubtitle",
+    toolIds: ["ai-chat", "ocr", "translate"],
+  },
+];
+
 export const suggestedPrompts = [
   "Summarize this document in 5 bullet points",
   "What are the key risks mentioned?",

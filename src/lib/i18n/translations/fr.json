@@ -2,6 +2,7 @@
   "common": {
     "search": "Tout rechercher...",
     "upload": "Téléverser",
+    "open": "Ouvrir",
     "download": "Télécharger",
     "cancel": "Annuler",
     "remove": "Supprimer",
@@ -55,7 +56,13 @@
     "popularTitle": "Outils populaires",
     "popularSubtitle": "Les outils les plus utilisés.",
     "allToolsTitle": "Tous les outils",
-    "allToolsSubtitle": "Tout ce dont vous avez besoin pour vos PDF."
+    "allToolsSubtitle": "Tout ce dont vous avez besoin pour vos PDF.",
+    "editTitle": "Modifier le PDF",
+    "editSubtitle": "Pivotez, protégez et organisez les pages.",
+    "convertTitle": "Convertir",
+    "convertSubtitle": "Transformez vos PDF vers d'autres formats et inversement.",
+    "aiTextTitle": "IA & Texte",
+    "aiTextSubtitle": "Posez des questions, numérisez et traduisez."
   },
   "settings": {
     "title": "Paramètres",

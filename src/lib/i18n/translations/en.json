@@ -2,6 +2,7 @@
   "common": {
     "search": "Search everything...",
     "upload": "Upload",
+    "open": "Open",
     "download": "Download",
     "cancel": "Cancel",
     "remove": "Remove",
@@ -55,7 +56,13 @@
     "popularTitle": "Popular tools",
     "popularSubtitle": "The tools people reach for most.",
     "allToolsTitle": "Every tool",
-    "allToolsSubtitle": "Everything you need to work with PDFs."
+    "allToolsSubtitle": "Everything you need to work with PDFs.",
+    "editTitle": "Edit PDF",
+    "editSubtitle": "Rotate, protect, and organize pages.",
+    "convertTitle": "Convert",
+    "convertSubtitle": "Turn PDFs into other formats and back.",
+    "aiTextTitle": "AI & Text",
+    "aiTextSubtitle": "Ask questions, scan, and translate."
   },
   "settings": {
     "title": "Settings",

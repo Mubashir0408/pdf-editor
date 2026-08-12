@@ -2,6 +2,7 @@
   "common": {
     "search": "搜索所有内容...",
     "upload": "上传",
+    "open": "打开",
     "download": "下载",
     "cancel": "取消",
     "remove": "移除",
@@ -55,7 +56,13 @@
     "popularTitle": "热门工具",
     "popularSubtitle": "最常用的工具。",
     "allToolsTitle": "全部工具",
-    "allToolsSubtitle": "处理 PDF 所需的一切。"
+    "allToolsSubtitle": "处理 PDF 所需的一切。",
+    "editTitle": "编辑 PDF",
+    "editSubtitle": "旋转、保护并整理页面。",
+    "convertTitle": "转换",
+    "convertSubtitle": "将 PDF 转换为其他格式，或反向转换。",
+    "aiTextTitle": "AI 与文本",
+    "aiTextSubtitle": "提问、扫描并翻译。"
   },
   "settings": {
     "title": "设置",

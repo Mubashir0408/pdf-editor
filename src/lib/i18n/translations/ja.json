@@ -2,6 +2,7 @@
   "common": {
     "search": "すべて検索...",
     "upload": "アップロード",
+    "open": "開く",
     "download": "ダウンロード",
     "cancel": "キャンセル",
     "remove": "削除",
@@ -55,7 +56,13 @@
     "popularTitle": "人気のツール",
     "popularSubtitle": "よく使われているツール。",
     "allToolsTitle": "すべてのツール",
-    "allToolsSubtitle": "PDF作業に必要なものすべて。"
+    "allToolsSubtitle": "PDF作業に必要なものすべて。",
+    "editTitle": "PDFを編集",
+    "editSubtitle": "ページの回転、保護、整理を行います。",
+    "convertTitle": "変換",
+    "convertSubtitle": "PDFを他の形式に変換、またはその逆。",
+    "aiTextTitle": "AIとテキスト",
+    "aiTextSubtitle": "質問する、スキャンする、翻訳する。"
   },
   "settings": {
     "title": "設定",

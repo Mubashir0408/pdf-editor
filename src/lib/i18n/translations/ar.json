@@ -2,6 +2,7 @@
   "common": {
     "search": "ابحث في كل شيء...",
     "upload": "رفع",
+    "open": "فتح",
     "download": "تنزيل",
     "cancel": "إلغاء",
     "remove": "إزالة",
@@ -55,7 +56,13 @@
     "popularTitle": "الأدوات الشائعة",
     "popularSubtitle": "الأدوات الأكثر استخدامًا.",
     "allToolsTitle": "جميع الأدوات",
-    "allToolsSubtitle": "كل ما تحتاجه للعمل مع ملفات PDF."
+    "allToolsSubtitle": "كل ما تحتاجه للعمل مع ملفات PDF.",
+    "editTitle": "تحرير PDF",
+    "editSubtitle": "قم بتدوير الصفحات وحمايتها وتنظيمها.",
+    "convertTitle": "تحويل",
+    "convertSubtitle": "حوّل ملفات PDF إلى صيغ أخرى والعكس.",
+    "aiTextTitle": "الذكاء الاصطناعي والنص",
+    "aiTextSubtitle": "اطرح الأسئلة وامسح ضوئيًا وترجم."
   },
   "settings": {
     "title": "الإعدادات",

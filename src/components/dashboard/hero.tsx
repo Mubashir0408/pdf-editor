@@ -25,16 +25,16 @@ export function DashboardHero() {
       <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-secondary" />
       <div className="absolute inset-0 bg-grid opacity-[0.12]" />
 
-      <div className="relative z-10 flex flex-col items-center gap-8 px-5 py-16 text-center sm:px-8 sm:py-20 lg:py-24">
+      <div className="relative z-10 flex flex-col items-center gap-5 px-5 py-8 text-center sm:px-8 sm:py-10 lg:py-12">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-white text-balance sm:text-4xl lg:text-5xl">
+          <h1 className="mx-auto max-w-2xl text-2xl font-semibold tracking-tight text-white text-balance sm:text-3xl lg:text-4xl">
             {t("dashboard.heroTitle")}
           </h1>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-white/80 sm:text-base">
+          <p className="mx-auto mt-2 max-w-xl text-sm text-white/80">
             {t("dashboard.heroSubtitle")}
           </p>
         </motion.div>
@@ -43,14 +43,13 @@ export function DashboardHero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="w-full max-w-lg"
+          className="w-full max-w-md"
         >
           <Dropzone
-            tone="hero"
+            tone="compact"
             onFilesAdded={handleFilesAdded}
             title={t("dashboard.dropTitle")}
             subtitle={t("dashboard.dropSubtitle")}
-            formats={`PDF, DOCX, XLSX, PPTX, JPG, PNG ${t("common.upTo100mb")}`}
           />
         </motion.div>
       </div>

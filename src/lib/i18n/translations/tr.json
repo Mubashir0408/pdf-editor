@@ -2,6 +2,7 @@
   "common": {
     "search": "Her şeyi ara...",
     "upload": "Yükle",
+    "open": "Aç",
     "download": "İndir",
     "cancel": "İptal",
     "remove": "Kaldır",
@@ -55,7 +56,13 @@
     "popularTitle": "Popüler araçlar",
     "popularSubtitle": "En çok tercih edilen araçlar.",
     "allToolsTitle": "Tüm araçlar",
-    "allToolsSubtitle": "PDF'lerle çalışmak için ihtiyacınız olan her şey."
+    "allToolsSubtitle": "PDF'lerle çalışmak için ihtiyacınız olan her şey.",
+    "editTitle": "PDF Düzenle",
+    "editSubtitle": "Sayfaları döndürün, koruyun ve düzenleyin.",
+    "convertTitle": "Dönüştür",
+    "convertSubtitle": "PDF'leri diğer biçimlere dönüştürün ve geri çevirin.",
+    "aiTextTitle": "Yapay Zeka ve Metin",
+    "aiTextSubtitle": "Soru sorun, tarayın ve çevirin."
   },
   "settings": {
     "title": "Ayarlar",

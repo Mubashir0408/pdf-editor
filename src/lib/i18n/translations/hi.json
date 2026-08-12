@@ -2,6 +2,7 @@
   "common": {
     "search": "सब कुछ खोजें...",
     "upload": "अपलोड करें",
+    "open": "खोलें",
     "download": "डाउनलोड करें",
     "cancel": "रद्द करें",
     "remove": "हटाएं",
@@ -55,7 +56,13 @@
     "popularTitle": "लोकप्रिय टूल्स",
     "popularSubtitle": "सबसे ज़्यादा इस्तेमाल किए जाने वाले टूल्स।",
     "allToolsTitle": "सभी टूल्स",
-    "allToolsSubtitle": "PDF के साथ काम करने के लिए आपको जो कुछ भी चाहिए।"
+    "allToolsSubtitle": "PDF के साथ काम करने के लिए आपको जो कुछ भी चाहिए।",
+    "editTitle": "PDF संपादित करें",
+    "editSubtitle": "पेज घुमाएं, सुरक्षित करें और व्यवस्थित करें।",
+    "convertTitle": "कनवर्ट करें",
+    "convertSubtitle": "PDF को अन्य फ़ॉर्मैट में बदलें और वापस।",
+    "aiTextTitle": "AI और टेक्स्ट",
+    "aiTextSubtitle": "प्रश्न पूछें, स्कैन करें और अनुवाद करें।"
   },
   "settings": {
     "title": "सेटिंग्स",

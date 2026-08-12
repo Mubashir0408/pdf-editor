@@ -2,6 +2,7 @@
   "common": {
     "search": "ہر چیز تلاش کریں...",
     "upload": "اپ لوڈ کریں",
+    "open": "کھولیں",
     "download": "ڈاؤن لوڈ کریں",
     "cancel": "منسوخ کریں",
     "remove": "ہٹائیں",
@@ -55,7 +56,13 @@
     "popularTitle": "مقبول ٹولز",
     "popularSubtitle": "سب سے زیادہ استعمال ہونے والے ٹولز۔",
     "allToolsTitle": "تمام ٹولز",
-    "allToolsSubtitle": "PDF کے ساتھ کام کرنے کے لیے آپ کو جو کچھ بھی چاہیے۔"
+    "allToolsSubtitle": "PDF کے ساتھ کام کرنے کے لیے آپ کو جو کچھ بھی چاہیے۔",
+    "editTitle": "PDF میں ترمیم کریں",
+    "editSubtitle": "صفحات گھمائیں، محفوظ کریں اور ترتیب دیں۔",
+    "convertTitle": "تبدیل کریں",
+    "convertSubtitle": "PDF کو دوسرے فارمیٹس میں اور واپس تبدیل کریں۔",
+    "aiTextTitle": "AI اور متن",
+    "aiTextSubtitle": "سوالات پوچھیں، اسکین کریں اور ترجمہ کریں۔"
   },
   "settings": {
     "title": "ترتیبات",

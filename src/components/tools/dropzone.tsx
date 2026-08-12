@@ -15,8 +15,11 @@ interface DropzoneProps {
   subtitle?: string;
   formats?: string;
   className?: string;
-  /** "default" fits inside a card; "hero" is a light glass style for use over the homepage hero. */
-  tone?: "default" | "hero";
+  /** "default" fits inside a card; "hero" is a light glass style for use over
+   *  a colored hero background; "compact" is a slim, light-on-color
+   *  secondary bar for the same colored-hero context — small icon, no idle
+   *  animation, no formats line. */
+  tone?: "default" | "hero" | "compact";
 }
 
 export function Dropzone({
@@ -33,6 +36,7 @@ export function Dropzone({
   const [isDragging, setIsDragging] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const isHero = tone === "hero";
+  const isCompact = tone === "compact";
   const resolvedTitle = title ?? t("common.dropFilesHere");
   const resolvedSubtitle = subtitle ?? t("common.orClickToBrowse");
   const resolvedFormats = formats ?? `PDF, DOCX, XLSX, PPTX, JPG, PNG ${t("common.upTo100mb")}`;
@@ -64,18 +68,23 @@ export function Dropzone({
       whileHover={{ scale: 1.005 }}
       whileTap={{ scale: 0.995 }}
       className={cn(
-        "relative flex cursor-pointer flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl text-center transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        isHero
+        "relative flex cursor-pointer overflow-hidden transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        isCompact
           ? cn(
-              "glass-panel border-2 border-dashed px-6 py-10 shadow-2xl shadow-black/20",
+              "glass-panel flex-row items-center gap-3 rounded-xl border border-dashed px-4 py-3 text-left",
               isDragging ? "border-white bg-white/20" : "border-white/40 hover:border-white/70 hover:bg-white/10"
             )
-          : cn(
-              "border-2 border-dashed px-6 py-14",
-              isDragging
-                ? "border-primary bg-primary/5"
-                : "border-border bg-muted/30 hover:border-primary/40 hover:bg-muted/50"
-            ),
+          : isHero
+            ? cn(
+                "glass-panel flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed px-6 py-10 text-center shadow-2xl shadow-black/20",
+                isDragging ? "border-white bg-white/20" : "border-white/40 hover:border-white/70 hover:bg-white/10"
+              )
+            : cn(
+                "flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed px-6 py-14 text-center",
+                isDragging
+                  ? "border-primary bg-primary/5"
+                  : "border-border bg-muted/30 hover:border-primary/40 hover:bg-muted/50"
+              ),
         className
       )}
     >
@@ -88,29 +97,50 @@ export function Dropzone({
         onChange={(e) => handleFiles(e.target.files)}
       />
 
-      {!isHero && <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />}
+      {tone === "default" && <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />}
 
       <motion.div
-        animate={{ y: isDragging ? -6 : [0, -8, 0] }}
+        animate={isCompact ? { y: isDragging ? -2 : 0 } : { y: isDragging ? -6 : [0, -8, 0] }}
         transition={
-          isDragging
+          isDragging || isCompact
             ? { duration: 0.2 }
             : { duration: 3, repeat: Infinity, ease: "easeInOut" }
         }
         className={cn(
-          "relative flex size-16 items-center justify-center rounded-2xl shadow-lg",
-          isHero ? "bg-white/15 shadow-black/10" : "bg-gradient-to-br from-primary to-secondary shadow-primary/25"
+          "relative flex shrink-0 items-center justify-center shadow-lg",
+          isCompact ? "size-9 rounded-lg shadow-sm" : "size-16 rounded-2xl",
+          isHero || isCompact
+            ? "bg-white/15 shadow-black/10"
+            : "bg-gradient-to-br from-primary to-secondary shadow-primary/25"
         )}
       >
-        <UploadCloud className={cn("size-7", isHero ? "text-white" : "text-white")} strokeWidth={1.75} />
+        <UploadCloud className={cn(isCompact ? "size-4" : "size-7", "text-white")} strokeWidth={1.75} />
       </motion.div>
 
       <div className="relative">
-        <p className={cn("text-base font-medium", isHero ? "text-white" : "text-foreground")}>{resolvedTitle}</p>
-        <p className={cn("mt-1 text-sm", isHero ? "text-white/75" : "text-muted-foreground")}>{resolvedSubtitle}</p>
+        <p
+          className={cn(
+            isCompact ? "text-sm font-medium" : "text-base font-medium",
+            isHero || isCompact ? "text-white" : "text-foreground"
+          )}
+        >
+          {resolvedTitle}
+        </p>
+        <p
+          className={cn(
+            isCompact ? "text-xs" : "mt-1 text-sm",
+            isHero || isCompact ? "text-white/75" : "text-muted-foreground"
+          )}
+        >
+          {resolvedSubtitle}
+        </p>
       </div>
 
-      <p className={cn("relative text-xs", isHero ? "text-white/60" : "text-muted-foreground/70")}>{resolvedFormats}</p>
+      {!isCompact && (
+        <p className={cn("relative text-xs", isHero ? "text-white/60" : "text-muted-foreground/70")}>
+          {resolvedFormats}
+        </p>
+      )}
     </motion.div>
   );
 }
