@@ -31,6 +31,16 @@ const envSchema = z.object({
    *  down the whole app); routes that need it fail clearly if it's unset. */
   SUPABASE_URL: z.string().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
+
+  /** Server-only OpenRouter key for AI Chat — never sent to the frontend.
+   *  Optional at boot (fail-open, same pattern as Supabase above); the
+   *  `/chat` endpoint returns a clean error if it's unset rather than
+   *  crashing the whole server. */
+  OPENROUTER_API_KEY: z.string().optional(),
+  /** Defaults to OpenRouter's own free-model router, which costs nothing
+   *  and requires no model selection — override only to pin a specific
+   *  free model. */
+  OPENROUTER_MODEL: z.string().min(1).default("openrouter/free"),
 });
 
 function loadEnv() {

@@ -52,6 +52,7 @@ export function ChatComposer({
         <input
           ref={inputRef}
           type="file"
+          accept=".pdf,application/pdf"
           className="hidden"
           onChange={(e) => {
             if (e.target.files?.[0]) onAttach(e.target.files[0]);

@@ -74,6 +74,29 @@ All responses use one consistent envelope:
 Accepted upload types: PDF, DOCX, PPTX, XLSX, JPG, PNG. Max size is set by
 `MAX_UPLOAD_SIZE` in `.env` (bytes; default 100MB).
 
+## AI Chat (OpenRouter)
+
+`POST /chat` (`{ message: string, fileId?: string }` → `{ reply: string }`) answers
+questions grounded in an uploaded PDF's extracted text, using
+[OpenRouter](https://openrouter.ai)'s free model router. No other AI provider is used
+and no paid model is ever called.
+
+1. **Get a free API key** — sign up at https://openrouter.ai and create a key at
+   https://openrouter.ai/keys. No payment method is required for free models.
+2. **Place it** in `backend/.env` as `OPENROUTER_API_KEY=sk-or-...`. This key is
+   server-only — it's never sent to the frontend, logged, or included in error
+   responses. `.env` is gitignored; never commit a real key.
+3. **Model** — `OPENROUTER_MODEL` (default `openrouter/free`), OpenRouter's own
+   "Free Models Router" which selects among currently-available free models at no
+   cost. Override this env var to pin a specific free model instead.
+4. **Rate limits** — free models are shared and rate-limited by OpenRouter; if the
+   limit is hit, `/chat` returns a clear "try again later" error rather than
+   silently falling back to a paid model.
+5. **Testing it** — `POST /upload` a PDF to get a `fileId`, then
+   `POST /chat` with `{ "message": "...", "fileId": "<id>" }`. Without
+   `OPENROUTER_API_KEY` set, the endpoint returns a clean "AI service is not
+   configured" error instead of crashing the server.
+
 ## Folder structure
 
 ```

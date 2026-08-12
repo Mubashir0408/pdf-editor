@@ -8,6 +8,7 @@ import { requestLogger } from "./middlewares/requestLogger.middleware";
 import { apiLimiter } from "./middlewares/rateLimiter.middleware";
 import { notFoundMiddleware } from "./middlewares/notFound.middleware";
 import { errorMiddleware } from "./middlewares/error.middleware";
+import { swaggerDocsMiddleware } from "./config/swagger";
 import routes from "./routes";
 
 /** JSON body cap — generous for any future metadata payloads, but nowhere
@@ -59,6 +60,11 @@ export function createApp(): Express {
   app.use(express.urlencoded({ extended: true, limit: JSON_BODY_LIMIT }));
 
   app.use(apiLimiter);
+
+  // API documentation (Swagger UI) — mounted on its own path, ahead of the
+  // real API router, so it can never shadow or interfere with any actual
+  // route. See config/swagger.ts for why this needs its own CSP.
+  app.use("/api-docs", swaggerDocsMiddleware);
 
   app.use(routes);
 

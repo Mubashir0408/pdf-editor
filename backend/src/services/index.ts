@@ -20,6 +20,8 @@ import { PdfToWordService } from "./pdfToWord.service";
 import { TranslationJobsService } from "./translationJobs.service";
 import { PdfTranslateService } from "./pdfTranslate.service";
 import { SupabaseService } from "./supabase.service";
+import { OpenRouterService } from "./openrouter.service";
+import { ChatService } from "./chat.service";
 
 /**
  * Composition root: every service is constructed exactly once here, with
@@ -58,3 +60,6 @@ export const pdfTranslateService = new PdfTranslateService(
 );
 
 export const supabaseService = new SupabaseService();
+
+export const openRouterService = new OpenRouterService();
+export const chatService = new ChatService(openRouterService);
