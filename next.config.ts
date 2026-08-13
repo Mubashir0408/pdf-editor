@@ -75,6 +75,23 @@ const nextConfig: NextConfig = {
     "mammoth",
     "exceljs",
   ],
+  /**
+   * `src/lib/server/utils/pdfjs.ts` locates its worker script and standard
+   * fonts by building a path at *runtime* (`path.join(pdfjsPackageRoot(),
+   * "legacy", "build", "pdf.worker.mjs")`, same for `standard_fonts/`) —
+   * this is what let it survive webpack bundling in the first place (see
+   * that file's comments), but it also means Vercel's build-time file
+   * tracer can't statically see the reference and leaves both out of the
+   * deployed function bundle. Works locally (the full `node_modules` is on
+   * disk); fails on Vercel with "Cannot find module .../pdf.worker.mjs" —
+   * this explicitly forces both into every API route's bundle regardless.
+   */
+  outputFileTracingIncludes: {
+    "/api/**/*": [
+      "./node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs",
+      "./node_modules/pdfjs-dist/standard_fonts/**/*",
+    ],
+  },
   compiler: {
     // Keep error/warn in production for real diagnostics; strip the rest
     // (debug/info-level console noise) from the shipped bundle.
