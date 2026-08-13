@@ -8,8 +8,21 @@ import { AuthProvider } from "@/components/providers/auth-provider";
 import { SITE_NAME, SITE_URL, DEFAULT_DESCRIPTION, DEFAULT_KEYWORDS } from "@/lib/seo";
 import "./globals.css";
 
+/** Temporary safety net: `SITE_URL` should always be a valid absolute URL,
+ *  but an unguarded `new URL()` here takes down the entire build (every
+ *  page collects this shared layout's metadata) if it isn't. Omitting
+ *  `metadataBase` entirely on failure is safe — Next.js just falls back to
+ *  resolving relative OG/canonical URLs against the request origin instead. */
+function safeMetadataBase(url: string): URL | undefined {
+  try {
+    return new URL(url);
+  } catch {
+    return undefined;
+  }
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: safeMetadataBase(SITE_URL),
   title: {
     default: `${SITE_NAME} — Free Online PDF Tools`,
     template: `%s · ${SITE_NAME}`,
