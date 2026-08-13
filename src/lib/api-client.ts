@@ -3,17 +3,16 @@ import axios from "axios";
 import { getSupabaseClient } from "@/lib/supabase/client";
 
 /**
- * The one axios instance every API call in the app goes through. Centralizing
- * the base URL here means every tool page that talks to the backend (merge
- * now, more to come) reuses the exact same client instead of each hardcoding
- * `process.env.NEXT_PUBLIC_API_URL`.
+ * The one axios instance every API call in the app goes through. The API
+ * now lives in this same Next.js app (`src/app/api/*`) rather than a
+ * separate backend, so every call is same-origin — `baseURL` is just the
+ * `/api` prefix, no external origin or `NEXT_PUBLIC_API_URL` needed.
  *
- * `withCredentials` lets the backend's guest-id cookie (see
- * `guestId.middleware.ts`) round-trip — without it the browser would never
- * send/store that cookie across the cross-port dev origins.
+ * `withCredentials` lets the guest-id cookie (see
+ * `src/lib/server/guestId.ts`) round-trip with every request.
  */
 export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000",
+  baseURL: "/api",
   withCredentials: true,
 });
 

@@ -1,7 +1,6 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
-const BACKEND_ORIGIN = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000").replace(/\/$/, "");
 /** Empty (and therefore a no-op below) until NEXT_PUBLIC_SUPABASE_URL is
  *  actually configured — same fail-open pattern as the rest of the auth
  *  integration. */
@@ -24,9 +23,11 @@ const SENTRY_ORIGIN = (() => {
  * without a nonce-based setup (a bigger change than this pass warrants),
  * `'unsafe-inline'` on script-src is required for the app to boot at all.
  * Everything else is locked to `'self'` plus the real external dependencies
- * this frontend talks to: the backend API origin, and (once configured)
- * Supabase's REST/auth API for login/signup and Sentry's ingest endpoint
- * for error monitoring.
+ * this frontend talks to: Supabase's REST/auth/Storage API (same project
+ * origin covers all three — including the direct-to-Storage upload PUT, see
+ * `src/lib/api/upload.ts`) and Sentry's ingest endpoint for error
+ * monitoring. The API itself (`/api/*`) is same-origin now that it's part
+ * of this Next.js app, so no separate backend origin is needed here.
  *
  * Dev mode additionally needs `'unsafe-eval'` — Next's Fast Refresh/HMR
  * client evaluates code via `eval()`, which a stricter CSP blocks outright
@@ -43,7 +44,7 @@ const CSP = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
-  `connect-src 'self' ${BACKEND_ORIGIN}${SUPABASE_ORIGIN ? ` ${SUPABASE_ORIGIN}` : ""}${SENTRY_ORIGIN ? ` ${SENTRY_ORIGIN}` : ""}${isDev ? " ws://localhost:* http://localhost:*" : ""}`,
+  `connect-src 'self'${SUPABASE_ORIGIN ? ` ${SUPABASE_ORIGIN}` : ""}${SENTRY_ORIGIN ? ` ${SENTRY_ORIGIN}` : ""}${isDev ? " ws://localhost:* http://localhost:*" : ""}`,
   "upgrade-insecure-requests",
 ].join("; ");
 
@@ -58,6 +59,22 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
+  /** These packages either ship native binaries (`@napi-rs/canvas`,
+   *  `@sparticuz/chromium`) or resolve worker/binary paths at runtime via
+   *  `require.resolve` (`pdfjs-dist`, `tesseract.js`) — none of that
+   *  survives webpack bundling, so Next.js must `require()` them directly
+   *  at runtime instead of trying to bundle them into the route's chunk.
+   *  All are used by the PDF/document conversion API routes ported from
+   *  the old Express backend (see `src/lib/server/services/`). */
+  serverExternalPackages: [
+    "@napi-rs/canvas",
+    "pdfjs-dist",
+    "puppeteer-core",
+    "@sparticuz/chromium",
+    "tesseract.js",
+    "mammoth",
+    "exceljs",
+  ],
   compiler: {
     // Keep error/warn in production for real diagnostics; strip the rest
     // (debug/info-level console noise) from the shipped bundle.
