@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { FileText, Layers, Scissors, RefreshCw, Minimize2, ScanText, Languages } from "lucide-react";
 
 import { getSupabaseClient } from "@/lib/supabase/client";
+import { sendWelcomeEmail } from "@/lib/api/auth";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -104,6 +105,10 @@ export default function SignupView() {
       setError(signUpError.message);
       return;
     }
+
+    // Best-effort welcome email — account creation already succeeded above,
+    // so a failure here (or Resend being unconfigured) must never block signup.
+    sendWelcomeEmail(email).catch(() => {});
 
     if (data.session) {
       toast.success("Account created");

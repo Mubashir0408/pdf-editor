@@ -21,6 +21,13 @@ const envSchema = z.object({
   OPENROUTER_API_KEY: z.string().optional(),
   OPENROUTER_MODEL: z.string().min(1).default("openrouter/free"),
 
+  /** Server-only, SECRET — never exposed to the browser. Signup confirmation
+   *  email is skipped (logged, not thrown) when unset. */
+  RESEND_API_KEY: z.string().optional(),
+  /** "From" address for the signup welcome email — must be a verified
+   *  domain/sender in Resend, or their sandbox `onboarding@resend.dev`. */
+  RESEND_FROM_EMAIL: z.string().min(1).default("onboarding@resend.dev"),
+
   /** Vercel Cron sends this in an Authorization header — verified by the
    *  cleanup route so the endpoint can't be triggered by anyone else. */
   CRON_SECRET: z.string().optional(),
