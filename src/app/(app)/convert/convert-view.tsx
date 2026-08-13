@@ -178,7 +178,7 @@ function ConvertPageInner() {
                 )}
               </div>
 
-              {file && uploadStatus === "ready" && (
+              {file && (
                 <div>
                   <p className="mb-3 text-sm font-medium text-foreground">2. Choose output format</p>
                   <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
@@ -203,16 +203,16 @@ function ConvertPageInner() {
                 </div>
               )}
 
-              {file && uploadStatus === "ready" && processing && (
+              {file && processing && (
                 <p className="text-sm text-muted-foreground">Converting your file…</p>
               )}
 
-              {file && uploadStatus === "ready" && !processing && (
+              {file && !processing && (
                 <Button
                   variant="gradient"
                   size="lg"
                   onClick={handleConvert}
-                  disabled={checkingUsage}
+                  disabled={checkingUsage || uploadStatus !== "ready"}
                   className="self-start"
                 >
                   Convert to {target.toUpperCase()} <ArrowRight />
