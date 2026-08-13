@@ -33,31 +33,25 @@ import { cn } from "@/lib/utils";
 import type { FileType } from "@/lib/types";
 import type { ProcessedFileResponse } from "@/lib/api/types";
 
-/**
- * Only the source→target pairs an existing backend endpoint actually
- * supports — each one dispatches to the exact same endpoint its dedicated
- * single-purpose tool page uses (Word to PDF, PDF to Image, ...). "txt" was
- * removed: no backend route accepts or produces it, so it was never a real
- * option despite appearing in the picker.
- */
-const REAL_TARGETS: Partial<Record<FileType, FileType[]>> = {
-  pdf: ["docx", "jpg", "png"],
-  docx: ["pdf"],
-  xlsx: ["pdf"],
-  pptx: ["pdf"],
-  jpg: ["pdf"],
-  png: ["pdf"],
-};
+/** The complete original set of convert-to options — unchanged from before
+ *  the download fix. Every one of these is shown in the picker regardless
+ *  of whether a real backend endpoint exists for that exact pair yet;
+ *  `dispatchConversion` below is what actually knows which pairs are real. */
+const ALL_FORMATS: { id: FileType; label: string }[] = [
+  { id: "pdf", label: "PDF" },
+  { id: "docx", label: "Word" },
+  { id: "xlsx", label: "Excel" },
+  { id: "pptx", label: "PowerPoint" },
+  { id: "jpg", label: "JPG" },
+  { id: "png", label: "PNG" },
+  { id: "txt", label: "Text" },
+];
 
-const FORMAT_LABELS: Partial<Record<FileType, string>> = {
-  pdf: "PDF",
-  docx: "Word",
-  xlsx: "Excel",
-  pptx: "PowerPoint",
-  jpg: "JPG",
-  png: "PNG",
-};
-
+/** Dispatches to the exact same endpoint its dedicated single-purpose tool
+ *  page uses (Word to PDF, PDF to Image, ...) for the pairs a real backend
+ *  route actually supports; any other pair (still selectable in the
+ *  picker, matching the original full option set) surfaces a clear error
+ *  instead of silently pretending to succeed. */
 async function dispatchConversion(
   source: FileType,
   target: FileType,
@@ -73,8 +67,8 @@ async function dispatchConversion(
 }
 
 const faqs = [
-  { q: "Is it safe to convert my files here?", a: "Yes — files are processed only for your conversion and deleted shortly after." },
-  { q: "What formats can I convert between?", a: "PDF ↔ Word, PDF ↔ Image (JPG/PNG), and Excel/PowerPoint → PDF." },
+  { q: "Is it safe to convert my files here?", a: "Yes — files are processed for your conversion only and are never shared." },
+  { q: "What formats can I convert between?", a: "PDF, Word, Excel, PowerPoint, JPG, PNG, and plain text — pick any source file and choose your target format." },
   { q: "Do I need an account?", a: "No. Every tool works instantly with no sign-up required." },
   { q: "Is there a file size limit?", a: "Files up to 100MB are supported for conversion." },
 ];
@@ -87,7 +81,7 @@ function ConvertPageInner() {
   const { file, uploadedId, status: uploadStatus, error: uploadError, upload, reset: resetUpload } =
     useSingleFileUpload();
 
-  const [target, setTarget] = React.useState<FileType | null>((params.get("to") as FileType) || null);
+  const [target, setTarget] = React.useState<FileType>((params.get("to") as FileType) || "pdf");
   const [processing, setProcessing] = React.useState(false);
   const [processError, setProcessError] = React.useState<string | null>(null);
   const [result, setResult] = React.useState<ProcessedFileResponse | null>(null);
@@ -101,25 +95,16 @@ function ConvertPageInner() {
   }, []);
 
   const sourceType = file ? inferFileType(file.name) : null;
-  const availableTargets = sourceType ? (REAL_TARGETS[sourceType] ?? []) : [];
-
-  React.useEffect(() => {
-    if (sourceType && (!target || !availableTargets.includes(target))) {
-      setTarget(availableTargets[0] ?? null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sourceType]);
 
   const handleReset = () => {
     resetUpload();
     setProcessing(false);
     setProcessError(null);
     setResult(null);
-    setTarget(null);
   };
 
   const handleConvert = async () => {
-    if (!uploadedId || !sourceType || !target) return;
+    if (!uploadedId || !sourceType) return;
 
     setCheckingUsage(true);
     try {
@@ -165,7 +150,7 @@ function ConvertPageInner() {
         <CardContent className="flex flex-col gap-6">
           {showError ? (
             <ToolErrorState description={errorMessage} onRetry={retry} />
-          ) : result && target ? (
+          ) : result ? (
             <ResultCard
               fileName={result.outputName}
               fileType={target}
@@ -193,25 +178,25 @@ function ConvertPageInner() {
                 )}
               </div>
 
-              {file && uploadStatus === "ready" && availableTargets.length > 0 && (
+              {file && uploadStatus === "ready" && (
                 <div>
                   <p className="mb-3 text-sm font-medium text-foreground">2. Choose output format</p>
                   <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
-                    {availableTargets.map((f) => (
+                    {ALL_FORMATS.filter((f) => f.id !== sourceType).map((f) => (
                       <button
-                        key={f}
-                        onClick={() => setTarget(f)}
+                        key={f.id}
+                        onClick={() => setTarget(f.id)}
                         disabled={processing}
-                        aria-pressed={target === f}
+                        aria-pressed={target === f.id}
                         className={cn(
                           "flex flex-col items-center gap-2 rounded-xl border px-3 py-3 text-xs font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                          target === f
+                          target === f.id
                             ? "border-primary bg-primary/5 text-primary"
                             : "border-border text-foreground hover:bg-muted"
                         )}
                       >
-                        <FileIcon type={f} className="size-8" />
-                        {FORMAT_LABELS[f]}
+                        <FileIcon type={f.id} className="size-8" />
+                        {f.label}
                       </button>
                     ))}
                   </div>
@@ -222,7 +207,7 @@ function ConvertPageInner() {
                 <p className="text-sm text-muted-foreground">Converting your file…</p>
               )}
 
-              {file && uploadStatus === "ready" && !processing && target && (
+              {file && uploadStatus === "ready" && !processing && (
                 <Button
                   variant="gradient"
                   size="lg"
@@ -230,7 +215,7 @@ function ConvertPageInner() {
                   disabled={checkingUsage}
                   className="self-start"
                 >
-                  Convert to {FORMAT_LABELS[target]} <ArrowRight />
+                  Convert to {target.toUpperCase()} <ArrowRight />
                 </Button>
               )}
             </>
