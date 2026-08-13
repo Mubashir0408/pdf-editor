@@ -85,20 +85,17 @@ export async function uploadGeneratedObject(objectKey: string, bytes: Uint8Array
   }
 }
 
-/** A short-lived signed URL with Supabase Storage's `download` param set,
- *  which makes Supabase attach a `Content-Disposition: attachment;
- *  filename=...` header itself — preserves the old backend's custom
- *  display-filename behavior without this app needing to stream/proxy the
- *  bytes through a serverless function. */
-export async function getGeneratedSignedUrl(objectKey: string, downloadFilename: string): Promise<string> {
-  const { data, error } = await getClient()
-    .storage.from(GENERATED_BUCKET)
-    .createSignedUrl(objectKey, 300, { download: downloadFilename });
+/** Downloads a generated object's bytes directly, for `/api/download/[id]`
+ *  to serve itself instead of redirecting the browser to a cross-origin
+ *  Supabase URL — avoids the `<a download>` attribute being dropped (and
+ *  any other cross-origin-redirect quirk) on the final download click. */
+export async function downloadGeneratedBuffer(objectKey: string): Promise<Buffer> {
+  const { data, error } = await getClient().storage.from(GENERATED_BUCKET).download(objectKey);
   if (error || !data) {
-    logger.error({ err: error, objectKey }, "Failed to create a signed download URL");
+    logger.error({ err: error, objectKey }, "Failed to download a generated object");
     throw ApiError.notFound("This file is no longer available for download.");
   }
-  return data.signedUrl;
+  return Buffer.from(await data.arrayBuffer());
 }
 
 /** Used by the cron cleanup route — mirrors the old `tempFileCleanup.ts`

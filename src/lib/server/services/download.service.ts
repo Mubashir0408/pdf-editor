@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import { uploadGeneratedObject, getGeneratedSignedUrl, removeUploadObject } from "../storage";
+import { uploadGeneratedObject, downloadGeneratedBuffer, removeUploadObject } from "../storage";
 import { getMimeTypeForFilename } from "../fileValidator";
 import { generateStoredFileName } from "../pathHelpers";
 import type { ProcessedFileDto } from "../api-types";
@@ -15,10 +15,12 @@ interface SaveProcessedFileParams {
 /**
  * Replaces the old Express backend's `download.service.ts`. Same public
  * method names/signatures (`save`, `deleteQuietly`) so every tool service
- * that depends on this class needs zero changes — only `streamToResponse`
- * is gone, since downloads are now served via a signed Storage URL redirect
- * (see `src/app/api/download/[id]/route.ts`) instead of proxying bytes
- * through a serverless function.
+ * that depends on this class needs zero changes. Downloads are served by
+ * `/api/download/[id]` fetching the bytes itself (via `getGeneratedFile`)
+ * and returning them directly, rather than redirecting the browser to a
+ * cross-origin Supabase URL — the redirect approach worked in every
+ * automated test but was suspected of causing real-browser download
+ * failures, so this route now owns the response entirely.
  */
 export class DownloadService {
   async save(params: SaveProcessedFileParams): Promise<ProcessedFileDto> {
@@ -39,8 +41,9 @@ export class DownloadService {
     };
   }
 
-  async getSignedDownloadUrl(id: string, displayName: string | undefined): Promise<string> {
-    return getGeneratedSignedUrl(id, displayName ?? id);
+  async getGeneratedFile(id: string, displayName: string | undefined): Promise<{ bytes: Buffer; filename: string }> {
+    const bytes = await downloadGeneratedBuffer(id);
+    return { bytes, filename: displayName ?? id };
   }
 
   /** `filePaths` are the local `/tmp` paths `resolveUploadedFilePath`
