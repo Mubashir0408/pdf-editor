@@ -33,4 +33,4 @@ export function isFeatureKey(value: string): value is FeatureKey {
 }
 
 /** Guests get this many uses of each feature before sign-in is required. */
-export const GUEST_FREE_USES = 2;
+export const GUEST_FREE_USES = 5;

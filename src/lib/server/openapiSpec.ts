@@ -93,7 +93,7 @@ const errorResponses = {
   },
   UsageLimitReached: {
     description:
-      "Guest usage limit reached for this feature (2 free uses without signing in). Only applies to unauthenticated requests — a valid `Authorization: Bearer <Supabase access token>` header bypasses this entirely. No-op (never returned) if Supabase isn't configured on the server.",
+      "Guest usage limit reached for this feature (5 free uses without signing in). Only applies to unauthenticated requests — a valid `Authorization: Bearer <Supabase access token>` header bypasses this entirely. No-op (never returned) if Supabase isn't configured on the server.",
     content: { "application/json": { schema: apiErrorSchema } },
   },
   TooManyRequests: {
@@ -107,7 +107,7 @@ const errorResponses = {
 };
 
 const usageLimitNote =
-  "\n\n**Usage limit:** guests get 2 free uses of this endpoint (tracked by an anonymous cookie); a valid `Authorization: Bearer <Supabase access token>` bypasses the limit entirely. A successful call only counts against the limit if the operation actually succeeds.";
+  "\n\n**Usage limit:** guests get 5 free uses of this endpoint (tracked by an anonymous cookie); a valid `Authorization: Bearer <Supabase access token>` bypasses the limit entirely. A successful call only counts against the limit if the operation actually succeeds.";
 
 function toolOperation(opts: {
   summary: string;

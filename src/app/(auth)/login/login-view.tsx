@@ -50,7 +50,10 @@ export default function LoginView() {
     setLoading(false);
 
     if (signInError) {
-      setError(signInError.message);
+      // Never surface Supabase's raw error text (leaks technical detail
+      // and, worse, can reveal whether an email is registered) — a single
+      // generic message covers wrong password, unknown email, etc.
+      setError("Invalid email or password.");
       return;
     }
 

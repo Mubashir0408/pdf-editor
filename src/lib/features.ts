@@ -26,4 +26,4 @@ export const FEATURE_LABELS = {
 export type FeatureKey = keyof typeof FEATURE_LABELS;
 
 /** Guests get this many uses of each feature before sign-in is required. */
-export const GUEST_FREE_USES = 2;
+export const GUEST_FREE_USES = 5;
