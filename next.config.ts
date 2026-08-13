@@ -76,20 +76,24 @@ const nextConfig: NextConfig = {
     "exceljs",
   ],
   /**
-   * `src/lib/server/utils/pdfjs.ts` locates its worker script and standard
-   * fonts by building a path at *runtime* (`path.join(pdfjsPackageRoot(),
-   * "legacy", "build", "pdf.worker.mjs")`, same for `standard_fonts/`) —
-   * this is what let it survive webpack bundling in the first place (see
-   * that file's comments), but it also means Vercel's build-time file
-   * tracer can't statically see the reference and leaves both out of the
-   * deployed function bundle. Works locally (the full `node_modules` is on
-   * disk); fails on Vercel with "Cannot find module .../pdf.worker.mjs" —
-   * this explicitly forces both into every API route's bundle regardless.
+   * Same underlying issue for two different packages: both resolve
+   * runtime assets via internal dynamic path logic rather than a static
+   * `import`, so Vercel's build-time file tracer can't see the reference
+   * and drops them from the deployed function bundle — works locally (full
+   * `node_modules` on disk), fails on Vercel.
+   * - `pdfjs-dist`: `src/lib/server/utils/pdfjs.ts` builds the worker/font
+   *   paths itself (`path.join(pdfjsPackageRoot(), ...)`) — fails with
+   *   "Cannot find module .../pdf.worker.mjs".
+   * - `@sparticuz/chromium`: its own `build/paths.js` resolves its brotli-
+   *   compressed Chromium binary under `bin/` at runtime — fails with
+   *   "no compatible browser engine could be started" (Word/Excel/
+   *   PowerPoint → PDF, and Translate's PDF render step).
    */
   outputFileTracingIncludes: {
     "/api/**/*": [
       "./node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs",
       "./node_modules/pdfjs-dist/standard_fonts/**/*",
+      "./node_modules/@sparticuz/chromium/bin/**/*",
     ],
   },
   compiler: {
