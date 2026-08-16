@@ -1,57 +1,170 @@
-# Docy
+# PDF Editor
 
-A public, no-account PDF tool site (convert, merge, split, and more) —
-Next.js frontend + Express/TypeScript backend.
+A full-stack PDF processing web application built with **Next.js, TypeScript, Supabase, and Vercel**. It provides tools for converting, merging, splitting, compressing, editing, and managing PDF files through a simple web interface.
 
-## Getting started
+## Features
 
-Install dependencies for both projects (they're independent — each has its
-own `package.json`):
+* 📄 PDF Merge
+* ✂️ PDF Split
+* 🗜️ PDF Compression
+* 🔄 PDF Conversion
+* 🖼️ Image/Document conversion
+* 🔒 Password protection
+* 💧 Watermark PDFs
+* 🔃 Rotate PDF pages
+* 📑 Extract pages
+* 🗑️ Delete pages
+* 🔍 OCR support
+* 🌐 PDF translation
+* 🤖 AI-powered PDF features
+* ☁️ Supabase Storage
+* 🔐 Supabase authentication
+* 📧 Welcome emails with Resend
+* 🐛 Error monitoring with Sentry
+* 📚 Swagger API documentation
+* 📱 Responsive interface
+* 🌙 Modern UI
+
+## Tech Stack
+
+### Frontend
+
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* Framer Motion
+* React Hook Form
+* Zod
+
+### Backend & Services
+
+* Next.js API Routes
+* Supabase
+* Supabase Storage
+* Supabase Authentication
+* Resend
+* Sentry
+* OpenRouter
+* Swagger / OpenAPI
+
+### Deployment
+
+* Vercel
+* Supabase
+
+## Authentication
+
+Users can create an account and log in using Supabase Authentication.
+
+Guest users can also use a limited number of free operations without creating an account.
+
+## File Processing
+
+Generated files are stored in Supabase Storage and are served through secure download endpoints.
+
+The application supports document conversion using a server-side Chromium environment on Vercel.
+
+## API Documentation
+
+Swagger documentation is available at:
+
+`/api-docs`
+
+Example:
+
+`https://your-domain.vercel.app/api-docs`
+
+## Error Monitoring
+
+Sentry is integrated for application error monitoring and debugging.
+
+## Email Integration
+
+Resend is integrated to send a welcome email after successful account creation.
+
+## Environment Variables
+
+Create a `.env.local` file and configure the required environment variables:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=
+
+OPENROUTER_API_KEY=
+OPENROUTER_MODEL=
+
+NEXT_PUBLIC_SENTRY_DSN=
+```
+
+**Never commit secret keys to GitHub.**
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Mubashir0408/pdf-editor.git
+cd pdf-editor
+```
+
+### 2. Install dependencies
 
 ```bash
 npm install
-cd backend && npm install && cd ..
-copy backend\.env.example backend\.env
 ```
 
-Then, from the project root:
+### 3. Configure environment variables
+
+Create `.env.local` and add the required values.
+
+### 4. Run the development server
 
 ```bash
 npm run dev
 ```
 
-This starts **both** the Next.js frontend (`http://localhost:3000`) and the
-Express backend (`http://localhost:5000`) together, each with hot reload,
-labeled and color-coded in one terminal (`[frontend]` / `[backend]`).
+Open:
 
-To run either on its own:
+`http://localhost:3000`
+
+### 5. Build for production
 
 ```bash
-npm run dev:frontend   # just Next.js
-npm run dev:backend    # just the API
+npm run build
 ```
 
-## Project structure
+## Deployment
 
-```
-src/          Next.js app (frontend)
-backend/      Express + TypeScript API — see backend/README.md
-```
+The application is deployed using **Vercel**.
 
-The backend is fully stateless: no database, no accounts. Every request
-uploads a file, processes it, and returns a download — see
-`backend/README.md` for how that flow works and what's implemented so far.
+Push changes to the `main` branch to trigger a new deployment.
 
-## Scripts (root)
+## Project Purpose
 
-| Script | Description |
-| --- | --- |
-| `npm run dev` | Start frontend + backend together |
-| `npm run dev:frontend` | Start only the Next.js dev server |
-| `npm run dev:backend` | Start only the Express dev server |
-| `npm run build` | Production build of the frontend |
-| `npm start` | Run the production frontend build |
-| `npm run lint` | Lint the frontend |
+This project was developed to build practical experience with:
 
-Backend has its own equivalents (`npm run dev`, `build`, `start`, `lint`)
-inside `backend/`.
+* Full-stack web development
+* Next.js and TypeScript
+* REST APIs
+* Authentication
+* File processing
+* Cloud storage
+* AI API integration
+* Email services
+* Error monitoring
+* API documentation
+* Serverless deployment
+
+## Author
+
+**Mubashir Ijaz**
+
+GitHub: https://github.com/Mubashir0408
