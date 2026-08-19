@@ -2,28 +2,28 @@
 
 A full-stack PDF processing web application built with **Next.js, TypeScript, Supabase, and Vercel**. It provides tools for converting, merging, splitting, compressing, editing, and managing PDF files through a simple web interface.
 
-## Features
+##Features
 
-* 📄 PDF Merge
-* ✂️ PDF Split
-* 🗜️ PDF Compression
-* 🔄 PDF Conversion
-* 🖼️ Image/Document conversion
-* 🔒 Password protection
-* 💧 Watermark PDFs
-* 🔃 Rotate PDF pages
-* 📑 Extract pages
-* 🗑️ Delete pages
-* 🔍 OCR support
-* 🌐 PDF translation
-* 🤖 AI-powered PDF features
-* ☁️ Supabase Storage
-* 🔐 Supabase authentication
-* 📧 Welcome emails with Resend
-* 🐛 Error monitoring with Sentry
-* 📚 Swagger API documentation
-* 📱 Responsive interface
-* 🌙 Modern UI
+*  PDF Merge
+*  PDF Split
+*  PDF Compression
+*  PDF Conversion
+*  Image/Document conversion
+*  Password protection
+*  Watermark PDFs
+*  Rotate PDF pages
+*  Extract pages
+*  Delete pages
+*  OCR support
+*  PDF translation
+*  AI-powered PDF features
+*  Supabase Storage
+*  Supabase authentication
+*  Welcome emails with Resend
+*  Error monitoring with Sentry
+*  Swagger API documentation
+*  Responsive interface
+*  Modern UI
 
 ## Tech Stack
 
